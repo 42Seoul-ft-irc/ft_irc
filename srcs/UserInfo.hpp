@@ -30,6 +30,8 @@ class UserInfo {
 		std::string getMode() const;
 		std::string getUnused() const;
 		std::string getRealname() const;
+
+		void 
 };
 
 #endif
