@@ -4,7 +4,10 @@ CXX = c++
 CXXFLAGS =  -Wall -Wextra -Werror -std=c++98 -MMD -MP
 RM = rm -rf
 NAME = ircserv
-SRCS = main.cpp 
+SRCS = main.cpp \
+		parsing.cpp \
+		Server.cpp \
+		socket.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(SRCS:.cpp=.d)
