@@ -13,14 +13,7 @@
 #include <vector>
 #include <map>
 
-typedef struct userInfo
-{
-	std::string nickname;
-	std::string username;
-	std::string mode;		// todo 숫자? 
-	std::string unused;
-	std::string realname;
-} userInfo;
+class UserInfo;
 
 class Server
 {
@@ -37,6 +30,8 @@ public:
 	void setPortNum(int portNum);
 	void setPassword(std::string password);
 	void setSocketFd(int fd);
+
+	std::map<int, UserInfo> users;
 };
 
 void parsing(int argc, char **argv, Server &server);
