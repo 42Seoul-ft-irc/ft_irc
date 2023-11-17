@@ -31,11 +31,4 @@ std::string UserInfo::getRealname() const
 	return this->realname;
 }
 
-UserInfo::UserInfo()
-{
-	nickname = "";
-	username = "";
-	hostname = "";
-	servername = "";
-	realname = "";
-}
+UserInfo::UserInfo() : nickname(""), username(""), hostname(""), servername(""), realname(""), pass(false), nick(false), user(false) { }
