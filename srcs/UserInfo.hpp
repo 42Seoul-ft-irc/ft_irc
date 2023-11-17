@@ -5,14 +5,19 @@
 
 class UserInfo {
 	private:
+		int fd;
 		std::string nickname;
 		std::string username;
-		std::string mode;
-		std::string unused;
+		std::string hostname;
+		std::string servername;
 		std::string realname;
+		bool pass;
+		bool nick;
+		bool user;
+		
 	public:
 		UserInfo();
-		~UserInfo();
+		// ~UserInfo();
 
 		void setNickname(std::string nickname);
 		void setUsername(std::string username);
@@ -27,4 +32,4 @@ class UserInfo {
 		std::string getRealname() const;
 };
 
-#endif;
+#endif

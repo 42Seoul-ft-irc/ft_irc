@@ -7,7 +7,8 @@ NAME = ircserv
 SRCS = main.cpp \
 		parsing.cpp \
 		Server.cpp \
-		socket.cpp
+		socket.cpp \
+		UserInfo.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(SRCS:.cpp=.d)

@@ -14,7 +14,7 @@ int convert_port(char *portStr)
 	return port;
 }
 
-void parsing(int argc, char **argv, Server &server)
+void argv_parsing(int argc, char **argv, Server &server)
 {
 	if (argc != 3)
 		throw std::invalid_argument("Error: invalid argument");

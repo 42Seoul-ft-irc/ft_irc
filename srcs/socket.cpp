@@ -3,12 +3,12 @@
 
 void create_socket(Server &server)
 {
-	int socketFd = socket(AF_INET, SOCK_STREAM, 0);
+	int socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 
-	if (socketFd == -1)
+	if (socket_fd == -1)
 		throw std::runtime_error("socket error");
 
-	server.setSocketFd(socketFd);
+	server.setSocketFd(socket_fd);
 }
 
 void open_server(Server &server)
@@ -18,14 +18,14 @@ void open_server(Server &server)
 	try
 	{
 		// 소켓 포트 연결
-		struct sockaddr_in serverAddr;
+		struct sockaddr_in server_addr;
 
-		std::memset(&serverAddr, 0, sizeof(serverAddr));
-		serverAddr.sin_family = AF_INET;
-		serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-		serverAddr.sin_port = htons(server.getPortNum());
+		std::memset(&server_addr, 0, sizeof(server_addr));
+		server_addr.sin_family = AF_INET;
+		server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+		server_addr.sin_port = htons(server.getPortNum());
 
-		if (bind(server.getSocketFd(), reinterpret_cast<const struct sockaddr *>(&serverAddr), sizeof(serverAddr)) == -1)
+		if (bind(server.getSocketFd(), reinterpret_cast<const struct sockaddr *>(&server_addr), sizeof(server_addr)) == -1)
 			throw std::runtime_error("Error: bind error");
 
 		if (listen(server.getSocketFd(), SOMAXCONN) == -1)

@@ -12,6 +12,8 @@
 #include <unistd.h>
 #include <vector>
 #include <map>
+#include "UserInfo.hpp"
+#include "Channel.hpp"
 
 class UserInfo;
 
@@ -34,7 +36,7 @@ public:
 	std::map<int, UserInfo> users;
 };
 
-void parsing(int argc, char **argv, Server &server);
+void argv_parsing(int argc, char **argv, Server &server);
 void open_server(Server &server);
 void create_socket(Server &server);
 
