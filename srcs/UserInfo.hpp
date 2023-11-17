@@ -31,7 +31,9 @@ class UserInfo {
 		std::string getUnused() const;
 		std::string getRealname() const;
 
-		void 
+		void checkPass();
+		void checkNick();
+		void checkuser();
 };
 
 #endif
