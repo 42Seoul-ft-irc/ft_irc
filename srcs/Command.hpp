@@ -3,6 +3,8 @@
 
 #include "Server.hpp"
 
+class Server;
+
 class Command {
 	private:
 		int fd;
@@ -11,13 +13,11 @@ class Command {
 		std::vector<std::string> parameters;
 		std::string trailing;
 	public:
-		Server &server;
-
 		Command(int fd, std::string command);
 		int getFd() const;
 		std::string getOriginalMessage() const;
 		std::string getCommand() const;
-		std::vector<std::string>::iterator *getParameters();
+		std::vector<std::string>::iterator getParameters();
 		std::string getTrailing() const;
 		void setCommand(std::string);
 		void setParameters(std::string);

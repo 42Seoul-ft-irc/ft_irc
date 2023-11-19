@@ -8,7 +8,8 @@ SRCS = main.cpp \
 		parsing.cpp \
 		Server.cpp \
 		socket.cpp \
-		UserInfo.cpp
+		UserInfo.cpp \
+		Command.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(SRCS:.cpp=.d)

@@ -35,11 +35,10 @@ void Server::setSocketFd(int fd)
 /* command 파싱 및 명령어 실행 */
 void Server::checkCommand(std::string cmd, int client_fd) {
 	Command command(client_fd, cmd);
-	command.server = *this;
 	//command.user = this->getUserInfoByFd(client_fd);
 
 	if (cmd == "PASS") {
-		command.pass();
+		command.command_pass();
 	}
 	else if (cmd == "NICK") {
 		//

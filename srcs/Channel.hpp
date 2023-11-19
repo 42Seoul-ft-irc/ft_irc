@@ -7,9 +7,9 @@ class Channel
 {
 private:
 	std::string name;
-	std::map<std::string, UserInfo&> operators;
-	std::map<std::string, UserInfo&> users;
-	char mode;
+	//std::map<std::string, UserInfo&> operators;
+	//std::map<std::string, UserInfo&> users;
+	//char mode;
 
 public:
 	Channel();

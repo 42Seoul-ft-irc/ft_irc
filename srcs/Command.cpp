@@ -1,6 +1,6 @@
 #include "Command.hpp"
 
-Command::Command(int fd, std::string cmd) :fd(fd), command(cmd) { }
+Command::Command(int fd, std::string cmd) :fd(fd), original_message(cmd) {}
 
 int Command::getFd() const {
 	return this->fd;
@@ -14,13 +14,10 @@ std::string Command::getOriginalMessage() const {
 	return this->original_message;
 }
 
-std::string Command::getCommand() const {
-	return this->command;
-}
 
 /* parameters의 시작 이터레이터 반환 */
-std::vector<std::string>::iterator* Command::getParameters() {
-	return &this->parameters.begin();
+std::vector<std::string>::iterator Command::getParameters() {
+	return this->parameters.begin();
 }
 
 std::string Command::getTrailing() const {

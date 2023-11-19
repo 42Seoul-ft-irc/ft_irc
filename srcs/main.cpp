@@ -47,6 +47,7 @@ int main(int argc, char **argv)
 					server.users.insert(std::make_pair(client_fd, UserInfo()));
 					pollfd newone;
 					newone.fd = client_fd;
+					newone.events = POLLIN;
 					pollfds.push_back(newone);
 					std::cout << "fd: " << client_fd << std::endl;
 					// todo 최대 크기 예외처리
