@@ -68,14 +68,14 @@ int main(int argc, char **argv)
 						memset(buffer, 0, sizeof(buffer));
 						ssize_t recv_byte = recv(fd, buffer, sizeof(buffer), 0);
 						if (recv_byte < 0) {
-
+							throw std::runtime_error("Error: Fail read");
 						}
 						else if (buffer[recv_byte - 2] == '\r' && buffer[recv_byte - 1] == '\n') {
 							std::strcat(clientBuffer[fd], buffer);
 							std::string recv_str(clientBuffer[fd]);
 							std::memset(clientBuffer[fd], 0, BUFSIZ);
 							server.checkCommand(recv_str, fd);
-							std::cout << pollfds[i].fd <<"가 [" << clientBuffer[fd] << "] 라고 보냄";
+							std::cout << fd <<"가 [" << clientBuffer[fd] << "] 라고 보냄";
 						}
 						else {
 							std::strcat(clientBuffer[fd], buffer);

@@ -2,6 +2,7 @@
 #define SERVER_HPP
 
 #include <string>
+#include <sstream>
 #include <iostream>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -36,7 +37,7 @@ public:
 	void checkCommand(std::string cmd, int client_fd);
 
 	// 특정 fd의 UserInfo 찾음
-	UserInfo &getUserInfo(int userFd);
+	UserInfo &getUserInfoByFd(int userFd);
 
 	std::map<int, UserInfo> users;
 };
