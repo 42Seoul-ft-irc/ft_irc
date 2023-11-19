@@ -14,6 +14,7 @@
 #include <map>
 #include "UserInfo.hpp"
 #include "Channel.hpp"
+#include "Command.hpp"
 
 class UserInfo;
 
@@ -32,6 +33,10 @@ public:
 	void setPortNum(int portNum);
 	void setPassword(std::string password);
 	void setSocketFd(int fd);
+	void checkCommand(std::string cmd, int client_fd);
+
+	// 특정 fd의 UserInfo 찾음
+	UserInfo &getUserInfo(int userFd);
 
 	std::map<int, UserInfo> users;
 };

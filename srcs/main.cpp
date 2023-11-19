@@ -8,6 +8,8 @@ int main(int argc, char **argv)
 {
 	// todo 인자 예외처리
 	Server server;
+	// \r\n 나올때까지 입력받기 위해서 클라이언트 수에 맞게 buffer 생성
+	char clientBuffer[SOMAXCONN][BUFSIZ];
 
 	try
 	{
@@ -56,21 +58,32 @@ int main(int argc, char **argv)
 				{
 					std::cout << "for문 들어옴\n";
 
+					// 클라이언트가 메시지를 보냄
 					if (pollfds[i].revents & POLLIN)
 					{
 						std::cout << "클라이언트가 메세지 보냄\n";
-						while (1)
-						{
-							char buffer[1024];
-							memset(buffer, 0, sizeof(buffer));
-							ssize_t recv_byte = recv(pollfds[i].fd, buffer, sizeof(buffer), 0);
+						
+						char buffer[1024];
+						int fd = pollfds[i].fd;
+						memset(buffer, 0, sizeof(buffer));
+						ssize_t recv_byte = recv(fd, buffer, sizeof(buffer), 0);
+						if (recv_byte < 0) {
 
-							std::string recv_str(buffer);
-							std::cout << pollfds[i].fd <<"가 [" << buffer << "] 라고 보냄";
-
-							if (recv_str.find("\r\n") != std::string::npos || recv_byte <= 0) // todo \r\n이 맞는가..
-								break;
 						}
+						else if (buffer[recv_byte - 2] == '\r' && buffer[recv_byte - 1] == '\n') {
+							std::strcat(clientBuffer[fd], buffer);
+							std::string recv_str(clientBuffer[fd]);
+							std::memset(clientBuffer[fd], 0, BUFSIZ);
+							server.checkCommand(recv_str, fd);
+							std::cout << pollfds[i].fd <<"가 [" << clientBuffer[fd] << "] 라고 보냄";
+						}
+						else {
+							std::strcat(clientBuffer[fd], buffer);
+						}
+					} //클라이언트가 연결을 끊음
+					else if (pollfds[i].revents & POLLHUP)
+					{
+						std::cout<< "클라이언트가 연결을 끊음\n";
 					}
 				}
 
