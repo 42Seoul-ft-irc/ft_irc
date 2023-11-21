@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 						if (recv_byte < 0) {
 							throw std::runtime_error("Error: Fail read");
 						}
-						else if (buffer[recv_byte - 2] == '\r' && buffer[recv_byte - 1] == '\n') {
+						else if (buffer[recv_byte - 1] == '\n') {
 							std::strcat(clientBuffer[fd], buffer);
 							std::string recv_str(clientBuffer[fd]);
 							std::memset(clientBuffer[fd], 0, BUFSIZ);

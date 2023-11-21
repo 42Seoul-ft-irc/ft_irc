@@ -49,7 +49,7 @@ void Command::splitCommand() {
 			this->trailing = this->trailing.substr(1);
 		}
 	}
-	std::cout<< this->command << "\n" << getTrailing() << "\n" << this->trailing <<"\n";
+	//std::cout<< this->command << "\n" << *(this->parameters.begin()++) << "\n";
 }
 
 void Command::command_pass() {
