@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 							std::string recv_str(clientBuffer[fd]);
 							std::cout << fd <<"가 [" << clientBuffer[fd] << "] 라고 보냄";
 							std::memset(clientBuffer[fd], 0, BUFSIZ);
-							Command command = server.createCommand(recv_str, fd);
+							Command& command = server.createCommand(recv_str, fd);
 							server.executeCommand(command);
 						}
 						else {

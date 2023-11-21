@@ -34,7 +34,7 @@ void Command::setTrailing(std::string str) {
 }
 
 /* original_message 파싱하여 command-parameters-trailing 으로 저장 */
-Command Command::splitCommand() {
+Command& Command::splitCommand() {
 	std::istringstream iss(this->original_message);
 	std::string token;
 
