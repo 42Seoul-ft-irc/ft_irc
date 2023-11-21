@@ -19,17 +19,22 @@ class UserInfo {
 		UserInfo();
 		// ~UserInfo();
 
+		void setFd(int fd);
 		void setNickname(std::string nickname);
 		void setUsername(std::string username);
 		void setMode(std::string mode);
 		void setUnused(std::string unused);
 		void setRealname(std::string realname);
 
+		int getFd() const;
 		std::string getNickname() const;
 		std::string getUsername() const;
 		std::string getMode() const;
 		std::string getUnused() const;
 		std::string getRealname() const;
+		bool getPass() const;
+		bool getNick() const;
+		bool getUser() const;
 
 		void checkPass();
 		void checkNick();
