@@ -23,7 +23,7 @@ class Command {
 		void setParameters(std::string);
 		void setTrailing(std::string);
 
-		Command splitCommand();
+		Command& splitCommand();
 
 		// 여기서부터 커맨드 추가
 		void command_pass();

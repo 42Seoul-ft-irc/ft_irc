@@ -35,8 +35,8 @@ public:
 	void setPortNum(int portNum);
 	void setPassword(std::string password);
 	void setSocketFd(int fd);
-	Command createCommand(std::string cmd, int client_fd);
-	void executeCommand(Command command);
+	Command& createCommand(std::string cmd, int client_fd);
+	void executeCommand(Command& command);
 
 	// 특정 fd의 UserInfo 찾음
 	UserInfo &getUserInfoByFd(int userFd);
