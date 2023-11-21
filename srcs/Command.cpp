@@ -53,12 +53,30 @@ Command& Command::splitCommand() {
 	//std::cout<< this->command << "\n" << *(this->parameters.begin()++) << "\n";
 }
 
-// 여기서부터 커맨드 작성
-// 여기서부터 커맨드 작성
-// 여기서부터 커맨드 작성
-// 여기서부터 커맨드 작성
+/* 
+* 여기서부터 커맨드 작성
+* 여기서부터 커맨드 작성
+* 여기서부터 커맨드 작성
+* 여기서부터 커맨드 작성
+*/
 
-void Command::command_pass() {
-	
+void Command::command_pass(Server &server, UserInfo &user) {
+	if (this->parameters.size() < 2){
+		// send(ERR_NEEDMOREPARAMS)
+	}
+	else if (this->parameters.size() != 2){
+		// send(PASS uses 'PASS passparameter')
+	}
+	if (user.getPass()){
+		// send(ERR_ALREADYREGISTRED)
+	}
+	if (*this->getParameters()++ ==server.getPassword())
+	{
+		user.checkPass();
+		std::cout<<"password completed\n";
+	}
+	else {
+		// send(ERR_PASSWDMISMATCH)
+	}
 }
 

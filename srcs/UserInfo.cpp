@@ -1,5 +1,10 @@
 #include "UserInfo.hpp"
 
+void UserInfo::setFd(int fd)
+{
+	this->fd = fd;
+}
+
 void UserInfo::setNickname(std::string nickname)
 {
 	this->nickname = nickname;
@@ -13,6 +18,11 @@ void UserInfo::setUsername(std::string username)
 void UserInfo::setRealname(std::string realname)
 {
 	this->realname = realname;
+}
+
+int UserInfo::getFd() const
+{
+	return this->fd;
 }
 
 std::string UserInfo::getNickname() const
@@ -31,4 +41,26 @@ std::string UserInfo::getRealname() const
 	return this->realname;
 }
 
-UserInfo::UserInfo() : nickname(""), username(""), hostname(""), servername(""), realname(""), pass(false), nick(false), user(false) { }
+bool UserInfo::getPass() const {
+	return this->pass;
+}
+
+bool UserInfo::getNick() const {
+	return this->nick;
+}
+
+bool UserInfo::getUser() const {
+	return this->user;
+}
+
+void UserInfo::checkPass(){
+	this->pass = true;
+};
+void UserInfo::checkNick(){
+	this->nick = true;
+};
+void UserInfo::checkuser(){
+	this->user = true;
+};
+
+UserInfo::UserInfo(): nickname(""), username(""), hostname(""), servername(""), realname(""), pass(false), nick(false), user(false) { }

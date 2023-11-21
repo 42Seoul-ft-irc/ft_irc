@@ -1,9 +1,15 @@
 #ifndef COMMAND_HPP
 #define COMMAND_HPP
 
+#define ERR_NEEDMOREPARAMS 461
+#define ERR_ALREADYREGISTRED 462
+
+#define ERR_PASSWDMISMATCH 464
+
 #include "Server.hpp"
 
 class Server;
+class UserInfo;
 
 class Command {
 	private:
@@ -26,7 +32,7 @@ class Command {
 		Command& splitCommand();
 
 		// 여기서부터 커맨드 추가
-		void command_pass();
+		void command_pass(Server &server, UserInfo &user);
 };
 
 #endif

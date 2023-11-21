@@ -45,11 +45,13 @@ int main(int argc, char **argv)
 					int client_fd = accept(server.getSocketFd(), reinterpret_cast<sockaddr *>(&client), &client_len);
 
 					server.users.insert(std::make_pair(client_fd, UserInfo()));
+					server.users[client_fd].setFd(client_fd);
 					pollfd newone;
 					newone.fd = client_fd;
 					newone.events = POLLIN;
 					pollfds.push_back(newone);
 					std::cout << "fd: " << client_fd << std::endl;
+
 					// todo 최대 크기 예외처리
 					// todo 서버가 서버에 접근할 때 처리(테스트 해보기)
 				}
@@ -71,12 +73,13 @@ int main(int argc, char **argv)
 						if (recv_byte < 0) {
 							throw std::runtime_error("Error: Fail read");
 						}
-						else if (buffer[recv_byte - 1] == '\n') {
+						else if (buffer[recv_byte - 2] == '\r' && buffer[recv_byte - 1] == '\n') {
 							std::strcat(clientBuffer[fd], buffer);
 							std::string recv_str(clientBuffer[fd]);
-							std::cout << fd <<"가 [" << clientBuffer[fd] << "] 라고 보냄";
+							std::cout << fd <<"가 [" << clientBuffer[fd] << "] 라고 보냄\n";
 							std::memset(clientBuffer[fd], 0, BUFSIZ);
-							Command& command = server.createCommand(recv_str, fd);
+							Command command = server.createCommand(recv_str, fd);
+							std::cout << command.getFd() << "'command is created.\n";
 							server.executeCommand(command);
 						}
 						else {
