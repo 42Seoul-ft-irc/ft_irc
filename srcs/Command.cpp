@@ -34,7 +34,7 @@ void Command::setTrailing(std::string str) {
 }
 
 /* original_message 파싱하여 command-parameters-trailing 으로 저장 */
-void Command::splitCommand() {
+Command Command::splitCommand() {
 	std::istringstream iss(this->original_message);
 	std::string token;
 
@@ -49,10 +49,16 @@ void Command::splitCommand() {
 			this->trailing = this->trailing.substr(1);
 		}
 	}
+	return *this;
 	//std::cout<< this->command << "\n" << *(this->parameters.begin()++) << "\n";
 }
 
-void Command::command_pass() {
+// 여기서부터 커맨드 작성
+// 여기서부터 커맨드 작성
+// 여기서부터 커맨드 작성
+// 여기서부터 커맨드 작성
 
+void Command::command_pass() {
+	
 }
 

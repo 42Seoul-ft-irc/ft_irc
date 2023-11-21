@@ -74,9 +74,10 @@ int main(int argc, char **argv)
 						else if (buffer[recv_byte - 1] == '\n') {
 							std::strcat(clientBuffer[fd], buffer);
 							std::string recv_str(clientBuffer[fd]);
-							std::memset(clientBuffer[fd], 0, BUFSIZ);
-							server.checkCommand(recv_str, fd);
 							std::cout << fd <<"가 [" << clientBuffer[fd] << "] 라고 보냄";
+							std::memset(clientBuffer[fd], 0, BUFSIZ);
+							Command command = server.createCommand(recv_str, fd);
+							server.executeCommand(command);
 						}
 						else {
 							std::strcat(clientBuffer[fd], buffer);

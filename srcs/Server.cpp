@@ -33,20 +33,20 @@ void Server::setSocketFd(int fd)
 
 //command
 /* command 파싱 및 명령어 실행 */
-void Server::checkCommand(std::string cmd, int client_fd) {
+Command Server::createCommand(std::string cmd, int client_fd) {
 	Command command(client_fd, cmd);
-	command.splitCommand();
-	std::cout << " check command complete!\n";
-	
-	//command.user = this->getUserInfoByFd(client_fd);
+	return command.splitCommand();
+	//std::cout << " check command complete!\n";
+}
 
-	if (cmd == "PASS") {
-		command.command_pass();
+void Server::executeCommand(Command cmd){
+	if (cmd.getCommand() == "PASS") {
+		cmd.command_pass();
 	}
-	else if (cmd == "NICK") {
+	else if (cmd.getCommand() == "NICK") {
 		//
 	}
-	else if (cmd == "USER") {
+	else if (cmd.getCommand() == "USER") {
 		//
 	}
 }
