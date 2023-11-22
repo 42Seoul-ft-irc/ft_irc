@@ -1,82 +1,105 @@
 #include "Command.hpp"
 
-Command::Command(int fd, std::string cmd) :fd(fd), original_message(cmd) {}
+Command::Command(int fd, std::string cmd) : fd(fd), original_message(cmd) {}
 
-int Command::getFd() const {
+int Command::getFd() const
+{
 	return this->fd;
 }
 
-std::string Command::getCommand() const {
+std::string Command::getCommand() const
+{
 	return this->command;
 }
 
-std::string Command::getOriginalMessage() const {
+std::string Command::getOriginalMessage() const
+{
 	return this->original_message;
 }
 
-
 /* parameters의 시작 이터레이터 반환 */
-std::vector<std::string>::iterator Command::getParameters() {
+std::vector<std::string>::iterator Command::getParameters()
+{
 	return this->parameters.begin();
 }
 
-std::string Command::getTrailing() const {
+std::string Command::getTrailing() const
+{
 	return this->trailing;
 }
-void Command::setCommand(std::string str) {
+void Command::setCommand(std::string str)
+{
 	this->command = str;
 }
-void Command::setParameters(std::string str) {
+void Command::setParameters(std::string str)
+{
 	this->parameters.push_back(str);
 }
-void Command::setTrailing(std::string str) {
+void Command::setTrailing(std::string str)
+{
 	this->trailing = str;
 }
 
 /* original_message 파싱하여 command-parameters-trailing 으로 저장 */
-Command& Command::splitCommand() {
+void Command::splitCommand()
+{
 	std::istringstream iss(this->original_message);
 	std::string token;
 
 	iss >> this->command;
+	std::streampos left_position;
 
-	while (iss >> token && token[0] != ':' && token.find('\r') == std::string::npos && token.find('\n') == std::string::npos) {
+	while (iss >> token && token[0] != ':' && token.find('\r') == std::string::npos && token.find('\n') == std::string::npos)
+	{
 		this->setParameters(token);
+		std::cout << token << std::endl;
+
+		left_position = iss.tellg();
 	}
 
-	if (iss >> std::ws && std::getline(iss, this->trailing, '\0')) {
-		if (!this->trailing.empty() && this->trailing[0] == ' ') {
-			this->trailing = this->trailing.substr(1);
-		}
+	std::string left;
+	if (left_position != -1)
+	{
+		iss.seekg(left_position);
+		std::getline(iss, left);
+
+		if (left[1] == ':')
+			this->setTrailing(left.substr(2));
 	}
-	return *this;
-	//std::cout<< this->command << "\n" << *(this->parameters.begin()++) << "\n";
 }
+/*
+ * 여기서부터 커맨드 작성
+ * 여기서부터 커맨드 작성
+ * 여기서부터 커맨드 작성
+ * 여기서부터 커맨드 작성
+ */
 
-/* 
-* 여기서부터 커맨드 작성
-* 여기서부터 커맨드 작성
-* 여기서부터 커맨드 작성
-* 여기서부터 커맨드 작성
-*/
-
-void Command::command_pass(Server &server, UserInfo &user) {
-	if (this->parameters.size() < 2){
+void Command::command_pass(Server &server, UserInfo &user)
+{
+	if (this->parameters.size() < 2)
+	{
 		// send(ERR_NEEDMOREPARAMS)
 	}
-	else if (this->parameters.size() != 2){
+	else if (this->parameters.size() != 2)
+	{
 		// send(PASS uses 'PASS passparameter')
 	}
-	if (user.getPass()){
+	if (user.getPass())
+	{
 		// send(ERR_ALREADYREGISTRED)
 	}
-	if (*this->getParameters()++ ==server.getPassword())
+	if (*this->getParameters()++ == server.getPassword())
 	{
 		user.checkPass();
-		std::cout<<"password completed\n";
+		std::cout << "password completed\n";
 	}
-	else {
+	else
+	{
 		// send(ERR_PASSWDMISMATCH)
 	}
 }
 
+void Command::commandUser()
+{
+	
+}

@@ -18,6 +18,8 @@ class Command {
 		std::string command;
 		std::vector<std::string> parameters;
 		std::string trailing;
+		
+
 	public:
 		Command(int fd, std::string command);
 		int getFd() const;
@@ -29,10 +31,11 @@ class Command {
 		void setParameters(std::string);
 		void setTrailing(std::string);
 
-		Command& splitCommand();
+		void splitCommand();
 
 		// 여기서부터 커맨드 추가
 		void command_pass(Server &server, UserInfo &user);
+		void commandUser();
 };
 
 #endif
