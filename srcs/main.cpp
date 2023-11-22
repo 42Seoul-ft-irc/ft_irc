@@ -51,6 +51,7 @@ int main(int argc, char **argv)
 					newone.events = POLLIN;
 					pollfds.push_back(newone);
 					std::cout << "fd: " << client_fd << std::endl;
+					
 
 					// todo 최대 크기 예외처리
 					// todo 서버가 서버에 접근할 때 처리(테스트 해보기)
