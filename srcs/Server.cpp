@@ -16,6 +16,11 @@ int Server::getSocketFd() const
 	return this->socketFd;
 }
 
+// int Server::getNumOfClient() const
+// {
+// 	return this->numOfClient;
+// }
+
 void Server::setPassword(std::string password)
 {
 	this->password = password;
@@ -30,6 +35,11 @@ void Server::setSocketFd(int fd)
 {
 	this->socketFd = fd;
 }
+
+// void Server::setNumOfClient(int numOfClient)
+// {
+// 	this->numOfClient = numOfClient;
+// }
 
 // command
 /* command 파싱 및 명령어 실행 */
@@ -53,7 +63,7 @@ void Server::executeCommand(Command cmd)
 	}
 	else if (cmd.getCommand() == "NICK")
 	{
-		//
+		cmd.commandNick(*this, user);
 	}
 	else if (cmd.getCommand() == "USER")
 	{

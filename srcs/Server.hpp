@@ -26,15 +26,18 @@ private:
 	int portNum;
 	std::string password;
 	int socketFd;
+	//int numOfClient;
 
 public:
 	int getPortNum() const;
 	std::string getPassword() const;
 	int getSocketFd() const;
+	//int getNumOfClient() const;
 
 	void setPortNum(int portNum);
 	void setPassword(std::string password);
 	void setSocketFd(int fd);
+	//void setNumOfClient(int numOfClient);
 	Command createCommand(std::string cmd, int client_fd);
 	void executeCommand(Command command);
 

@@ -99,6 +99,58 @@ void Command::command_pass(Server &server, UserInfo &user)
 	}
 }
 
+int Command::checkDuplicateNickname(Server &server)
+{
+	std::map<int, UserInfo>::iterator iter;
+
+	for (iter = server.users.begin(); iter != server.users.end(); iter++)
+	{
+		if ((*iter).second.getNickname() == parameters[1])
+			return 1;
+	}
+	return 0;
+}
+
+int Command::checkNicknameForm(Server &server)
+{
+	if (this->parameters[1].size() >= 10)
+	{
+		// send(ERR_ERRONEUSNICKNAME)
+		return 1;
+	}
+	if (checkDuplicateNickname(server))
+	{
+		// send(ERR_NICKNAMEINUSE)
+		return 1;
+	}
+	return 0;
+}
+
+void Command::commandNick(Server &server, UserInfo &user)
+{
+	if (this->parameters.size() < 2)
+	{
+		// send(ERR_NEEDMOREPARAMS)
+	}
+	else if (this->parameters.size() != 2)
+	{
+		// send(NICK uses 'NICK passparameter')
+	}
+	if (user.getNick()) //원래 유저 닉네임 변경
+	{
+		if (!checkNicknameForm(server))
+			std::cout << "nickname update completed\n";
+	}
+	else //새 유저 닉네임 생성
+	{
+		if (!checkNicknameForm(server))
+		{
+			user.checkNick();
+			std::cout << "nickname completed\n";
+		}
+	}
+}
+
 void Command::commandUser()
 {
 	

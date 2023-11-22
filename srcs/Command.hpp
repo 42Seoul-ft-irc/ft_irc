@@ -6,6 +6,10 @@
 
 #define ERR_PASSWDMISMATCH 464
 
+#define ERR_NONICKNAMEGIVEN 431
+#define ERR_ERRONEUSNICKNAME 432
+#define ERR_NICKNAMEINUSE 433
+
 #include "Server.hpp"
 
 class Server;
@@ -35,6 +39,9 @@ class Command {
 
 		// 여기서부터 커맨드 추가
 		void command_pass(Server &server, UserInfo &user);
+		void commandNick(Server &server, UserInfo &user);
+		int checkNicknameForm(Server &server);
+		int checkDuplicateNickname(Server &server);
 		void commandUser();
 };
 
