@@ -42,7 +42,7 @@ class UserInfo {
 		void checkNick();
 		void checkuser();
 		void checkActive();
-		std::set<std::string> channels;
+		std::map<std::string, bool> channels;
 };
 
 #endif
