@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <vector>
 #include <map>
+#include <set>
 #include "UserInfo.hpp"
 //#include "Channel.hpp"
 #include "Command.hpp"

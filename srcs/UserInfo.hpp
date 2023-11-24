@@ -14,6 +14,7 @@ class UserInfo {
 		bool pass;
 		bool nick;
 		bool user;
+		bool active;
 		
 	public:
 		UserInfo();
@@ -35,10 +36,13 @@ class UserInfo {
 		bool getPass() const;
 		bool getNick() const;
 		bool getUser() const;
+		bool getActive() const; 
 
 		void checkPass();
 		void checkNick();
 		void checkuser();
+		void checkActive();
+		std::set<std::string> channels;
 };
 
 #endif

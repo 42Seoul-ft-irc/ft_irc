@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 					{
 						std::cout << "클라이언트가 메세지 보냄\n";
 						
-						char buffer[1024];
+						char buffer[512];
 						int fd = pollfds[i].fd;
 						memset(buffer, 0, sizeof(buffer));
 						ssize_t recv_byte = recv(fd, buffer, sizeof(buffer), 0);
@@ -76,6 +76,7 @@ int main(int argc, char **argv)
 						}
 						else if (buffer[recv_byte - 2] == '\r' && buffer[recv_byte - 1] == '\n') {
 							std::strcat(clientBuffer[fd], buffer);
+							std::cout<<"버퍼에 문자가 추가됨\n";
 							std::string recv_str(clientBuffer[fd]);
 							std::cout << fd <<"가 [" << clientBuffer[fd] << "] 라고 보냄\n";
 							std::memset(clientBuffer[fd], 0, BUFSIZ);
@@ -85,6 +86,7 @@ int main(int argc, char **argv)
 						}
 						else {
 							std::strcat(clientBuffer[fd], buffer);
+							std::cout<<"버퍼에 문자가 추가됨\n";
 						}
 					} //클라이언트가 연결을 끊음
 					else if (pollfds[i].revents & POLLHUP)

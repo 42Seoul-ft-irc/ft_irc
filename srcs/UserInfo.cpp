@@ -53,6 +53,10 @@ bool UserInfo::getUser() const {
 	return this->user;
 }
 
+bool UserInfo::getActive() const {
+	return this->active;
+}
+
 void UserInfo::checkPass(){
 	this->pass = true;
 };
@@ -62,5 +66,8 @@ void UserInfo::checkNick(){
 void UserInfo::checkuser(){
 	this->user = true;
 };
+void UserInfo::checkActive(){
+	this->active = true;
+}
 
-UserInfo::UserInfo(): nickname(""), username(""), hostname(""), servername(""), realname(""), pass(false), nick(false), user(false) { }
+UserInfo::UserInfo(): nickname(""), username(""), hostname(""), servername(""), realname(""), pass(false), nick(false), user(false), active(false) { }
