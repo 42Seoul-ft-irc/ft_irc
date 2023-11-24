@@ -5,9 +5,7 @@ CXXFLAGS =  -Wall -Wextra -Werror -std=c++98 -MMD -MP
 RM = rm -rf
 NAME = ircserv
 SRCS = main.cpp \
-		parsing.cpp \
 		Server.cpp \
-		socket.cpp \
 		UserInfo.cpp \
 		Command.cpp
 
