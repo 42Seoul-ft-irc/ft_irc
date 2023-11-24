@@ -79,14 +79,17 @@ void Command::command_pass(Server &server, UserInfo &user)
 	if (this->parameters.size() < 2)
 	{
 		// send(ERR_NEEDMOREPARAMS)
+		return ;
 	}
 	else if (this->parameters.size() != 2)
 	{
 		// send(PASS uses 'PASS passparameter')
+		return ;
 	}
 	if (user.getPass())
 	{
 		// send(ERR_ALREADYREGISTRED)
+		return ;
 	}
 	if (*this->getParameters()++ == server.getPassword())
 	{

@@ -23,6 +23,7 @@ class Command;
 
 class Server
 {
+
 private:
 	int portNum;
 	std::string password;
@@ -30,6 +31,12 @@ private:
 	//int numOfClient;
 
 public:
+	std::map<int, UserInfo> users;
+	char clientBuffer[SOMAXCONN][BUFSIZ];
+	std::vector<pollfd> pollfds;
+
+	Server(int argc, char **argv);
+	void open_server();
 	int getPortNum() const;
 	std::string getPassword() const;
 	int getSocketFd() const;
@@ -39,17 +46,12 @@ public:
 	void setPassword(std::string password);
 	void setSocketFd(int fd);
 	//void setNumOfClient(int numOfClient);
+	void acceptClient();
 	Command createCommand(std::string cmd, int client_fd);
 	void executeCommand(Command command);
 
 	// 특정 fd의 UserInfo 찾음
-	UserInfo &getUserInfoByFd(int userFd);
-
-	std::map<int, UserInfo> users;
+	UserInfo &getUserInfoByFd(int userFd);	
 };
-
-void argv_parsing(int argc, char **argv, Server &server);
-void open_server(Server &server);
-void create_socket(Server &server);
 
 #endif
