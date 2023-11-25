@@ -1,7 +1,7 @@
 #include "Server.hpp"
 
 /* 생성자 */
-static int convert_port(char *portStr)
+static int convertPort(char *portStr)
 {
 	for (size_t i = 0; i < strlen(portStr); i++)
 		if (!isdigit(portStr[i]))
@@ -15,70 +15,85 @@ static int convert_port(char *portStr)
 	return port;
 }
 
-void create_socket(Server &server)
+void Server::createSocket()
 {
-	int socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+	int socketFd = socket(AF_INET, SOCK_STREAM, 0);
 
-	if (socket_fd == -1)
+	if (socketFd == -1)
 		throw std::runtime_error("socket error");
 
-	server.setSocketFd(socket_fd);
+	setSocketFd(socketFd);
 }
 
-void Server::open_server(){
-	create_socket(*this);
+void setServerAddr(struct sockaddr_in & serverAddr, int portNum)
+{
+	std::memset(&serverAddr, 0, sizeof(serverAddr));
+
+	serverAddr.sin_family = AF_INET;
+	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	serverAddr.sin_port = htons(portNum);
+}
+
+void Server::openServer()
+{
+	createSocket();
 
 	try
 	{
 		// 소켓 포트 연결
-		struct sockaddr_in server_addr;
+		struct sockaddr_in serverAddr;
+		setServerAddr(serverAddr, getPortNum());
 
-		std::memset(&server_addr, 0, sizeof(server_addr));
-		server_addr.sin_family = AF_INET;
-		server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-		server_addr.sin_port = htons(this->getPortNum());
-
-		if (bind(this->getSocketFd(), reinterpret_cast<const struct sockaddr *>(&server_addr), sizeof(server_addr)) == -1)
+		if (bind(getSocketFd(), reinterpret_cast<const struct sockaddr *>(&serverAddr), sizeof(serverAddr)) == -1)
 			throw std::runtime_error("Error: bind error");
 
-		if (listen(this->getSocketFd(), SOMAXCONN) == -1)
+		if (listen(getSocketFd(), SOMAXCONN) == -1)
 			throw std::runtime_error("Error: listen error");
 	}
 	catch (const std::exception &e)
 	{
-		close(this->getSocketFd());
+		close(getSocketFd());
+
 		throw std::runtime_error(e.what());
 	}
 }
 
-Server::Server(int argc, char **argv) {
+void Server::pushServerPollfd()
+{
 	pollfd pollfd;
 
-	if (argc != 3)
-		throw std::invalid_argument("Error: invalid argument");
-	this->setPortNum(convert_port(argv[1]));
-	std::string password(argv[2]);
-	this->setPassword(password);
-	open_server();
-	pollfd.fd = this->getSocketFd();
+	pollfd.fd = getSocketFd();
 	pollfd.events = POLLIN;
 	pollfds.push_back(pollfd);
+}
+
+Server::Server(int argc, char **argv)
+{
+	if (argc != 3)
+		throw std::invalid_argument("Error: invalid argument");
+
+	setPortNum(convertPort(argv[1]));
+	std::string password(argv[2]);
+	setPassword(password);
+
+	openServer();
+	pushServerPollfd();
 }
 
 /* getter setter */
 std::string Server::getPassword() const
 {
-	return this->password;
+	return password;
 }
 
 int Server::getPortNum() const
 {
-	return this->portNum;
+	return portNum;
 }
 
 int Server::getSocketFd() const
 {
-	return this->socketFd;
+	return socketFd;
 }
 
 void Server::setPassword(std::string password)
@@ -96,39 +111,41 @@ void Server::setSocketFd(int fd)
 	this->socketFd = fd;
 }
 
-void Server::acceptClient() {
+void Server::acceptClient()
+{
 	sockaddr_in client;
-	socklen_t client_len = sizeof(client);
+	socklen_t clientLen = sizeof(client);
 
-	int client_fd = accept(this->getSocketFd(), reinterpret_cast<sockaddr *>(&client), &client_len);
+	int clientFd = accept(getSocketFd(), reinterpret_cast<sockaddr *>(&client), &clientLen);
 
-	this->users.insert(std::make_pair(client_fd, UserInfo()));
-	this->users[client_fd].setFd(client_fd);
-	pollfd newone;
-	newone.fd = client_fd;
-	newone.events = POLLIN;
-	this->pollfds.push_back(newone);
-	std::cout << "fd: " << client_fd << std::endl;
+	users.insert(std::make_pair(clientFd, UserInfo()));
+	users[clientFd].setFd(clientFd);
+
+	pollfd newPollfd;
+	newPollfd.fd = clientFd;
+	newPollfd.events = POLLIN;
+	pollfds.push_back(newPollfd);
+
+	std::cout << "new client fd: " << clientFd << std::endl;
 }
 
 /* command 파싱 및 명령어 실행 */
-Command Server::createCommand(std::string cmd, int client_fd)
+Command Server::createCommand(std::string cmd, int clientFd)
 {
-	Command command(client_fd, cmd);
+	Command command(clientFd, cmd);
 
 	command.splitCommand();
+
 	return command;
-	// std::cout << " check command complete!\n";
 }
 
 void Server::executeCommand(Command cmd)
 {
-	std::cout << "command fd: " << cmd.getFd() << "\n";
-	UserInfo &user = this->getUserInfoByFd(cmd.getFd());
+	UserInfo &user = getUserInfoByFd(cmd.getFd());
 
 	if (cmd.getCommand() == "PASS")
 	{
-		cmd.command_pass(*this, user);
+		cmd.commandPass(*this, user);
 	}
 	else if (cmd.getCommand() == "NICK")
 	{
@@ -141,9 +158,9 @@ void Server::executeCommand(Command cmd)
 }
 
 /* fd를 이용해서 IserInfo 레퍼런스 반환 */
-UserInfo &Server::getUserInfoByFd(int client_fd)
+UserInfo &Server::getUserInfoByFd(int clientFd)
 {
-	std::map<int, UserInfo>::iterator it = this->users.find(client_fd);
+	std::map<int, UserInfo>::iterator it = users.find(clientFd);
 	std::cout << "find user: " << it->first << "\n";
 	if (it != users.end())
 	{

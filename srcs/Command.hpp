@@ -29,7 +29,7 @@ class Command {
 		void splitCommand();
 
 		// 여기서부터 커맨드 추가
-		void command_pass(Server &server, UserInfo &user);
+		void commandPass(Server &server, UserInfo &user);
 		void commandNick(Server &server, UserInfo &user);
 		int checkNicknameForm(Server &server);
 		int checkDuplicateNickname(Server &server);

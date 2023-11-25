@@ -4,28 +4,28 @@ Command::Command(int fd, std::string cmd) : fd(fd), original_message(cmd) {}
 
 int Command::getFd() const
 {
-	return this->fd;
+	return fd;
 }
 
 std::string Command::getCommand() const
 {
-	return this->command;
+	return command;
 }
 
 std::string Command::getOriginalMessage() const
 {
-	return this->original_message;
+	return original_message;
 }
 
 /* parameters의 시작 이터레이터 반환 */
 std::vector<std::string>::iterator Command::getParameters()
 {
-	return this->parameters.begin();
+	return parameters.begin();
 }
 
 std::string Command::getTrailing() const
 {
-	return this->trailing;
+	return trailing;
 }
 void Command::setCommand(std::string str)
 {
@@ -43,15 +43,15 @@ void Command::setTrailing(std::string str)
 /* original_message 파싱하여 command-parameters-trailing 으로 저장 */
 void Command::splitCommand()
 {
-	std::istringstream iss(this->original_message);
+	std::istringstream iss(original_message);
 	std::string token;
 
-	iss >> this->command;
+	iss >> command;
 	std::streampos left_position;
 
 	while (iss >> token && token[0] != ':' && token.find('\r') == std::string::npos && token.find('\n') == std::string::npos)
 	{
-		this->setParameters(token);
+		setParameters(token);
 		std::cout << token << std::endl;
 
 		left_position = iss.tellg();
@@ -64,7 +64,7 @@ void Command::splitCommand()
 		std::getline(iss, left);
 
 		if (left[1] == ':')
-			this->setTrailing(left.substr(2));
+			setTrailing(left.substr(2));
 	}
 }
 /*
@@ -74,14 +74,14 @@ void Command::splitCommand()
  * 여기서부터 커맨드 작성
  */
 
-void Command::command_pass(Server &server, UserInfo &user)
+void Command::commandPass(Server &server, UserInfo &user)
 {
-	if (this->parameters.size() < 2)
+	if (parameters.size() < 2)
 	{
 		// send(ERR_NEEDMOREPARAMS)
 		return ;
 	}
-	else if (this->parameters.size() != 2)
+	else if (parameters.size() != 2)
 	{
 		// send(PASS uses 'PASS passparameter')
 		return ;
@@ -91,7 +91,7 @@ void Command::command_pass(Server &server, UserInfo &user)
 		// send(ERR_ALREADYREGISTRED)
 		return ;
 	}
-	if (*this->getParameters()++ == server.getPassword())
+	if (*getParameters()++ == server.getPassword())
 	{
 		user.checkPass();
 		std::cout << "password completed\n";
@@ -116,7 +116,7 @@ int Command::checkDuplicateNickname(Server &server)
 
 int Command::checkNicknameForm(Server &server)
 {
-	if (this->parameters[1].size() >= 10)
+	if (parameters[1].size() >= 10)
 	{
 		// send(ERR_ERRONEUSNICKNAME)
 		return 1;
@@ -131,11 +131,11 @@ int Command::checkNicknameForm(Server &server)
 
 void Command::commandNick(Server &server, UserInfo &user)
 {
-	if (this->parameters.size() < 2)
+	if (parameters.size() < 2)
 	{
 		// send(ERR_NEEDMOREPARAMS)
 	}
-	else if (this->parameters.size() != 2)
+	else if (parameters.size() != 2)
 	{
 		// send(NICK uses 'NICK passparameter')
 	}
