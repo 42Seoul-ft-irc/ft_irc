@@ -78,8 +78,6 @@ Server::Server(int argc, char **argv)
 
 	openServer();
 	pushServerPollfd();
-
-	std::cout << getPortNum() << ", " << getSocketFd() << ", " << getPassword() << std::endl;
 }
 
 /* getter setter */
@@ -137,18 +135,17 @@ Command Server::createCommand(std::string cmd, int clientFd)
 	Command command(clientFd, cmd);
 
 	command.splitCommand();
+
 	return command;
-	// std::cout << " check command complete!\n";
 }
 
 void Server::executeCommand(Command cmd)
 {
-	std::cout << "command fd: " << cmd.getFd() << "\n";
 	UserInfo &user = getUserInfoByFd(cmd.getFd());
 
 	if (cmd.getCommand() == "PASS")
 	{
-		cmd.command_pass(*this, user);
+		cmd.commandPass(*this, user);
 	}
 	else if (cmd.getCommand() == "NICK")
 	{
