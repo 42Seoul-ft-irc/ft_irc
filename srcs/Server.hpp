@@ -18,6 +18,7 @@
 #include "Command.hpp"
 #include "Message.hpp"
 #include "Pass.hpp"
+#include "Nick.hpp"
 
 class UserInfo;
 class Command;

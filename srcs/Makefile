@@ -9,7 +9,8 @@ SRCS = main.cpp \
 		Server.cpp \
 		UserInfo.cpp \
 		Pass.cpp \
-		Message.cpp
+		Message.cpp \
+		Nick.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(SRCS:.cpp=.d)

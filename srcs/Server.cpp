@@ -138,8 +138,6 @@ Command *Server::createCommand(int fd, std::string recvStr)
 	Message msg(fd, recvStr);
 	msg.splitMsg();
 
-	// Command cmdDemo(&msg);
-
 	UserInfo &user = getUserInfoByFd(msg.getFd());
 
 	Command *cmd = 0;
@@ -147,17 +145,12 @@ Command *Server::createCommand(int fd, std::string recvStr)
 	if (msg.getCommand() == "PASS")
 	{
 		cmd = new Pass(&msg, user, password);
-
-		// cmd.commandPass(*this, user);
 	}
-	// else if (cmdDemo.getCommand() == "NICK")
-	// {
-	// 	cmd.commandNick(*this, user);
-	// }
-	// else if (cmdDemo.getCommand() == "USER")
-	// {
-	// 	cmd.commandUser();
-	// }
+	else if (msg.getCommand() == "NICK")
+	{
+		std::cout << "닉!!\n";
+		cmd = new Nick(&msg, user, users);
+	}
 
 	return cmd;
 }
