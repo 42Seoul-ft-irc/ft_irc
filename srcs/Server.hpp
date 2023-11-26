@@ -15,8 +15,9 @@
 #include <map>
 #include <set>
 #include "UserInfo.hpp"
-// #include "Channel.hpp"
 #include "Command.hpp"
+#include "Message.hpp"
+#include "Pass.hpp"
 
 class UserInfo;
 class Command;
@@ -38,6 +39,7 @@ public:
 	char clientBuffer[SOMAXCONN][BUFSIZ];
 	std::vector<pollfd> pollfds;
 
+	Server();
 	Server(int argc, char **argv);
 
 	int getPortNum() const;
@@ -49,9 +51,9 @@ public:
 	void setSocketFd(int fd);
 
 	void acceptClient();
-	Command createCommand(std::string cmd, int client_fd);
-	void executeCommand(Command command);
 
+	Command *createCommand(int fd, std::string recvStr);
+	void executeCommand(Command *cmd);
 	// 특정 fd의 UserInfo 찾음
 	UserInfo &getUserInfoByFd(int userFd);
 };

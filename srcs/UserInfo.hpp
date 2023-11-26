@@ -1,7 +1,8 @@
 #ifndef USERINFO_HPP
 #define USERINFO_HPP
 
-#include "Server.hpp"
+#include <string>
+#include <map>
 
 class UserInfo {
 	private:
@@ -18,7 +19,6 @@ class UserInfo {
 		
 	public:
 		UserInfo();
-		// ~UserInfo();
 
 		void setFd(int fd);
 		void setNickname(std::string nickname);
