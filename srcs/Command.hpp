@@ -40,6 +40,4 @@ public:
 	// int checkDuplicateNickname(Server &server);
 };
 
-std::ostream &operator<<(std::ostream &os, const Command &obj);
-
 #endif

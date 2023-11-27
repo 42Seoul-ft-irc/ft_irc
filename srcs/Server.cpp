@@ -134,12 +134,14 @@ void Server::acceptClient()
 /* command 파싱 및 명령어 실행 */
 Command *Server::createCommand(int fd, std::string recvStr)
 {
-
 	Message msg(fd, recvStr);
 	msg.splitMsg();
 
 	UserInfo &user = getUserInfoByFd(msg.getFd());
+
 	std::cout << user;
+	std::cout << msg << std::endl;
+
 	Command *cmd = 0;
 
 	if (msg.getCommand() == "PASS")

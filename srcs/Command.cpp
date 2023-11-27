@@ -55,16 +55,3 @@ void Command::setTrailing(std::string str)
 {
 	this->trailing = str;
 }
-
-std::ostream &operator<<(std::ostream &os, const Command &obj)
-{
-	os << "fd : " << obj.getFd() << std::endl;
-	os << "originalMessage : " << obj.getOriginalMessage() << std::endl;
-	os << "parameters : { ";
-
-	for (size_t i = 0; i < obj.getParameters().size(); i++)
-		os << obj.getParameters()[i] << " / ";
-
-	os << "trailing : " << obj.getTrailing() << std::endl;
-	return os;
-}

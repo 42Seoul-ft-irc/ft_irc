@@ -35,42 +35,49 @@ std::string UserInfo::getUsername() const
 	return username;
 }
 
-
 std::string UserInfo::getRealname() const
 {
 	return realname;
 }
 
-bool UserInfo::getPass() const {
+bool UserInfo::getPass() const
+{
 	return pass;
 }
 
-bool UserInfo::getNick() const {
+bool UserInfo::getNick() const
+{
 	return nick;
 }
 
-bool UserInfo::getUser() const {
+bool UserInfo::getUser() const
+{
 	return user;
 }
 
-bool UserInfo::getActive() const {
+bool UserInfo::getActive() const
+{
 	return active;
 }
 
-void UserInfo::checkPass(){
+void UserInfo::checkPass()
+{
 	pass = true;
 };
-void UserInfo::checkNick(){
+void UserInfo::checkNick()
+{
 	nick = true;
 };
-void UserInfo::checkuser(){
+void UserInfo::checkuser()
+{
 	user = true;
 };
-void UserInfo::checkActive(){
+void UserInfo::checkActive()
+{
 	active = true;
 }
 
-UserInfo::UserInfo(): nickname(""), username(""), realname(""), pass(false), nick(false), user(false), active(false) { }
+UserInfo::UserInfo() : nickname(""), username(""), realname(""), pass(false), nick(false), user(false), active(false) {}
 
 std::ostream &operator<<(std::ostream &os, const UserInfo &obj)
 {
@@ -84,7 +91,8 @@ std::ostream &operator<<(std::ostream &os, const UserInfo &obj)
 	os << "PASS : " << (obj.getPass() ? "✅" : "❌") << std::endl;
 	os << "NICK : " << (obj.getNick() ? "✅" : "❌") << std::endl;
 	os << "USER : " << (obj.getUser() ? "✅" : "❌") << std::endl;
-	os << "ACTIVE : " << (obj.getActive() ? "✅" : "❌") << std::endl << std::endl;
+	os << "ACTIVE : " << (obj.getActive() ? "✅" : "❌") << std::endl;
+	os << "~~~~~~~~~~~~~~~~~" << std::endl;
 
 	return os;
 }
