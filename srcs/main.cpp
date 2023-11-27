@@ -52,7 +52,8 @@ int main(int argc, char **argv)
 							std::memset(server.clientBuffer[fd], 0, BUFSIZ);
 
 							Command *cmd = server.createCommand(fd, recvStr);
-							std::cout << cmd << std::endl;
+							if (cmd)
+								std::cout << *cmd << std::endl;
 							
 							server.executeCommand(cmd);
 						}

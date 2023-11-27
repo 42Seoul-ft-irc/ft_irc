@@ -34,7 +34,7 @@ std::vector<std::string>::iterator Command::getParametersBegin()
 	return parameters.begin();
 }
 
-std::vector<std::string> Command::getParameters()
+std::vector<std::string> Command::getParameters() const
 {
 	return parameters;
 }
@@ -56,7 +56,7 @@ void Command::setTrailing(std::string str)
 	this->trailing = str;
 }
 
-std::ostream &operator<<(std::ostream &os, Command &obj)
+std::ostream &operator<<(std::ostream &os, const Command &obj)
 {
 	os << "fd : " << obj.getFd() << std::endl;
 	os << "originalMessage : " << obj.getOriginalMessage() << std::endl;
