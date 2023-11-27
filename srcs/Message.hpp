@@ -24,7 +24,7 @@ public:
 	int getFd() const;
 	std::string getOriginalMessage() const;
 	std::string getCommand() const;
-	std::vector<std::string> getParameters();
+	std::vector<std::string> getParameters() const;
 	std::vector<std::string>::iterator getParametersBegin();
 	std::string getTrailing() const;
 
@@ -34,5 +34,7 @@ public:
 	void setTrailing(std::string);
 	void setParentValue(std::string, std::vector<std::string>, std::string);
 };
+
+std::ostream &operator<<(std::ostream &os, const Message &obj);
 
 #endif

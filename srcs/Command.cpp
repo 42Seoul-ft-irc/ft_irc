@@ -1,7 +1,5 @@
 #include "Command.hpp"
 
-Command::Command() {}
-
 Command::Command(Message *message)
 {
 	fd = message->getFd();
@@ -36,7 +34,7 @@ std::vector<std::string>::iterator Command::getParametersBegin()
 	return parameters.begin();
 }
 
-std::vector<std::string> Command::getParameters()
+std::vector<std::string> Command::getParameters() const
 {
 	return parameters;
 }
@@ -56,17 +54,4 @@ void Command::setParameters(std::string str)
 void Command::setTrailing(std::string str)
 {
 	this->trailing = str;
-}
-
-std::ostream &operator<<(std::ostream &os, Command &obj)
-{
-	os << "fd : " << obj.getFd() << std::endl;
-	os << "originalMessage : " << obj.getOriginalMessage() << std::endl;
-	os << "parameters : { ";
-
-	for (size_t i = 0; i < obj.getParameters().size(); i++)
-		os << obj.getParameters()[i] << " / ";
-
-	os << "trailing : " << obj.getTrailing() << std::endl;
-	return os;
 }

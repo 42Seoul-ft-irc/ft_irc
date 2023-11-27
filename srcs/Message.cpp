@@ -26,7 +26,7 @@ std::vector<std::string>::iterator Message::getParametersBegin()
 	return parameters.begin();
 }
 
-std::vector<std::string> Message::getParameters()
+std::vector<std::string> Message::getParameters() const
 {
 	return parameters;
 }
@@ -49,7 +49,6 @@ void Message::setTrailing(std::string str)
 {
 	this->trailing = str;
 }
-
 
 /* originalMessage 파싱하여 Message-parameters-trailing 으로 저장 */
 void Message::splitMsg()
@@ -77,4 +76,20 @@ void Message::splitMsg()
 		if (left[1] == ':')
 			setTrailing(left.substr(2));
 	}
+}
+
+std::ostream &operator<<(std::ostream &os, const Message &obj)
+{
+	os << "~~ MESSAGE ~~" << std::endl;
+
+	os << "fd : " << obj.getFd() << std::endl;
+	os << "originalMessage : " << obj.getOriginalMessage() << std::endl;
+	os << "parameters : { ";
+
+	for (size_t i = 0; i < obj.getParameters().size(); i++)
+		os << obj.getParameters()[i] << "  ";
+	os << "}\ntrailing : " << obj.getTrailing() << std::endl;
+	os << "~~~~~~~~~~~~~~~~" << std::endl;
+
+	return os;
 }

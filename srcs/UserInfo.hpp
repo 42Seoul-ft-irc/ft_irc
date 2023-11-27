@@ -1,6 +1,7 @@
 #ifndef USERINFO_HPP
 #define USERINFO_HPP
 
+#include <iostream>
 #include <string>
 #include <map>
 
@@ -9,8 +10,6 @@ class UserInfo {
 		int fd;
 		std::string nickname;
 		std::string username;
-		std::string hostname;
-		std::string servername;
 		std::string realname;
 		bool pass;
 		bool nick;
@@ -44,5 +43,7 @@ class UserInfo {
 		void checkActive();
 		std::map<std::string, bool> channels;
 };
+
+std::ostream &operator<<(std::ostream &os, const UserInfo &obj);
 
 #endif

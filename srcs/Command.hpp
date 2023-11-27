@@ -15,7 +15,6 @@ private:
 	std::string trailing;
 
 public:
-	Command();
 	Command(Message *msg);
 	virtual ~Command();
 
@@ -25,7 +24,7 @@ public:
 	int getFd() const;
 	std::string getOriginalMessage() const;
 	std::string getCommand() const;
-	std::vector<std::string> getParameters();
+	std::vector<std::string> getParameters() const;
 	std::vector<std::string>::iterator getParametersBegin();
 	std::string getTrailing() const;
 
@@ -40,7 +39,5 @@ public:
 	// int checkNicknameForm(Server &server);
 	// int checkDuplicateNickname(Server &server);
 };
-
-std::ostream &operator<<(std::ostream &os, const Command &obj);
 
 #endif

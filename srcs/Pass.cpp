@@ -1,6 +1,6 @@
 #include "Pass.hpp"
 
-Pass::Pass(Message *msg, UserInfo &user, std::string password) : Command(msg), user(user), password(password){}
+Pass::Pass(Message *msg, UserInfo &user, std::string password) : Command(msg), user(user), password(password) {}
 
 Pass::~Pass() {}
 
@@ -32,4 +32,6 @@ void Pass::execute()
 	{
 		// send(ERR_PASSWDMISMATCH)
 	}
+
+	std::cout << user;
 }
