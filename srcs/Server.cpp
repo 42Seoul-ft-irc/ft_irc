@@ -25,7 +25,7 @@ void Server::createSocket()
 	setSocketFd(socketFd);
 }
 
-void setServerAddr(struct sockaddr_in & serverAddr, int portNum)
+void setServerAddr(struct sockaddr_in &serverAddr, int portNum)
 {
 	std::memset(&serverAddr, 0, sizeof(serverAddr));
 
@@ -80,6 +80,8 @@ Server::Server(int argc, char **argv)
 	pushServerPollfd();
 }
 
+Server::Server() {}
+
 /* getter setter */
 std::string Server::getPassword() const
 {
@@ -130,31 +132,35 @@ void Server::acceptClient()
 }
 
 /* command 파싱 및 명령어 실행 */
-Command Server::createCommand(std::string cmd, int clientFd)
+Command *Server::createCommand(int fd, std::string recvStr)
 {
-	Command command(clientFd, cmd);
 
-	command.splitCommand();
+	Message msg(fd, recvStr);
+	msg.splitMsg();
 
-	return command;
+	UserInfo &user = getUserInfoByFd(msg.getFd());
+
+	Command *cmd = 0;
+
+	if (msg.getCommand() == "PASS")
+	{
+		cmd = new Pass(&msg, user, password);
+	}
+	else if (msg.getCommand() == "NICK")
+	{
+		std::cout << "닉!!\n";
+		cmd = new Nick(&msg, user, users);
+	}
+
+	return cmd;
 }
 
-void Server::executeCommand(Command cmd)
+void Server::executeCommand(Command *cmd)
 {
-	UserInfo &user = getUserInfoByFd(cmd.getFd());
+	if (cmd)
+		cmd->execute();
 
-	if (cmd.getCommand() == "PASS")
-	{
-		cmd.commandPass(*this, user);
-	}
-	else if (cmd.getCommand() == "NICK")
-	{
-		cmd.commandNick(*this, user);
-	}
-	else if (cmd.getCommand() == "USER")
-	{
-		cmd.commandUser();
-	}
+	delete (cmd);
 }
 
 /* fd를 이용해서 IserInfo 레퍼런스 반환 */

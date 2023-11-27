@@ -1,11 +1,12 @@
-#ifndef COMMAND_HPP
-#define COMMAND_HPP
+#ifndef MESSAGE_HPP
+#define MESSAGE_HPP
 
-#include "Message.hpp"
 #include <string>
 #include <vector>
+#include <sstream>
+#include <iostream>
 
-class Command
+class Message
 {
 private:
 	int fd;
@@ -15,11 +16,9 @@ private:
 	std::string trailing;
 
 public:
-	Command();
-	Command(Message *msg);
-	virtual ~Command();
-
-	virtual void execute()=0;
+	Message(int, std::string);
+	
+	void splitMsg();
 
 	// getter
 	int getFd() const;
@@ -33,14 +32,7 @@ public:
 	void setCommand(std::string);
 	void setParameters(std::string);
 	void setTrailing(std::string);
-
-	// 여기서부터 커맨드 추가
-	// void commandPass(Server &server, UserInfo &user);
-	// void commandNick(Server &server, UserInfo &user);
-	// int checkNicknameForm(Server &server);
-	// int checkDuplicateNickname(Server &server);
+	void setParentValue(std::string, std::vector<std::string>, std::string);
 };
-
-std::ostream &operator<<(std::ostream &os, const Command &obj);
 
 #endif

@@ -51,10 +51,10 @@ int main(int argc, char **argv)
 							std::cout << fd << "가 [" << server.clientBuffer[fd] << "] 라고 보냄\n";
 							std::memset(server.clientBuffer[fd], 0, BUFSIZ);
 
-							Command command = server.createCommand(recvStr, fd);
-
-							std::cout << command.getFd() << "'command is created.\n";
-							server.executeCommand(command);
+							Command *cmd = server.createCommand(fd, recvStr);
+							std::cout << cmd << std::endl;
+							
+							server.executeCommand(cmd);
 						}
 						else
 						{
