@@ -139,7 +139,7 @@ Command *Server::createCommand(int fd, std::string recvStr)
 	msg.splitMsg();
 
 	UserInfo &user = getUserInfoByFd(msg.getFd());
-
+	std::cout << user;
 	Command *cmd = 0;
 
 	if (msg.getCommand() == "PASS")
@@ -148,7 +148,6 @@ Command *Server::createCommand(int fd, std::string recvStr)
 	}
 	else if (msg.getCommand() == "NICK")
 	{
-		std::cout << "닉!!\n";
 		cmd = new Nick(&msg, user, users);
 	}
 
@@ -158,9 +157,10 @@ Command *Server::createCommand(int fd, std::string recvStr)
 void Server::executeCommand(Command *cmd)
 {
 	if (cmd)
+	{
 		cmd->execute();
-
-	delete (cmd);
+		delete (cmd);
+	}
 }
 
 /* fd를 이용해서 IserInfo 레퍼런스 반환 */

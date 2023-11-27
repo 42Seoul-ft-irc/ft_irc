@@ -15,7 +15,6 @@ private:
 	std::string trailing;
 
 public:
-	Command();
 	Command(Message *msg);
 	virtual ~Command();
 

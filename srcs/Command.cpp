@@ -1,7 +1,5 @@
 #include "Command.hpp"
 
-Command::Command() {}
-
 Command::Command(Message *message)
 {
 	fd = message->getFd();
