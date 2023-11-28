@@ -152,6 +152,14 @@ Command *Server::createCommand(int fd, std::string recvStr)
 	{
 		cmd = new Nick(&msg, user, users);
 	}
+	else if (msg.getCommand() == "USER")
+	{
+
+	}
+	else if (msg.getCommand() == "JOIN")
+	{
+		cmd = new Join(&msg, user);
+	}
 
 	return cmd;
 }

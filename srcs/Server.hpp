@@ -15,6 +15,7 @@
 #include <map>
 #include <set>
 #include "UserInfo.hpp"
+#include "Channel.hpp"
 #include "Command.hpp"
 #include "Message.hpp"
 #include "Pass.hpp"
@@ -37,6 +38,7 @@ private:
 
 public:
 	std::map<int, UserInfo> users;
+	std::map<std::string, Channel*> channels;
 	char clientBuffer[SOMAXCONN][BUFSIZ];
 	std::vector<pollfd> pollfds;
 
