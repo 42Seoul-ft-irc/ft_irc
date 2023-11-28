@@ -2,7 +2,8 @@
 #define USER_HPP
 
 #include "Command.hpp"
-#include "UserInfo.hpp"
+#include "../utils.hpp"
+#include "../UserInfo.hpp"
 
 class User : public Command {
 private:
