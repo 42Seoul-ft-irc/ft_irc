@@ -17,6 +17,7 @@ private:
 
 public:
 	Message(int, std::string);
+	*Message(int, std::string);
 	
 	void splitMsg();
 
