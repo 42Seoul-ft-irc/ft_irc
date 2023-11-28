@@ -1,4 +1,4 @@
-#include INVITE_HPP
+#ifndef INVITE_HPP
 #define INVITE_HPP
 #include "Command.hpp"
 
