@@ -1,15 +1,15 @@
-#include JOIN_HPP
+#ifndef JOIN_HPP
 #define JOIN_HPP
 
 #include "Command.hpp"
-#include "UserInfo.hpp"
-#include "Message.hpp"
-#include "Channel.hpp"
+#include "../UserInfo.hpp"
+#include "../Message.hpp"
+#include "../Channel.hpp"
 
 class Join : public Command {
 	private:
 		UserInfo &user;
-		Channel &channel;
+		//Channel &channel;
 		std::string channelName;
 	
 	public:
