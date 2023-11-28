@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 							std::cout << fd << "가 [" << server.clientBuffer[fd] << "] 라고 보냄\n";
 							std::memset(server.clientBuffer[fd], 0, BUFSIZ);
 
-							Command *cmd = server.createCommand(fd, recvStr);							
+							Command *cmd = server.createCommand(fd, recvStr);
 							server.executeCommand(cmd);
 						}
 						else
@@ -73,4 +73,12 @@ int main(int argc, char **argv)
 	{
 		std::cerr << e.what() << std::endl;
 	}
+}
+
+void ft_send(int fd, std::string msg)
+{
+	int result = send(fd, &msg, msg.length() + 1, 0);
+
+	if (result == -1)
+		throw std::runtime_error("Error: send error");
 }
