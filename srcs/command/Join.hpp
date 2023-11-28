@@ -6,14 +6,17 @@
 #include "../Message.hpp"
 #include "../Channel.hpp"
 
+class Channel;
+
 class Join : public Command {
 	private:
 		UserInfo &user;
-		//Channel &channel;
 		std::string channelName;
 	
 	public:
-		Join(Message *msg, UserInfo &user);
+		std::map<std::string, Channel> *channels;
+		Channel *channel;
+		Join(Message *msg, UserInfo &user, std::map<std::string, Channel> *channels);
 		void execute();
 
 };

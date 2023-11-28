@@ -1,4 +1,3 @@
-#pragma once
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
@@ -21,6 +20,7 @@
 #include "Message.hpp"
 #include "command/Pass.hpp"
 #include "command/Nick.hpp"
+#include "command/Join.hpp"
 
 class UserInfo;
 class Command;
@@ -40,7 +40,7 @@ private:
 
 public:
 	std::map<int, UserInfo> users;
-	std::map<std::string, Channel *> channels;
+	std::map<std::string, Channel> channels;
 	char clientBuffer[SOMAXCONN][BUFSIZ];
 	std::vector<pollfd> pollfds;
 
