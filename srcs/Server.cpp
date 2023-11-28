@@ -135,8 +135,7 @@ void Server::acceptClient()
 Command *Server::createCommand(int fd, std::string recvStr)
 {
 	Message msg(fd, recvStr);
-	msg.splitMsg();
-
+	
 	UserInfo &user = getUserInfoByFd(msg.getFd());
 
 	std::cout << user;
