@@ -1,7 +1,7 @@
 #ifndef COMMAND_HPP
 #define COMMAND_HPP
 
-#include "Message.hpp"
+#include "../Message.hpp"
 #include <string>
 #include <vector>
 
@@ -16,6 +16,7 @@ private:
 
 public:
 	Command(Message *msg);
+	Command(Message &msg);
 	virtual ~Command();
 
 	virtual void execute()=0;

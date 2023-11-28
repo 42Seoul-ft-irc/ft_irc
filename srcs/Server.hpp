@@ -16,10 +16,10 @@
 #include <set>
 #include "UserInfo.hpp"
 #include "Channel.hpp"
-#include "Command.hpp"
+#include "command/Command.hpp"
 #include "Message.hpp"
-#include "Pass.hpp"
-#include "Nick.hpp"
+#include "command/Pass.hpp"
+#include "command/Nick.hpp"
 
 class UserInfo;
 class Command;

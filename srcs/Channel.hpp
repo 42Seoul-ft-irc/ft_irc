@@ -18,16 +18,7 @@ private:
 
 public:
 	Channel(UserInfo &user, std::string name);
-	~Channel();
 };
-
-Channel::Channel()
-{
-}
-
-Channel::~Channel()
-{
-}
 
 
 #endif

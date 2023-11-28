@@ -2,7 +2,7 @@
 #define NICK_HPP
 
 #include "Command.hpp"
-#include "UserInfo.hpp"
+#include "../UserInfo.hpp"
 #include <map>
 
 class Nick : public Command
