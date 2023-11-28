@@ -10,6 +10,8 @@ class UserInfo {
 		int fd;
 		std::string nickname;
 		std::string username;
+		std::string hostname;
+		std::string servername;
 		std::string realname;
 		bool pass;
 		bool nick;
@@ -29,9 +31,11 @@ class UserInfo {
 		int getFd() const;
 		std::string getNickname() const;
 		std::string getUsername() const;
+		std::string getHostname() const;
+		std::string getServername() const;
+		std::string getRealname() const;
 		std::string getMode() const;
 		std::string getUnused() const;
-		std::string getRealname() const;
 		bool getPass() const;
 		bool getNick() const;
 		bool getUser() const;
