@@ -20,6 +20,7 @@
 #include "Message.hpp"
 #include "command/Pass.hpp"
 #include "command/Nick.hpp"
+#include "command/User.hpp"
 #include "command/Join.hpp"
 
 class UserInfo;

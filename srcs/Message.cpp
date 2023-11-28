@@ -1,6 +1,6 @@
 #include "Message.hpp"
 
-Message::Message(int fd, std::string cmd) : fd(fd), originalMessage(cmd)
+Message::Message(int fd, std::string cmd) : fd(fd), originalMessage(cmd), command(""), trailing("")
 {
 	splitMsg();
 }

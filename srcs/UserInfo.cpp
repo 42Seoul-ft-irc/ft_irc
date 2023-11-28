@@ -15,6 +15,16 @@ void UserInfo::setUsername(std::string username)
 	this->username = username;
 }
 
+void UserInfo::setHostname(std::string hostname)
+{
+	this->hostname = hostname;
+}
+
+void UserInfo::setServername(std::string servername)
+{
+	this->servername = servername;
+}
+
 void UserInfo::setRealname(std::string realname)
 {
 	this->realname = realname;
@@ -33,6 +43,16 @@ std::string UserInfo::getNickname() const
 std::string UserInfo::getUsername() const
 {
 	return username;
+}
+
+std::string UserInfo::getHostname() const
+{
+	return hostname;
+}
+
+std::string UserInfo::getServername() const
+{
+	return servername;
 }
 
 std::string UserInfo::getRealname() const
@@ -68,7 +88,7 @@ void UserInfo::checkNick()
 {
 	nick = true;
 };
-void UserInfo::checkuser()
+void UserInfo::checkUser()
 {
 	user = true;
 };
@@ -77,7 +97,7 @@ void UserInfo::checkActive()
 	active = true;
 }
 
-UserInfo::UserInfo() : nickname(""), username(""), realname(""), pass(false), nick(false), user(false), active(false) {}
+UserInfo::UserInfo() : nickname(""), username(""), hostname(""), servername(""), realname(""), pass(false), nick(false), user(false), active(false) {}
 
 std::ostream &operator<<(std::ostream &os, const UserInfo &obj)
 {
@@ -86,7 +106,10 @@ std::ostream &operator<<(std::ostream &os, const UserInfo &obj)
 	os << "fd : " << obj.getFd() << std::endl;
 	os << "nickname : " << obj.getNickname() << std::endl;
 	os << "username : " << obj.getUsername() << std::endl;
-	os << "realname : " << obj.getRealname() << std::endl << std::endl;
+	os << "hostname : " << obj.getHostname() << std::endl;
+	os << "servername : " << obj.getServername() << std::endl;
+	os << "realname : " << obj.getRealname() << std::endl
+	   << std::endl;
 
 	os << "PASS : " << (obj.getPass() ? "✅" : "❌") << std::endl;
 	os << "NICK : " << (obj.getNick() ? "✅" : "❌") << std::endl;

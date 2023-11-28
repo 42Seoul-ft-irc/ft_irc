@@ -153,7 +153,7 @@ Command *Server::createCommand(int fd, std::string recvStr)
 	}
 	else if (msg.getCommand() == "USER")
 	{
-
+		cmd = new User(&msg, user);
 	}
 	else if (msg.getCommand() == "JOIN")
 	{
