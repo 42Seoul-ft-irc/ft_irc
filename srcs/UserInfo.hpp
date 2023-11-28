@@ -24,9 +24,11 @@ class UserInfo {
 		void setFd(int fd);
 		void setNickname(std::string nickname);
 		void setUsername(std::string username);
+		void setHostname(std::string hostname);
+		void setServername(std::string servername);
+		void setRealname(std::string realname);
 		void setMode(std::string mode);
 		void setUnused(std::string unused);
-		void setRealname(std::string realname);
 
 		int getFd() const;
 		std::string getNickname() const;
@@ -43,7 +45,7 @@ class UserInfo {
 
 		void checkPass();
 		void checkNick();
-		void checkuser();
+		void checkUser();
 		void checkActive();
 		std::map<std::string, bool> channels;
 };
