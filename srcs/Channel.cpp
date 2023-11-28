@@ -4,8 +4,8 @@ Channel::Channel(UserInfo &user, std::string name) : pass(""), topic(""), limit(
 	if (name.length() > 200 && name[0] != '#') {
 		this->name = name.substr(0, 200);
 	}
-	operators[user.getNickname()] = &user;
-	users[user.getNickname()] = &user;
+	operators[user.getNickname()] = user;
+	users[user.getNickname()] = user;
 }
 
 std::string Channel::getName() const{
