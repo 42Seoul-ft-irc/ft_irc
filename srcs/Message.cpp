@@ -83,7 +83,8 @@ std::ostream &operator<<(std::ostream &os, const Message &obj)
 	os << "~~ MESSAGE ~~" << std::endl;
 
 	os << "fd : " << obj.getFd() << std::endl;
-	os << "originalMessage : " << obj.getOriginalMessage() << std::endl;
+	os << "originalMessage : " << obj.getOriginalMessage();
+	os << "command : " << obj.getCommand() << std::endl;
 	os << "parameters : { ";
 
 	for (size_t i = 0; i < obj.getParameters().size(); i++)
