@@ -8,12 +8,12 @@ void Pass::execute()
 {
 	std::cout << "pass 명령어 실행\n";
 
-	if (getParameters().size() < 2)
+	if (getParameters().size() < 1)
 	{
 		// send(ERR_NEEDMOREPARAMS)
 		return;
 	}
-	else if (getParameters().size() != 2)
+	else if (getParameters().size() != 1)
 	{
 		// send(PASS uses 'PASS passparameter')
 		return;
