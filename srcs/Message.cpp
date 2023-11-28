@@ -1,9 +1,5 @@
 #include "Message.hpp"
 
-&Message::Message(int fd, std::string cmd) : fd(fd), originalMessage(cmd) {
-	splitMsg();
-}
-
 Message::Message(int fd, std::string cmd) : fd(fd), originalMessage(cmd)
 {
 	splitMsg();
