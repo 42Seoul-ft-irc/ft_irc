@@ -17,4 +17,11 @@ void User::execute()
 
 	if (getTrailing().empty())
 		ft_send(user.getFd(), "461 USER :Not enough parameters"); // ERR_NEEDMOREPARAMS
+
+	user.setUsername(getParameters()[0]);
+	user.setHostname(getParameters()[1]);
+	user.setServername(getParameters()[2]);
+	user.setRealname(getTrailing());
+
+	user.checkUser();
 }
