@@ -36,7 +36,7 @@ int Nick::checkDuplicateNickname()
 
 	for (iter = users.begin(); iter != users.end(); iter++)
 	{
-		if ((*iter).second.getNickname() == getParameters()[1])
+		if ((*iter).second.getNickname() == getParameters()[0])
 			return 1;
 	}
 	return 0;

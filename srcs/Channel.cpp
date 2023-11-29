@@ -1,8 +1,12 @@
 #include "Channel.hpp"
 
 Channel::Channel(UserInfo &user, std::string name) : pass(""), topic(""), limit(0), isInvite(false), isLimit(false), isKey(false) {
-	if (name.length() > 200 && name[0] != '#') {
+	
+	if (name.length() > 200) {
 		this->name = name.substr(0, 200);
+	}
+	else {
+		this->name = name;
 	}
 	operators[user.getNickname()] = user;
 	users[user.getNickname()] = user;

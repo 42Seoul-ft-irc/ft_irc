@@ -7,27 +7,38 @@ Join::Join(Message *msg, UserInfo &user, std::map<std::string, Channel> *channel
 
 void Join::execute()
 {
+	std::cout<< "join line 10\n";
 	// 매개변수 없을 때
-	if (this->getParameters().size() < 2)
+	if (this->getParameters().size() < 1)
 	{
+			std::cout<< "join line 10\n";
 		// ERR_NEEDMOREPARAMS
 		return;
 	}
+	std::cout<< "join line 18\n";
 	// 사용자가 가입한 채널이 10개인지 확인
 	if (this->user.channels.size() >= 10)
 	{
+		std::cout<< "join line 22\n";
 		// ERR_TOOMANYCHANNELS
 		return;
 	}
+	std::cout<< "join line 26\n";
 	// 존재하는 채널인지 확인 => 채널 생성 및 운영자 설정
 	std::map<std::string, Channel>::iterator it1 = this->channels->find(this->getParameters().at(0));
 	if (it1 == channels->end()){	
-		Channel channel(this->user, this->getParameters().at(1));
+		std::cout<< "join line 30\n";
+		std::cout<< this->getParameters().at(0) << std::endl;
+		Channel channel(this->user, this->getParameters().at(0));
 		this->channels->insert(std::make_pair(this->getParameters().at(0), channel));
 		channel.operators.insert(std::make_pair(user.getNickname(), this->user));
 		channel.users.insert(std::make_pair(user.getNickname(), this->user));
+
+		std::map<std::string, Channel>::iterator it2 = this->channels->find(this->getParameters().at(0));
+		this->channel = &it2->second;
+
 		// join 성공 후 리턴
-		std::cout << "JOIN 성공! 새로운 채널이 생성됨. \n";
+		std::cout << "JOIN 성공! 새로운 채널이 생성됨. channel name: " << this->channel->getName() <<"\n";
 		return ;
 	}
 	// 조인의 대상 채널 지정
@@ -40,25 +51,26 @@ void Join::execute()
 		// command 무시하고 넘어가기
 		return ;
 	}
+
 	// 인원수 제한 확인
-	if (channel->getIsLimit() && channel->getLimit() <= this->channel->users.size()) {
-		//ERR_CHANNELISFULL
+	if (channel->getIsLimit()) {
+		if (channel->getLimit() <= this->channel->users.size()) {
+			//ERR_CHANNELISFULL
+		}
+		else {
+
+		}
 		return ;
-	}
+	} 
+
 	// 채널 비밀번호 확인
-	if (channel->getIsKey() && this->getParameters().size() < 2) {
-		//ERR_NEEDMOREPARAMS
+	if (channel->getIsKey()) {
+		if (this->getParameters().size() < 2 || this->getParameters().at(1) != channel->getPass()) {
+			//ERR_NEEDMOREPARAMS
+		}
+		else {
+
+		}
 		return ;
-	} 
-	else if (channel->getIsKey() && this->getParameters().at(1) != channel->getPass()) {
-		//ERR_BADCHANNELKEY
-		return ;
-	} 
-	else if (channel->getIsKey() && this->getParameters().at(1) == channel->getPass()) {
-		
 	}
-	
-	//if ()
-	//{
-	//}
 }
