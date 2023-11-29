@@ -165,8 +165,14 @@ Command *Server::createCommand(int fd, std::string recvStr)
 void Server::executeCommand(Command *cmd)
 {
 	if (cmd)
+	{
 		cmd->execute();
 		delete (cmd);
+		// std::map<std::string, Channel>::iterator i = this->channels.begin();
+        // for (; i != this->channels.end(); ++i)
+        // {
+        //     std::cout << "서버에 들어온 채널: " << i->second.getName() << std::endl;
+        // }
 	}
 }
 
