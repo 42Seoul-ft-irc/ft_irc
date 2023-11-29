@@ -166,8 +166,8 @@ void Server::executeCommand(Command *cmd)
 {
 	if (cmd)
 		cmd->execute();
-
-	delete (cmd);
+		delete (cmd);
+	}
 }
 
 /* fd를 이용해서 IserInfo 레퍼런스 반환 */

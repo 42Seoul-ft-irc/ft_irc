@@ -17,8 +17,11 @@ class Join : public Command {
 		std::map<std::string, Channel> *channels;
 		Channel *channel;
 		Join(Message *msg, UserInfo &user, std::map<std::string, Channel> *channels);
+		void createChannel();
+		void joinChannel();
 		void execute();
-
 };
+
+
 
 #endif 

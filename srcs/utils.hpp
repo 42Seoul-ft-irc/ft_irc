@@ -3,6 +3,6 @@
 
 #include <string>
 
-void ft_send(int fd, std::string msg);
+void ft_send(int fd, char *msg);
 
 #endif
