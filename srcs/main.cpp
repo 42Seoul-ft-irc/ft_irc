@@ -75,10 +75,10 @@ int main(int argc, char **argv)
 	}
 }
 
-void ft_send(int fd, std::string msg)
+void ft_send(int fd, char *msg)
 {
-	int result = send(fd, &msg, msg.length() + 1, 0);
+    int result = send(fd, msg, strlen(msg) + 2, 0);
 
-	if (result == -1)
-		throw std::runtime_error("Error: send error");
+    if (result == -1)
+        throw std::runtime_error("Error: send error");
 }
