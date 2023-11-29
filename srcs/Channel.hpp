@@ -21,6 +21,7 @@ public:
 	std::map<std::string, UserInfo> users;
 
 	Channel(UserInfo &user, std::string name);
+
 	std::string getName() const;
 	std::string getPass() const;
 	std::string getTopic() const;
@@ -29,7 +30,9 @@ public:
 	bool getIsInvite() const;
 	bool getIsLimit() const;
 	bool getIsKey() const;
+
 	void setUserCount(int count);
+	void setTopic(std::string);
 };
 
 std::ostream &operator<<(std::ostream &os, const Channel &obj);

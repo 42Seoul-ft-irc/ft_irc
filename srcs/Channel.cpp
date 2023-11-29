@@ -41,6 +41,11 @@ void Channel::setUserCount(int count){
 	this->userCount = static_cast<size_t>(static_cast<int>(this->userCount) + count);
 }
 
+void Channel::setTopic(std::string topic)
+{
+	this->topic = topic;
+}
+
 std::ostream &operator<<(std::ostream &os, const Channel &obj) {
 	os << "~~ CHANNEL ~~" << std::endl;
 	os << "name: " << obj.getName() << std::endl;
