@@ -5,12 +5,15 @@ CXXFLAGS =  -Wall -Wextra -Werror -std=c++98 -MMD -MP
 RM = rm -rf
 NAME = ircserv
 SRCS = main.cpp \
-		Command.cpp \
 		Server.cpp \
 		UserInfo.cpp \
-		Pass.cpp \
 		Message.cpp \
-		Nick.cpp
+		Channel.cpp \
+		command/Command.cpp \
+		command/Pass.cpp \
+		command/Nick.cpp \
+		command/User.cpp \
+		command/Join.cpp \
 
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(SRCS:.cpp=.d)

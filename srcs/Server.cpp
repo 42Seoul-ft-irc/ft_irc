@@ -136,8 +136,7 @@ Command *Server::createCommand(int fd, std::string recvStr)
 {
 
 	Message msg(fd, recvStr);
-	msg.splitMsg();
-
+	
 	UserInfo &user = getUserInfoByFd(msg.getFd());
 
 	Command *cmd = 0;
@@ -150,6 +149,14 @@ Command *Server::createCommand(int fd, std::string recvStr)
 	{
 		std::cout << "닉!!\n";
 		cmd = new Nick(&msg, user, users);
+	}
+	else if (msg.getCommand() == "USER")
+	{
+		cmd = new User(&msg, user);
+	}
+	else if (msg.getCommand() == "JOIN")
+	{
+		cmd = new Join(&msg, user, &this->channels);
 	}
 
 	return cmd;
