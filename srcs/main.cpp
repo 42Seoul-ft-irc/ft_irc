@@ -43,22 +43,29 @@ int main(int argc, char **argv)
 						{
 							throw std::runtime_error("Error: Fail read");
 						}
-						else if (buffer[recvByte - 2] == '\r' && buffer[recvByte - 1] == '\n')
-						{
-							std::strcat(server.clientBuffer[fd], buffer);
-							std::cout << "버퍼에 문자가 추가됨1\n";
-							std::string recvStr(server.clientBuffer[fd]);
-							std::cout << fd << "가 [" << server.clientBuffer[fd] << "] 라고 보냄\n";
-							std::memset(server.clientBuffer[fd], 0, BUFSIZ);
-
-							Command *cmd = server.createCommand(fd, recvStr);
-							server.executeCommand(cmd);
-						}
 						else
 						{
 							std::strcat(server.clientBuffer[fd], buffer);
-							std::cout << "버퍼에 문자가 추가됨2\n"
-									  << buffer << std::endl;
+							std::string recvStr(server.clientBuffer[fd]);
+							if (recvStr.find("\r\n") == std::string::npos) {
+								continue ;
+							}
+							std::vector<std::string> commands = splitByCRLF(recvStr);
+
+							// std::string으로 복사하여 사용
+							std::string strBuffer(server.clientBuffer[fd]);
+							std::size_t lastCRLFPos = strBuffer.rfind("\r\n");
+							if (lastCRLFPos != std::string::npos) {
+								strBuffer.erase(0, lastCRLFPos + 2);
+							}
+							
+							for (size_t i = 0; i < commands.size(); i++) {
+								std::cout << commands[i] << std::endl;
+								Command *cmd = server.createCommand(fd, commands[i]);
+								server.executeCommand(cmd);
+							}
+							std::strcpy(server.clientBuffer[fd], strBuffer.c_str());
+							//std::cout <<"남은 버퍼: " << strBuffer << std::endl;
 						}
 					} // 클라이언트가 연결을 끊음
 					else if (server.pollfds[i].revents & POLLHUP)
@@ -73,6 +80,21 @@ int main(int argc, char **argv)
 	{
 		std::cerr << e.what() << std::endl;
 	}
+}
+
+std::vector<std::string> splitByCRLF(std::string& input) {
+	std::vector<std::string> result;
+
+	size_t start = 0;
+	size_t found = input.find("\r\n");
+
+	while (found != std::string::npos) {
+		std::cout << input.substr(start, found - start) << ", found: "<<found << std::endl;
+		result.push_back(input.substr(start, found - start));
+		start = found + 2; 
+		found = input.find("\r\n", start);
+	}
+	return result;
 }
 
 void ft_send(int fd, char *msg)
