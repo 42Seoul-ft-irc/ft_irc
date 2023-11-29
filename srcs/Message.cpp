@@ -91,6 +91,6 @@ std::ostream &operator<<(std::ostream &os, const Message &obj)
 		os << obj.getParameters()[i] << "  ";
 	os << "}\ntrailing : " << obj.getTrailing() << std::endl;
 	os << "~~~~~~~~~~~~~~~~" << std::endl;
-
+	
 	return os;
 }
