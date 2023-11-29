@@ -77,7 +77,7 @@ int main(int argc, char **argv)
 
 void ft_send(int fd, char *msg)
 {
-    int result = send(fd, msg, strlen(msg) + 2, 0);
+    int result = send(fd, msg, strlen(msg), 0);
 
     if (result == -1)
         throw std::runtime_error("Error: send error");
