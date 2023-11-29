@@ -20,7 +20,8 @@ class Join : public Command {
 		void createChannel();
 		void joinChannel();
 		void execute();
-
 };
+
+
 
 #endif 
