@@ -15,9 +15,11 @@ void Topic::execute()
 	if (isError())
 		return;
 
+	std::string channelName = getParameters()[0];
+
 	if (getTrailing().empty()) // topic 조회
 	{
-		checkTopic();
+		checkTopic(channelName);
 		return;
 	}
 }
@@ -47,9 +49,8 @@ bool Topic::isError()
 	return false;
 }
 
-void Topic::checkTopic()
+void Topic::checkTopic(std::string channelName)
 {
-	std::string channelName = getParameters()[0];
 	std::map<std::string, Channel>::iterator it = channelList.find(channelName);
 
 	Channel channel = it->second;
