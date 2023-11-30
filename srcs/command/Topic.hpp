@@ -12,6 +12,8 @@ private:
 	UserInfo &user;
 	std::map<std::string, Channel> channelList;
 
+	bool isError();
+
 public:
 	Topic(Message *msg, UserInfo &user, std::map<std::string, Channel> channelList);
 	~Topic();

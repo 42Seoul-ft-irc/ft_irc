@@ -9,12 +9,19 @@ Topic::~Topic() {}
 
 void Topic::execute()
 {
-	if (!user.getActive())
+	if (isError())
 		return;
+}
+
+bool Topic::isError()
+{
+	if (!user.getActive())
+		return true;
+
 	if (!getParameters().size()) // 461 ERR_NEEDMOREPARAMS
 	{
 		ft_send(user.getFd(), const_cast<char *>("461 TOPIC :Not enough parameters"));
-		return;
+		return true;
 	}
 
 	std::map<std::string, Channel>::iterator it = channelList.find(getParameters()[0]);
@@ -25,6 +32,8 @@ void Topic::execute()
 		str.append(" :No such channel");
 
 		ft_send(user.getFd(), const_cast<char *>(str.c_str()));
-		return;
+		return true;
 	}
+
+	return false;
 }
