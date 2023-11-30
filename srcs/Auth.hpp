@@ -1,8 +1,8 @@
 #ifndef AUTH_HPP
 #define AUTH_HPP
 
-#include "../UserInfo.hpp"
-#include "../utils.hpp"
+#include "UserInfo.hpp"
+#include "utils.hpp"
 
 class Auth
 {
