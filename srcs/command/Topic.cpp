@@ -30,7 +30,7 @@ bool Topic::isError()
 
 	if (!getParameters().size()) // 461 ERR_NEEDMOREPARAMS
 	{
-		ft_send(user.getFd(), const_cast<char *>("461 TOPIC :Not enough parameters"));
+		ft_send(user.getFd(), const_cast<char *>("461 TOPIC :Not enough parameters\r\n"));
 		return true;
 	}
 
@@ -39,7 +39,7 @@ bool Topic::isError()
 	{
 		std::string str = "461 ";
 		str.append(getParameters()[0]);
-		str.append(" :No such channel");
+		str.append(" :No such channel\r\n");
 
 		ft_send(user.getFd(), const_cast<char *>(str.c_str()));
 		return true;
@@ -56,7 +56,7 @@ void Topic::checkTopic(std::string channelName)
 
 	if (channel.getTopic().empty())
 	{
-		std::string str = "331 " + channelName + " :No topic is set";
+		std::string str = "331 " + channelName + " :No topic is set\r\n";
 		const char *reply = str.c_str();
 
 		ft_send(user.getFd(), const_cast<char *>(reply));
