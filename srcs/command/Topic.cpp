@@ -9,6 +9,9 @@ Topic::~Topic() {}
 
 void Topic::execute()
 {
+	if (!user.getActive())
+		return;
+
 	if (isError())
 		return;
 
