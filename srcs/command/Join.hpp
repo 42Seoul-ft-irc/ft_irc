@@ -17,9 +17,12 @@ class Join : public Command {
 	public:
 		std::map<std::string, Channel> *channels;
 		Channel *channel;
+		
 		Join(Message *msg, UserInfo &user, std::map<std::string, Channel> *channels);
-		void createChannel();
-		void joinChannel();
+		void handleChannelJoin(const std::string &channelName, const std::vector<std::string> &passwordList);
+		void createAndJoinNewChannel(const std::string &channelName);
+		void joinExistingChannel(const std::string &channelName, const std::vector<std::string> &passwordList);
+		bool checkJoinConditions(const std::vector<std::string> &passwordList);
 		void execute();
 };
 
