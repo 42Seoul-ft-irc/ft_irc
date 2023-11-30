@@ -147,7 +147,6 @@ Command *Server::createCommand(int fd, std::string recvStr)
 	}
 	else if (msg.getCommand() == "NICK")
 	{
-		std::cout << "닉!!\n";
 		cmd = new Nick(&msg, user, users);
 	}
 	else if (msg.getCommand() == "USER")
@@ -168,11 +167,6 @@ void Server::executeCommand(Command *cmd)
 	{
 		cmd->execute();
 		delete (cmd);
-		// std::map<std::string, Channel>::iterator i = this->channels.begin();
-        // for (; i != this->channels.end(); ++i)
-        // {
-        //     std::cout << "서버에 들어온 채널: " << i->second.getName() << std::endl;
-        // }
 	}
 }
 
