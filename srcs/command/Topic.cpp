@@ -1,9 +1,6 @@
 #include "Topic.hpp"
 
-Topic::Topic(Message *msg, UserInfo &user,
-			 std::map<std::string, Channel> &channelList) : Command(msg), user(user), channelList(channelList)
-{
-}
+Topic::Topic(Message *msg, UserInfo &user, std::map<std::string, Channel> &channelList) : Command(msg), user(user), channelList(channelList) {}
 
 Topic::~Topic() {}
 
@@ -30,18 +27,18 @@ bool Topic::isError()
 
 	if (!getParameters().size()) // 461 ERR_NEEDMOREPARAMS
 	{
-		ft_send(user.getFd(), const_cast<char *>("461 TOPIC :Not enough parameters\r\n"));
+		ft_send(user.getFd(), "461 TOPIC :Not enough parameters");
+
 		return true;
 	}
 
 	std::map<std::string, Channel>::iterator it = channelList.find(getParameters()[0]);
 	if (it == channelList.end()) // 403 ERR_NOSUCHCHANNEL
 	{
-		std::string str = "461 ";
-		str.append(getParameters()[0]);
-		str.append(" :No such channel\r\n");
+		std::string reply = "461 " + getParameters()[0] + " :No such channel";
 
-		ft_send(user.getFd(), const_cast<char *>(str.c_str()));
+		ft_send(user.getFd(), reply);
+
 		return true;
 	}
 
@@ -56,17 +53,15 @@ void Topic::checkTopic(std::string channelName)
 
 	if (channel.getTopic().empty())
 	{
-		std::string str = "331 " + channelName + " :No topic is set\r\n";
-		const char *reply = str.c_str();
+		std::string reply = "331 " + channelName + " :No topic is set";
 
-		ft_send(user.getFd(), const_cast<char *>(reply));
+		ft_send(user.getFd(), reply);
 	}
 	else
 	{
-		std::string str = "332 " + channelName + " :" + channel.getTopic();
-		const char *reply = str.c_str();
+		std::string reply = "332 " + channelName + " :" + channel.getTopic();
 
-		ft_send(user.getFd(), const_cast<char *>(reply));
+		ft_send(user.getFd(), reply);
 	}
 }
 
@@ -82,15 +77,15 @@ void Topic::editTopic(std::string channelName)
 			channel.setTopic(getTrailing());
 		else
 		{
-			std::string str = "482 " + channelName + " :You're not channel operator\r\n";
-			const char *reply = str.c_str();
-			ft_send(user.getFd(), const_cast<char *>(reply));
+			std::string reply = "482 " + channelName + " :You're not channel operator";
+
+			ft_send(user.getFd(), reply);
 		}
 	}
 	else
 	{
-		std::string str = "442 " + channelName + " :You're not on that channel\r\n";
-		const char *reply = str.c_str();
-		ft_send(user.getFd(), const_cast<char *>(reply));
+		std::string reply = "442 " + channelName + " :You're not on that channel";
+
+		ft_send(user.getFd(), reply);
 	}
 }
