@@ -132,12 +132,9 @@ void Server::acceptClient()
 }
 
 /* command 파싱 및 명령어 실행 */
-Command *Server::createCommand(int fd, std::string recvStr)
+Command *Server::createCommand(UserInfo &user, std::string recvStr)
 {
-
-	Message msg(fd, recvStr);
-	
-	UserInfo &user = getUserInfoByFd(msg.getFd());
+	Message msg(user.getFd(), recvStr);
 
 	Command *cmd = 0;
 
@@ -161,11 +158,15 @@ Command *Server::createCommand(int fd, std::string recvStr)
 	return cmd;
 }
 
-void Server::executeCommand(Command *cmd)
+void Server::executeCommand(Command *cmd, UserInfo &user)
 {
 	if (cmd)
 	{
 		cmd->execute();
+
+		if (!user.getActive() && (cmd->getCommand() == "NICK" || cmd->getCommand() == "USER"))
+			Auth auth(user);
+
 		delete (cmd);
 	}
 }
