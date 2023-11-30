@@ -11,6 +11,29 @@ void Topic::execute()
 {
 	if (isError())
 		return;
+
+	if (getTrailing().empty()) // topic 조회
+	{
+		std::string channelName = getParameters()[0];
+		std::map<std::string, Channel>::iterator it = channelList.find(channelName);
+
+		Channel channel = it->second;
+
+		if (channel.getTopic().empty())
+		{
+			std::string str = "331 " + channelName + " :No topic is set";
+			const char *reply = str.c_str();
+
+			ft_send(user.getFd(), const_cast<char *>(reply));
+		}
+		else
+		{
+			std::string str = "332 " + channelName + " :" + channel.getTopic();
+			const char *reply = str.c_str();
+
+			ft_send(user.getFd(), const_cast<char *>(reply));
+		}
+	}
 }
 
 bool Topic::isError()
