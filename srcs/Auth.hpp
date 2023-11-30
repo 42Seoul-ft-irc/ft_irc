@@ -11,7 +11,7 @@ private:
 
 	bool isNamesEmpty();
 	bool isAllPass();
-	void Auth::sendReplies();
+	void sendReplies();
 
 public:
 	Auth(UserInfo &user);
