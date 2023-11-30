@@ -175,15 +175,11 @@ void Server::executeCommand(Command *cmd, UserInfo &user)
 UserInfo &Server::getUserInfoByFd(int clientFd)
 {
 	std::map<int, UserInfo>::iterator it = users.find(clientFd);
-	std::cout << "find user: " << it->first << "\n";
+
 	if (it != users.end())
-	{
-		std::cout << it->first << "\n";
 		return it->second;
-	}
 	else
-	{
 		throw std::runtime_error("Error: Not find any user");
-	}
+
 	return it->second;
 }
