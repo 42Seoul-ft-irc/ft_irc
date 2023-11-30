@@ -6,6 +6,8 @@
 #include "../utils.hpp"
 #include "../Channel.hpp"
 
+class Channel;
+
 class Topic : public Command
 {
 private:
