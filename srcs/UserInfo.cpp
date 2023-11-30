@@ -84,14 +84,17 @@ void UserInfo::checkPass()
 {
 	pass = true;
 };
+
 void UserInfo::checkNick()
 {
 	nick = true;
 };
+
 void UserInfo::checkUser()
 {
 	user = true;
 };
+
 void UserInfo::checkActive()
 {
 	active = true;

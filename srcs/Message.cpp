@@ -45,6 +45,7 @@ void Message::setParameters(std::string str)
 {
 	this->parameters.push_back(str);
 }
+
 void Message::setTrailing(std::string str)
 {
 	this->trailing = str;

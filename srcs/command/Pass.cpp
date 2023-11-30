@@ -32,6 +32,4 @@ void Pass::execute()
 	{
 		// send(ERR_PASSWDMISMATCH)
 	}
-
-	std::cout << user;
 }
