@@ -1,8 +1,8 @@
 #ifndef AUTH_HPP
 #define AUTH_HPP
 
-#include "../UserInfo.hpp"
-#include "../utils.hpp"
+#include "UserInfo.hpp"
+#include "utils.hpp"
 
 class Auth
 {
@@ -11,7 +11,7 @@ private:
 
 	bool isNamesEmpty();
 	bool isAllPass();
-	void Auth::sendReplies();
+	void sendReplies();
 
 public:
 	Auth(UserInfo &user);

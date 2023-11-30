@@ -61,8 +61,10 @@ int main(int argc, char **argv)
 							
 							for (size_t i = 0; i < commands.size(); i++) {
 								std::cout << commands[i] << std::endl;
-								Command *cmd = server.createCommand(fd, commands[i]);
-								server.executeCommand(cmd);
+
+								UserInfo &user = server.getUserInfoByFd(fd);
+								Command *cmd = server.createCommand(user, commands[i]);
+								server.executeCommand(cmd, user);
 							}
 							std::strcpy(server.clientBuffer[fd], strBuffer.c_str());
 							//std::cout <<"남은 버퍼: " << strBuffer << std::endl;

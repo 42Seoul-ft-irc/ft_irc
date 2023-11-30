@@ -22,6 +22,7 @@
 #include "command/Nick.hpp"
 #include "command/User.hpp"
 #include "command/Join.hpp"
+#include "Auth.hpp"
 
 class UserInfo;
 class Command;
@@ -58,8 +59,8 @@ public:
 
 	void acceptClient();
 
-	Command *createCommand(int fd, std::string recvStr);
-	void executeCommand(Command *cmd);
+	Command *createCommand(UserInfo &user, std::string recvStr);
+	void executeCommand(Command *cmd, UserInfo &user);
 	// 특정 fd의 UserInfo 찾음
 	UserInfo &getUserInfoByFd(int userFd);
 };
