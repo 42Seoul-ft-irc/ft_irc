@@ -1,7 +1,19 @@
 #include "Server.hpp"
 
-/* 생성자 */
-static int convertPort(char *portStr)
+Server::Server(int argc, char **argv)
+{
+	if (argc != 3)
+		throw std::invalid_argument("Error: invalid argument");
+
+	portNum = convertPort(argv[1]);
+	std::string password(argv[2]);
+	password = password;
+
+	openServer();
+	pushServerPollfd();
+}
+
+int Server::convertPort(char *portStr)
 {
 	for (size_t i = 0; i < strlen(portStr); i++)
 		if (!isdigit(portStr[i]))
@@ -13,25 +25,6 @@ static int convertPort(char *portStr)
 		throw std::invalid_argument("Error: invalid argument");
 
 	return port;
-}
-
-void Server::createSocket()
-{
-	int socketFd = socket(AF_INET, SOCK_STREAM, 0);
-
-	if (socketFd == -1)
-		throw std::runtime_error("socket error");
-
-	setSocketFd(socketFd);
-}
-
-void setServerAddr(struct sockaddr_in &serverAddr, int portNum)
-{
-	std::memset(&serverAddr, 0, sizeof(serverAddr));
-
-	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	serverAddr.sin_port = htons(portNum);
 }
 
 void Server::openServer()
@@ -58,6 +51,25 @@ void Server::openServer()
 	}
 }
 
+void Server::createSocket()
+{
+	int socketFd = socket(AF_INET, SOCK_STREAM, 0);
+
+	if (socketFd == -1)
+		throw std::runtime_error("socket error");
+
+	setSocketFd(socketFd);
+}
+
+void Server::setServerAddr(struct sockaddr_in &serverAddr, int portNum)
+{
+	std::memset(&serverAddr, 0, sizeof(serverAddr));
+
+	serverAddr.sin_family = AF_INET;
+	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	serverAddr.sin_port = htons(portNum);
+}
+
 void Server::pushServerPollfd()
 {
 	pollfd pollfd;
@@ -67,22 +79,7 @@ void Server::pushServerPollfd()
 	pollfds.push_back(pollfd);
 }
 
-Server::Server(int argc, char **argv)
-{
-	if (argc != 3)
-		throw std::invalid_argument("Error: invalid argument");
-
-	setPortNum(convertPort(argv[1]));
-	std::string password(argv[2]);
-	setPassword(password);
-
-	openServer();
-	pushServerPollfd();
-}
-
-Server::Server() {}
-
-/* getter setter */
+/* getter */
 std::string Server::getPassword() const
 {
 	return password;
@@ -98,6 +95,7 @@ int Server::getSocketFd() const
 	return socketFd;
 }
 
+/* setter */
 void Server::setPassword(std::string password)
 {
 	this->password = password;
@@ -131,7 +129,6 @@ void Server::acceptClient()
 	std::cout << "new client fd: " << clientFd << std::endl;
 }
 
-/* command 파싱 및 명령어 실행 */
 Command *Server::createCommand(UserInfo &user, std::string recvStr)
 {
 	Message msg(user.getFd(), recvStr);
@@ -139,21 +136,13 @@ Command *Server::createCommand(UserInfo &user, std::string recvStr)
 	Command *cmd = 0;
 
 	if (msg.getCommand() == "PASS")
-	{
 		cmd = new Pass(&msg, user, password);
-	}
 	else if (msg.getCommand() == "NICK")
-	{
 		cmd = new Nick(&msg, user, users);
-	}
 	else if (msg.getCommand() == "USER")
-	{
 		cmd = new User(&msg, user);
-	}
 	else if (msg.getCommand() == "JOIN")
-	{
 		cmd = new Join(&msg, user, &this->channels);
-	}
 
 	return cmd;
 }
@@ -171,7 +160,6 @@ void Server::executeCommand(Command *cmd, UserInfo &user)
 	}
 }
 
-/* fd를 이용해서 IserInfo 레퍼런스 반환 */
 UserInfo &Server::getUserInfoByFd(int clientFd)
 {
 	std::map<int, UserInfo>::iterator it = users.find(clientFd);

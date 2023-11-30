@@ -19,6 +19,8 @@ class UserInfo {
 		bool active;
 		
 	public:
+		std::map<std::string, bool> channels;
+		
 		UserInfo();
 
 		void setFd(int fd);
@@ -47,7 +49,6 @@ class UserInfo {
 		void checkNick();
 		void checkUser();
 		void checkActive();
-		std::map<std::string, bool> channels;
 };
 
 std::ostream &operator<<(std::ostream &os, const UserInfo &obj);
