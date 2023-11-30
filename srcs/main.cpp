@@ -26,8 +26,6 @@ int main(int argc, char **argv)
 				}
 				for (size_t i = 1; i <= server.pollfds.size(); i++)
 				{
-					std::cout << "for문 i = " << i << std::endl;
-
 					if (server.pollfds[i].revents & POLLIN)
 					{
 						std::cout << "클라이언트가 메세지 보냄\n";
@@ -58,13 +56,14 @@ int main(int argc, char **argv)
 							if (lastCRLFPos != std::string::npos) {
 								strBuffer.erase(0, lastCRLFPos + 2);
 							}
-							
-							for (size_t i = 0; i < commands.size(); i++) {
-								std::cout << commands[i] << std::endl;
 
+							for (size_t i = 0; i < commands.size(); i++)
+							{
 								UserInfo &user = server.getUserInfoByFd(fd);
 								Command *cmd = server.createCommand(user, commands[i]);
 								server.executeCommand(cmd, user);
+
+								std::cout << user << std::endl;
 							}
 							std::strcpy(server.clientBuffer[fd], strBuffer.c_str());
 							//std::cout <<"남은 버퍼: " << strBuffer << std::endl;
@@ -90,8 +89,8 @@ std::vector<std::string> splitByCRLF(std::string& input) {
 	size_t start = 0;
 	size_t found = input.find("\r\n");
 
-	while (found != std::string::npos) {
-		std::cout << input.substr(start, found - start) << ", found: "<<found << std::endl;
+	while (found != std::string::npos)
+	{
 		result.push_back(input.substr(start, found - start));
 		start = found + 2; 
 		found = input.find("\r\n", start);
