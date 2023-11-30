@@ -7,7 +7,7 @@ Server::Server(int argc, char **argv)
 
 	portNum = convertPort(argv[1]);
 	std::string password(argv[2]);
-	password = password;
+	this->password = password;
 
 	openServer();
 	pushServerPollfd();
@@ -143,6 +143,8 @@ Command *Server::createCommand(UserInfo &user, std::string recvStr)
 		cmd = new User(&msg, user);
 	else if (msg.getCommand() == "JOIN")
 		cmd = new Join(&msg, user, &this->channels);
+	else if (msg.getCommand() == "TOPIC")
+		cmd = new Topic(&msg, user, this->channels);
 
 	return cmd;
 }

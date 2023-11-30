@@ -23,6 +23,7 @@
 #include "command/User.hpp"
 #include "command/Join.hpp"
 #include "Auth.hpp"
+#include "command/Topic.hpp"
 
 class UserInfo;
 class Command;
