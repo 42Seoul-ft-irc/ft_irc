@@ -5,76 +5,108 @@ Join::Join(Message *msg, UserInfo &user, std::map<std::string, Channel> *channel
 	this->channels = channels;
 }
 
-void Join::createChannel() {
-	Channel channel(this->user, this->getParameters().at(0));
-	this->channels->insert(std::make_pair(this->getParameters().at(0), channel));
-	channel.operators.insert(std::make_pair(user.getNickname(), this->user));
-	channel.users.insert(std::make_pair(user.getNickname(), this->user));
-	user.channels.insert(std::make_pair(channel.getName(), true));
+static std::vector<std::string> splitByComma(std::string &input)
+{
+	std::vector<std::string> result;
 
-	std::map<std::string, Channel>::iterator it2 = this->channels->find(this->getParameters().at(0));
-	this->channel = &it2->second;
+	size_t start = 0;
+	size_t found = input.find(',');
 
-	std::cout << "JOIN 성공! 새로운 채널이 생성됨.\n";
-	std::cout << *this->channel;
-}
+	while (found != std::string::npos)
+	{
+		result.push_back(input.substr(start, found - start));
+		start = found + 1;
+		found = input.find(',', start);
+	}
+	result.push_back(input.substr(start));
 
-void Join::joinChannel() {
-	std::cout<< this->getParameters().at(0) << "채널에 입장합니다. " << std::endl;
-	channel->users.insert(std::make_pair(user.getNickname(), this->user));
-	user.channels.insert(std::make_pair(channel->getName(), false));
-	channel->setUserCount(1);
+	return result;
 }
 
 void Join::execute()
 {
-	// std::cout<< "join line 10\n";
-	// 매개변수 없을 때
+	std::vector<std::string> channelList;
+	std::vector<std::string> passwordList;
+
 	if (this->getParameters().size() < 1)
 	{
-		// std::cout<< "join line 10\n";
-		// ERR_NEEDMOREPARAMS
+		std::cout << "parameter error \n";
+		ft_send(this->user.getFd(), const_cast<char *>("461 JOIN :Not enough parameters\r\n"));
 		return;
 	}
-	// std::cout<< "join line 18\n";
-	// 사용자가 가입한 채널이 10개인지 확인
-	if (this->user.channels.size() >= 10)
+	else if (this->getParameters().size() >= 1)
 	{
-		// std::cout<< "join line 22\n";
-		// ERR_TOOMANYCHANNELS
-		return;
+		channelList = splitByComma(this->getParameters().at(0));
+		if (this->getParameters().size() >= 2)
+		{
+			passwordList = splitByComma(this->getParameters().at(1));
+		}
 	}
-	// std::cout<< "join line 26\n";
-	// 존재하는 채널인지 확인 => 채널 생성 및 운영자 설정
-	std::map<std::string, Channel>::iterator it1 = this->channels->find(this->getParameters().at(0));
-	if (it1 == channels->end()) {
-		createChannel();
-		return ;
-	}
-	// 조인의 대상 채널 지정
-	std::map<std::string, Channel>::iterator it2 = this->channels->find(this->getParameters().at(0));
-	this->channel = &it2->second;
-	// 사용자가 채널에 없는지 확인
-	// std::cout<< "join line 59\n";
-	std::map<std::string, bool>::iterator it_user = this->user.channels.find(this->getParameters().at(0));
-	if (it_user != this->user.channels.end()) {
-		// command 무시하고 넘어가기
-		return ;
-	}
-	// 인원수 제한 확인
-	else if (channel->getIsLimit() && channel->getLimit() <= this->channel->users.size()) {
-		//ERR_CHANNELISFULL
-		return ;
-	} 
-	// 채널 비밀번호 확인
-	else if (channel->getIsKey() && (this->getParameters().size() < 2 || this->getParameters().at(1) != channel->getPass())) {
-		//ERR_NEEDMOREPARAMS
-		return ;
-	}
-	else {
-		joinChannel();
-		std::cout << "JOIN 성공! 존재하는 채널에 입장됨.\n";
-		std::cout<< *this->channel;
-		return ;
+	for (size_t i = 0; i < channelList.size(); i++)
+	{
+		// 사용자가 가입한 채널이 10개인지 확인
+		if (this->user.channels.size() >= 10)
+		{
+			std::string msg = "405 " + this->channel->getName() + " :You have joined too many channels\r\n";
+			ft_send(this->user.getFd(), const_cast<char *>(msg.c_str()));
+			return;
+		}
+		// 존재하는 채널인지 확인 => 채널 생성 및 운영자 설정
+		std::map<std::string, Channel>::iterator it1 = this->channels->find(channelList.at(i));
+		if (it1 == channels->end())
+		{
+			Channel channel(this->user, channelList.at(i));
+			this->channels->insert(std::make_pair(channelList.at(i), channel));
+			channel.operators.insert(std::make_pair(user.getNickname(), this->user));
+			channel.users.insert(std::make_pair(user.getNickname(), this->user));
+			// join 성공 후 리턴
+			std::cout << "JOIN 성공! 새로운 채널이 생성됨. \n";
+			continue;
+		}
+		// 조인의 대상 채널 지정
+		std::map<std::string, Channel>::iterator it2 = this->channels->find(channelList.at(i));
+		this->channel = &it2->second;
+		// 사용자가 채널에 없는지 확인
+		std::map<std::string, bool>::iterator it_user = this->user.channels.find(channelList.at(i));
+		if (it_user == this->user.channels.end())
+		{
+			// command 무시하고 넘어가기
+			continue;
+		}
+		// 인원수 제한 확인
+		if (channel->getIsLimit() && channel->getLimit() <= this->channel->users.size())
+		{
+			std::string msg = "471 " + channel->getName() + " :Cannot join channel (+l)\r\n";
+			ft_send(this->user.getFd(), const_cast<char *>(msg.c_str()));
+			continue;
+		}
+		// 채널 비밀번호 확인
+		if (channel->getIsKey() && passwordList.at(i).empty())
+		{
+			std::string msg = "461 JOIN :Not enough parameters\r\n";
+			ft_send(this->user.getFd(), const_cast<char *>(msg.c_str()));
+			continue;
+		}
+		else if (channel->getIsKey() && passwordList.at(i) != channel->getPass())
+		{
+			std::string msg = "475 " + channel->getName() + " :Cannot join channel (+k)\r\n";
+			ft_send(this->user.getFd(), const_cast<char *>(msg.c_str()));
+			continue;
+		}
+		// 초대모드인 경우 초대된 사용자 확인
+		if (channel->getIsInvite()) {
+			std::map<std::string, UserInfo>::iterator invite_it = channel->invite.find(user.getNickname());
+			if (invite_it == channel->invite.end()){
+				std::string msg = "473 " + channel->getName() + " :Cannot join channel (+i)\r\n";
+				ft_send(this->user.getFd(), const_cast<char *>(msg.c_str()));
+				continue;
+			}
+		}
+		// 기존 채널에 사용자 추가
+		channel->users.insert(std::make_pair(user.getNickname(), this->user));
+		channel->setUserCount(1);
+		if (channel->getIsInvite()) {
+			channel->invite.erase(user.getNickname());
+		}
 	}
 }
