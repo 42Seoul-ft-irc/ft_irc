@@ -98,10 +98,13 @@ std::vector<std::string> splitByCRLF(std::string& input) {
 	return result;
 }
 
-void ft_send(int fd, char *msg)
+void ft_send(int fd, std::string str)
 {
-    int result = send(fd, msg, strlen(msg), 0);
+	str += "\r\n";
+	const char *reply = str.c_str();
 
-    if (result == -1)
-        throw std::runtime_error("Error: send error");
+	int result = send(fd, const_cast<char *>(reply), strlen(reply), 0);
+
+	if (result == -1)
+		throw std::runtime_error("Error: send error");
 }
