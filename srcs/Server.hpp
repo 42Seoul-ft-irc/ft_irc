@@ -22,6 +22,7 @@
 #include "command/Nick.hpp"
 #include "command/User.hpp"
 #include "command/Join.hpp"
+#include "command/Invite.hpp"
 
 class UserInfo;
 class Command;
