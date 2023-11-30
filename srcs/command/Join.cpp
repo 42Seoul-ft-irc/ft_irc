@@ -31,6 +31,8 @@ void Join::handleChannelJoin(const std::string &channelName, const std::vector<s
 	}
 	std::map<std::string, Channel>::iterator it1 = this->channels->find(channelName);
 	if (it1 == this->channels->end()) {
+		if (channelName[0] != '#')
+			return ;
 		createAndJoinNewChannel(channelName);
 	}
 	else {
