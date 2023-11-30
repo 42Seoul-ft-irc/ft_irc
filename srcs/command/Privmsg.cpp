@@ -20,6 +20,19 @@ void Privmsg::execute()
 	}
 	if (checkParameters(parameters[0]))
 		return ;
+	if (recipientChannels.size() > 0)
+	{
+		while (recipientChannels)
+	}
+	if (recipientUsersFd.size() > 0)
+	{
+		for (int i = 0; recipientUsersFd[i]; i++)
+		{
+			ft_send(recipientUsersFd[i], getTrailing());
+		}
+	}
+	//채널로 전송
+	//사용자들로 전송
 	sendText();
 }
 
@@ -36,8 +49,6 @@ int Privmsg::checkParameters(std::string parameter)
 		//send (ERR_NORECIPIENT);
 		return 1;
 	}
-	//중복 확인
-	//if ()
 	return 0;
 }
 
@@ -88,6 +99,7 @@ int Privmsg::checkRecipient(std::string recipient)
 int Privmsg::checkChannels(std::string recipient)
 {
 	std::map<std::string, Channel> iter;
+	std::map<std::string, UserInfo> iterUsers;
 	class Channel = NULL;
 
 	for (iter = channels.begin(); iter != channels.end(); iter++)
@@ -98,11 +110,12 @@ int Privmsg::checkChannels(std::string recipient)
 	if (!Channel)
 		return 1;
 	//전송할 채널에 발신자가 있는지 확인
-	// for (iter = channels.begin(); iter != channels.end(); iter++)
-	// {
-	// 	if ((*iter).second.getName() == recipient)
-	// 		Channel = (*iter).second;
-	// }
+	for (iterUsers = Channel.users.begin(); iterUsers != Channel.users.end(); iterUsers++)
+	{
+		if ((*iterUsers).first == this->user.getNickname())
+			return 0;
+	}
+	return 1;
 }
 
 int Privmsg::checkUsers(std::string recipient)
