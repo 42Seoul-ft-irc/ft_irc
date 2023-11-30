@@ -25,8 +25,8 @@ void Join::handleChannelJoin(const std::string &channelName, const std::vector<s
 {
 	if (this->user.channels.size() >= 10)
 	{
-		std::string msg = "405 " + channelName + " :You have joined too many channels\r\n";
-		ft_send(this->user.getFd(), const_cast<char *>(msg.c_str()));
+		std::string msg = "405 " + channelName + " :You have joined too many channels";
+		ft_send(this->user.getFd(), msg);
 		return;
 	}
 	std::map<std::string, Channel>::iterator it1 = this->channels->find(channelName);
@@ -72,28 +72,28 @@ bool Join::checkJoinConditions(const std::vector<std::string> &passwordList)
 {
 	if (channel->getIsLimit() && channel->getLimit() <= this->channel->users.size())
 	{
-		std::string msg = "471 " + channel->getName() + " :Cannot join channel (+l)\r\n";
-		ft_send(this->user.getFd(), const_cast<char *>(msg.c_str()));
+		std::string msg = "471 " + channel->getName() + " :Cannot join channel (+l)";
+		ft_send(this->user.getFd(), msg);
 		return false;
 	}
 
 	if (channel->getIsKey() && passwordList.empty())
 	{
-		std::string msg = "461 JOIN :Not enough parameters\r\n";
-		ft_send(this->user.getFd(), const_cast<char *>(msg.c_str()));
+		std::string msg = "461 JOIN :Not enough parameters";
+		ft_send(this->user.getFd(), msg);
 		return false;
 	}
 	else if (channel->getIsKey() && passwordList.front() != channel->getPass())
 	{
-		std::string msg = "475 " + channel->getName() + " :Cannot join channel (+k)\r\n";
-		ft_send(this->user.getFd(), const_cast<char *>(msg.c_str()));
+		std::string msg = "475 " + channel->getName() + " :Cannot join channel (+k)";
+		ft_send(this->user.getFd(), msg);
 		return false;
 	}
 
 	if (channel->getIsInvite() && channel->invite.find(user.getNickname()) == channel->invite.end())
 	{
-		std::string msg = "473 " + channel->getName() + " :Cannot join channel (+i)\r\n";
-		ft_send(this->user.getFd(), const_cast<char *>(msg.c_str()));
+		std::string msg = "473 " + channel->getName() + " :Cannot join channel (+i)";
+		ft_send(this->user.getFd(), msg);
 		return false;
 	}
 
@@ -108,7 +108,7 @@ void Join::execute()
 	if (this->getParameters().size() < 1)
 	{
 		std::cout << "parameter error \n";
-		ft_send(this->user.getFd(), const_cast<char *>("461 JOIN :Not enough parameters\r\n"));
+		ft_send(this->user.getFd(), "461 JOIN :Not enough parameters");
 		return;
 	}
 	else if (this->getParameters().size() >= 1)

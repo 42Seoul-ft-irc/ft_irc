@@ -18,8 +18,7 @@ bool Auth::isAllPass()
 
 void Auth::sendReplies()
 {
-	// todo custom
-	std::string str =
+	std::string reply =
 		// ":irc.local 251 nickwonlim2222 :There are 0 users and 1 invisible on 1 servers\n"
 		// ":irc.local 253 nickwonlim2222 1 :unknown connections"
 		// ":irc.local 254 nickwonlim2222 1 :channels formed"
@@ -56,11 +55,9 @@ void Auth::sendReplies()
 		"372 :  '-.__ __ _,','    '`-..___;-...__   ,.'\\ ____.___.'\n"
 		"372 :  `\"^--'..'   '-`-^-'\"--    `-^-'`.''\"\"\"\"\"`.,^.`.--' mh\n\n"
 
-		"376 :End of message of the day.\r\n";
+		"376 :End of message of the day.";
 
-	const char *msg = str.c_str();
-
-	ft_send(user.getFd(), const_cast<char *>(msg));
+	ft_send(user.getFd(), reply);
 }
 
 Auth::Auth(UserInfo &user) : user(user)

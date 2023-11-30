@@ -10,12 +10,12 @@ void User::execute()
 		return;
 	if (user.getActive())
 	{
-		ft_send(user.getFd(), const_cast<char *>("462 :You may not reregister\r\n")); // ERR_ALREADYREGISTRED
+		ft_send(user.getFd(), "462 :You may not reregister"); // ERR_ALREADYREGISTRED
 		return;
 	}
 	if (getParameters().size() < 3 || getTrailing().empty())
 	{
-		ft_send(user.getFd(), const_cast<char *>("461 USER :Not enough parameters\r\n")); // ERR_NEEDMOREPARAMS
+		ft_send(user.getFd(), "461 USER :Not enough parameters"); // ERR_NEEDMOREPARAMS
 		return;
 	}
 
