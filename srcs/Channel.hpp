@@ -14,6 +14,8 @@ private:
 	bool isInvite;
 	bool isLimit;
 	bool isKey;
+	bool topicMode;
+	bool inviteMode;
 
 public:
 	std::map<std::string, UserInfo> operators;
@@ -30,9 +32,13 @@ public:
 	bool getIsInvite() const;
 	bool getIsLimit() const;
 	bool getIsKey() const;
+	bool getTopicMode() const;
+	bool getInviteMode() const;
 
 	void setUserCount(int count);
 	void setTopic(std::string);
+	void setTopicMode(bool);
+	void setInviteMode(bool);
 };
 
 std::ostream &operator<<(std::ostream &os, const Channel &obj);

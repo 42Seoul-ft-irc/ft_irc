@@ -1,7 +1,7 @@
 #include "Topic.hpp"
 
 Topic::Topic(Message *msg, UserInfo &user,
-			 std::map<std::string, Channel> channelList) : Command(msg), user(user), channelList(channelList)
+			 std::map<std::string, Channel> &channelList) : Command(msg), user(user), channelList(channelList)
 {
 }
 
@@ -17,11 +17,10 @@ void Topic::execute()
 
 	std::string channelName = getParameters()[0];
 
-	if (getTrailing().empty()) // topic 조회
-	{
+	if (getTrailing().empty())
 		checkTopic(channelName);
-		return;
-	}
+	else
+		editTopic(channelName);
 }
 
 bool Topic::isError()
@@ -67,6 +66,31 @@ void Topic::checkTopic(std::string channelName)
 		std::string str = "332 " + channelName + " :" + channel.getTopic();
 		const char *reply = str.c_str();
 
+		ft_send(user.getFd(), const_cast<char *>(reply));
+	}
+}
+
+void Topic::editTopic(std::string channelName)
+{
+	std::map<std::string, bool>::iterator userIt = user.channels.find(channelName);
+	std::map<std::string, Channel>::iterator channelIt = channelList.find(channelName);
+	Channel &channel = channelIt->second;
+
+	if (userIt != user.channels.end())
+	{
+		if (userIt->second || !channel.getTopicMode())
+			channel.setTopic(getTrailing());
+		else
+		{
+			std::string str = "482 " + channelName + " :You're not channel operator\r\n";
+			const char *reply = str.c_str();
+			ft_send(user.getFd(), const_cast<char *>(reply));
+		}
+	}
+	else
+	{
+		std::string str = "442 " + channelName + " :You're not on that channel\r\n";
+		const char *reply = str.c_str();
 		ft_send(user.getFd(), const_cast<char *>(reply));
 	}
 }
