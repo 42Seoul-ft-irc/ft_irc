@@ -2,6 +2,7 @@
 #define JOIN_HPP
 
 #include "Command.hpp"
+#include "../utils.hpp"
 #include "../UserInfo.hpp"
 #include "../Message.hpp"
 #include "../Channel.hpp"
