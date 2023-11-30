@@ -13,6 +13,7 @@ private:
 	std::map<std::string, Channel> channelList;
 
 	bool isError();
+	void checkTopic();
 
 public:
 	Topic(Message *msg, UserInfo &user, std::map<std::string, Channel> channelList);
