@@ -2,6 +2,7 @@
 #define PASS_HPP
 
 #include "Command.hpp"
+#include "../utils.hpp"
 #include "../UserInfo.hpp"
 
 class Pass : public Command {

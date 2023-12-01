@@ -10,17 +10,14 @@ void Pass::execute()
 
 	if (getParameters().size() < 1)
 	{
-		// send(ERR_NEEDMOREPARAMS)
-		return;
-	}
-	else if (getParameters().size() != 1)
-	{
-		// send(PASS uses 'PASS passparameter')
+		std::string msg = "461 " + user.getNickname() + " PASS :Not enough parameters";
+		ft_send(user.getFd(), msg);
 		return;
 	}
 	if (user.getPass())
 	{
-		// send(ERR_ALREADYREGISTRED)
+		std::string msg = "462 :You may not reregister";
+		ft_send(user.getFd(), msg);
 		return;
 	}
 	if (*getParametersBegin()++ == password)
@@ -30,6 +27,8 @@ void Pass::execute()
 	}
 	else
 	{
-		// send(ERR_PASSWDMISMATCH)
+		std::string msg = "464 :Password incorrect";
+		ft_send(user.getFd(), msg);
+		return	;
 	}
 }
