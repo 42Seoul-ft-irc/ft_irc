@@ -1,7 +1,8 @@
 #include "Channel.hpp"
 
-Channel::Channel(UserInfo &user, std::string name) : pass(""), topic(""), limit(0), userCount(1), isInvite(false), isLimit(false), isKey(false) {
-	
+Channel::Channel(UserInfo &user, std::string name) : pass(""), topic(""), limit(0), userCount(1), isInvite(false), isLimit(false), isKey(false), topicMode(true), inviteMode(false)
+{
+
 	if (name.length() > 200) {
 		this->name = name.substr(0, 200);
 	}
@@ -36,9 +37,32 @@ bool Channel::getIsLimit() const{
 bool Channel::getIsKey() const{
 	return this->isKey;
 }
+bool Channel::getTopicMode() const
+{
+	return topicMode;
+}
+bool Channel::getInviteMode() const
+{
+	return inviteMode;
+}
+
 /* 채팅방 인원 추가하고 싶으면 매개변수에 1, 퇴장시키고 싶으면 매개변수에 2 넣어주세요 */
 void Channel::setUserCount(int count){
 	this->userCount = static_cast<size_t>(static_cast<int>(this->userCount) + count);
+}
+
+void Channel::setTopic(std::string topic)
+{
+	this->topic = topic;
+}
+
+void Channel::setTopicMode(bool mode)
+{
+	topicMode = mode;
+}
+void Channel::setInviteMode(bool mode)
+{
+	inviteMode = mode;
 }
 
 std::ostream &operator<<(std::ostream &os, const Channel &obj) {

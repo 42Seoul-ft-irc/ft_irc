@@ -14,7 +14,12 @@ SRCS = main.cpp \
 		command/Nick.cpp \
 		command/User.cpp \
 		command/Join.cpp \
+<<<<<<< HEAD
 		command/Invite.cpp \
+=======
+		Auth.cpp \
+		command/Topic.cpp
+>>>>>>> main
 
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(SRCS:.cpp=.d)

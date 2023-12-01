@@ -27,7 +27,6 @@ void Nick::execute()
 			std::cout << "nickname completed\n";
 		}
 	}
-	std::cout <<user;
 }
 
 int Nick::checkDuplicateNickname()

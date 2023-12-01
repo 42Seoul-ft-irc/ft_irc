@@ -22,7 +22,12 @@
 #include "command/Nick.hpp"
 #include "command/User.hpp"
 #include "command/Join.hpp"
+<<<<<<< HEAD
 #include "command/Invite.hpp"
+=======
+#include "Auth.hpp"
+#include "command/Topic.hpp"
+>>>>>>> main
 
 class UserInfo;
 class Command;
@@ -36,9 +41,11 @@ private:
 	std::string password;
 	int socketFd;
 
-	void pushServerPollfd();
-	void createSocket();
+	int convertPort(char *portStr);
 	void openServer();
+	void createSocket();
+	void setServerAddr(struct sockaddr_in &serverAddr, int portNum);
+	void pushServerPollfd();
 
 public:
 	std::map<int, UserInfo> users;
@@ -46,7 +53,6 @@ public:
 	char clientBuffer[SOMAXCONN][BUFSIZ];
 	std::vector<pollfd> pollfds;
 
-	Server();
 	Server(int argc, char **argv);
 
 	int getPortNum() const;
@@ -58,10 +64,9 @@ public:
 	void setSocketFd(int fd);
 
 	void acceptClient();
+	Command *createCommand(UserInfo &user, std::string recvStr);
+	void executeCommand(Command *cmd, UserInfo &user);
 
-	Command *createCommand(int fd, std::string recvStr);
-	void executeCommand(Command *cmd);
-	// 특정 fd의 UserInfo 찾음
 	UserInfo &getUserInfoByFd(int userFd);
 };
 
