@@ -143,6 +143,8 @@ Command *Server::createCommand(UserInfo &user, std::string recvStr)
 		cmd = new User(&msg, user);
 	else if (msg.getCommand() == "JOIN")
 		cmd = new Join(&msg, user, &this->channels);
+	else if (msg.getCommand() == "INVITE")
+		cmd = new Invite(&msg, user, &this->channels, &this->users);
 	else if (msg.getCommand() == "TOPIC")
 		cmd = new Topic(&msg, user, this->channels);
 
@@ -159,6 +161,11 @@ void Server::executeCommand(Command *cmd, UserInfo &user)
 			Auth auth(user);
 
 		delete (cmd);
+		 std::map<std::string, Channel>::iterator i = this->channels.begin();
+         for (; i != this->channels.end(); ++i)
+         {
+             std::cout << "서버에 들어온 채널: " << i->second.getName() << std::endl;
+         }
 	}
 }
 

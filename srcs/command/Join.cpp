@@ -31,6 +31,8 @@ void Join::handleChannelJoin(const std::string &channelName, const std::vector<s
 	}
 	std::map<std::string, Channel>::iterator it1 = this->channels->find(channelName);
 	if (it1 == this->channels->end()) {
+		if (channelName[0] != '#')
+			return ;
 		createAndJoinNewChannel(channelName);
 	}
 	else {
@@ -44,6 +46,7 @@ void Join::createAndJoinNewChannel(const std::string &channelName)
 	this->channels->insert(std::make_pair(channelName, channel));
 	channel.operators.insert(std::make_pair(user.getNickname(), this->user));
 	channel.users.insert(std::make_pair(user.getNickname(), this->user));
+	user.channels.insert(std::make_pair(channel.getName(), true));
 	std::cout << "JOIN success! New channel created.\n";
 }
 
@@ -60,6 +63,7 @@ void Join::joinExistingChannel(const std::string &channelName, const std::vector
 	if (checkJoinConditions(passwordList))
 	{
 		channel->users.insert(std::make_pair(user.getNickname(), this->user));
+		user.channels.insert(std::make_pair(channel->getName(), false));
 		channel->setUserCount(1);
 
 		if (channel->getIsInvite()) {

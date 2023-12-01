@@ -22,6 +22,7 @@
 #include "command/Nick.hpp"
 #include "command/User.hpp"
 #include "command/Join.hpp"
+#include "command/Invite.hpp"
 #include "Auth.hpp"
 #include "command/Topic.hpp"
 
