@@ -147,6 +147,8 @@ Command *Server::createCommand(UserInfo &user, std::string recvStr)
 		cmd = new Invite(&msg, user, &this->channels, &this->users);
 	else if (msg.getCommand() == "TOPIC")
 		cmd = new Topic(&msg, user, this->channels);
+	else if (msg.getCommand() == "PRIVMSG")
+		cmd = new Privmsg(&msg, user, this->users, this->channels);
 
 	return cmd;
 }
