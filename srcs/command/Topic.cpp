@@ -1,6 +1,6 @@
 #include "Topic.hpp"
 
-Topic::Topic(Message *msg, UserInfo &user, std::map<std::string, Channel> &channelList) : Command(msg), user(user), channelList(channelList) {}
+Topic::Topic(Message *msg, UserInfo &user, std::map<std::string, Channel> &channelList, std::string serverName) : Command(msg), user(user), channelList(channelList), serverName(serverName) {}
 
 Topic::~Topic() {}
 
@@ -27,7 +27,9 @@ bool Topic::isError()
 
 	if (!getParameters().size()) // 461 ERR_NEEDMOREPARAMS
 	{
-		ft_send(user.getFd(), "461 TOPIC :Not enough parameters");
+		std::string reply = ":" + serverName + " 461 " + user.getNickname() + " TOPIC :Not enough parameters";
+
+		ft_send(user.getFd(), reply);
 
 		return true;
 	}
@@ -35,7 +37,7 @@ bool Topic::isError()
 	std::map<std::string, Channel>::iterator it = channelList.find(getParameters()[0]);
 	if (it == channelList.end()) // 403 ERR_NOSUCHCHANNEL
 	{
-		std::string reply = "461 " + getParameters()[0] + " :No such channel";
+		std::string reply = ":" + serverName + " 403 " + user.getNickname() + " " + getParameters()[0] + " :No such channel";
 
 		ft_send(user.getFd(), reply);
 
@@ -53,13 +55,13 @@ void Topic::checkTopic(std::string channelName)
 
 	if (channel.getTopic().empty())
 	{
-		std::string reply = "331 " + channelName + " :No topic is set";
+		std::string reply = ":" + serverName + " 331 " + user.getNickname() + " " + getParameters()[0] + " :No topic is set";
 
 		ft_send(user.getFd(), reply);
 	}
 	else
 	{
-		std::string reply = "332 " + channelName + " :" + channel.getTopic();
+		std::string reply = ":" + serverName + " 332 " + user.getNickname() + " " + getParameters()[0] + " :" + channel.getTopic();
 
 		ft_send(user.getFd(), reply);
 	}
@@ -74,17 +76,23 @@ void Topic::editTopic(std::string channelName)
 	if (userIt != user.channels.end())
 	{
 		if (userIt->second || !channel.getTopicMode())
+		{
 			channel.setTopic(getTrailing());
+
+			std::string reply = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getHostname() + " TOPIC " + channelName + " :" + getTrailing();
+
+			ft_send(user.getFd(), reply);
+		}
 		else
 		{
-			std::string reply = "482 " + channelName + " :You're not channel operator";
+			std::string reply = ":" + serverName + " 482 " + user.getNickname() + " " + getParameters()[0] + " :You do not have access to change the topic on this channel";
 
 			ft_send(user.getFd(), reply);
 		}
 	}
 	else
 	{
-		std::string reply = "442 " + channelName + " :You're not on that channel";
+		std::string reply = ":" + serverName + " 442 " + user.getNickname() + " " + getParameters()[0] + " :You're not on that channel";
 
 		ft_send(user.getFd(), reply);
 	}
