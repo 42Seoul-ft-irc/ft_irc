@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-Server::Server(int argc, char **argv)
+Server::Server(int argc, char **argv) : serverName("irc.local")
 {
 	if (argc != 3)
 		throw std::invalid_argument("Error: invalid argument");
@@ -94,6 +94,10 @@ int Server::getSocketFd() const
 {
 	return socketFd;
 }
+std::string Server::getServerName() const
+{
+	return serverName;
+}
 
 /* setter */
 void Server::setPassword(std::string password)
@@ -161,11 +165,6 @@ void Server::executeCommand(Command *cmd, UserInfo &user)
 			Auth auth(user);
 
 		delete (cmd);
-		 std::map<std::string, Channel>::iterator i = this->channels.begin();
-         for (; i != this->channels.end(); ++i)
-         {
-             std::cout << "서버에 들어온 채널: " << i->second.getName() << std::endl;
-         }
 	}
 }
 
