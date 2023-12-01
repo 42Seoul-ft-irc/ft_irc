@@ -83,7 +83,7 @@ void Privmsg::splitParameter(std::string parameter)
 		parameter = parameter.substr(commaPos + 1);
 		commaPos = parameter.find(',');
 	}
-	recipients.push_back(parameter.substr(0, commaPos - 1));
+	recipients.push_back(parameter);
 }
 
 int Privmsg::checkRecipient(std::string recipient)
