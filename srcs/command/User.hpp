@@ -8,9 +8,10 @@
 class User : public Command {
 private:
 	UserInfo &user;
+	std::string serverName;
 
 public:
-	User(Message *msg, UserInfo &user);
+	User(Message *, UserInfo &, std::string);
 	~User();
 	void execute();
 };
