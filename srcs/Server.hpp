@@ -14,6 +14,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <csignal>
 #include "UserInfo.hpp"
 #include "Channel.hpp"
 #include "command/Command.hpp"
