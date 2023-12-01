@@ -38,6 +38,7 @@ private:
 	int portNum;
 	std::string password;
 	int socketFd;
+	std::string serverName;
 
 	int convertPort(char *portStr);
 	void openServer();
@@ -56,6 +57,7 @@ public:
 	int getPortNum() const;
 	std::string getPassword() const;
 	int getSocketFd() const;
+	std::string getServerName() const;
 
 	void setPortNum(int portNum);
 	void setPassword(std::string password);

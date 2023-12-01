@@ -8,13 +8,14 @@ class Auth
 {
 private:
 	UserInfo &user;
+	std::string serverName;
 
 	bool isNamesEmpty();
 	bool isAllPass();
 	void sendReplies();
 
 public:
-	Auth(UserInfo &user);
+	Auth(UserInfo &, std::string);
 };
 
 #endif

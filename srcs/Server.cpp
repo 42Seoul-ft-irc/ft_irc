@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-Server::Server(int argc, char **argv)
+Server::Server(int argc, char **argv) : serverName("irc.local")
 {
 	if (argc != 3)
 		throw std::invalid_argument("Error: invalid argument");
@@ -94,6 +94,10 @@ int Server::getSocketFd() const
 {
 	return socketFd;
 }
+std::string Server::getServerName() const
+{
+	return serverName;
+}
 
 /* setter */
 void Server::setPassword(std::string password)
@@ -140,13 +144,13 @@ Command *Server::createCommand(UserInfo &user, std::string recvStr)
 	else if (msg.getCommand() == "NICK")
 		cmd = new Nick(&msg, user, users);
 	else if (msg.getCommand() == "USER")
-		cmd = new User(&msg, user);
+		cmd = new User(&msg, user, serverName);
 	else if (msg.getCommand() == "JOIN")
 		cmd = new Join(&msg, user, &this->channels);
 	else if (msg.getCommand() == "INVITE")
 		cmd = new Invite(&msg, user, &this->channels, &this->users);
 	else if (msg.getCommand() == "TOPIC")
-		cmd = new Topic(&msg, user, this->channels);
+		cmd = new Topic(&msg, user, this->channels, serverName);
 
 	return cmd;
 }
@@ -158,14 +162,9 @@ void Server::executeCommand(Command *cmd, UserInfo &user)
 		cmd->execute();
 
 		if (!user.getActive() && (cmd->getCommand() == "NICK" || cmd->getCommand() == "USER"))
-			Auth auth(user);
+			Auth auth(user, serverName);
 
 		delete (cmd);
-		 std::map<std::string, Channel>::iterator i = this->channels.begin();
-         for (; i != this->channels.end(); ++i)
-         {
-             std::cout << "서버에 들어온 채널: " << i->second.getName() << std::endl;
-         }
 	}
 }
 
