@@ -11,6 +11,7 @@ class Invite : public Command {
 	private:
 		UserInfo &user;
 	public:
+		UserInfo *client;
 		Channel *channel;
 		std::map<std::string, Channel> *channels;
 		std::map<int, UserInfo> *users;
