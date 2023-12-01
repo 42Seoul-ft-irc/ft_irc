@@ -144,13 +144,13 @@ Command *Server::createCommand(UserInfo &user, std::string recvStr)
 	else if (msg.getCommand() == "NICK")
 		cmd = new Nick(&msg, user, users);
 	else if (msg.getCommand() == "USER")
-		cmd = new User(&msg, user);
+		cmd = new User(&msg, user, serverName);
 	else if (msg.getCommand() == "JOIN")
 		cmd = new Join(&msg, user, &this->channels);
 	else if (msg.getCommand() == "INVITE")
 		cmd = new Invite(&msg, user, &this->channels, &this->users);
 	else if (msg.getCommand() == "TOPIC")
-		cmd = new Topic(&msg, user, this->channels);
+		cmd = new Topic(&msg, user, this->channels, serverName);
 
 	return cmd;
 }
@@ -162,7 +162,7 @@ void Server::executeCommand(Command *cmd, UserInfo &user)
 		cmd->execute();
 
 		if (!user.getActive() && (cmd->getCommand() == "NICK" || cmd->getCommand() == "USER"))
-			Auth auth(user);
+			Auth auth(user, serverName);
 
 		delete (cmd);
 	}
