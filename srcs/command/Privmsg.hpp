@@ -2,10 +2,10 @@
 #define PRIVMSG_HPP
 
 #include "Command.hpp"
-#include "UserInfo.hpp"
-#include "Channel.hpp"
-#include <map>
-#include <vector>
+#include "../utils.hpp"
+#include "../UserInfo.hpp"
+#include "../Message.hpp"
+#include "../Channel.hpp"
 
 class Privmsg : public Command
 {
@@ -15,7 +15,7 @@ private:
 	std::map<std::string, Channel> channels;
 
 	std::vector<std::string> recipients;
-	std::vector<std::string> recipientChannels;
+	std::vector<Channel> recipientChannels;
 	std::vector<int> recipientUsersFd;
 	
 
@@ -31,6 +31,10 @@ public:
 	int checkChannels(std::string recipient);
 	int checkUsers(std::string recipient);
 
+	void sendUsersOfChannel(Channel channel);
+
 };
+
+void ft_send(int fd, std::string str);
 
 #endif
