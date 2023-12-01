@@ -53,6 +53,6 @@ void Invite::execute() {
 	std::string msg = "341 " + this->user.getNickname() + " " + this->getParameters().at(0) + " :" + this->getParameters().at(1);
 	ft_send(user.getFd(), msg);
 	msg.clear();
-	msg = ":" + this->user.getNickname() + "@" + this->user.getServername() + " " + "INVITE " + this->getParameters().at(0) + " :" + this->getParameters().at(1);
+	msg = ":" + this->user.getNickname() + "!" + this->user.getUsername() + "@" + this->user.getServername() + " " + "INVITE " + this->getParameters().at(0) + " :" + this->getParameters().at(1);
 	ft_send(this->client->getFd(), msg);
 }

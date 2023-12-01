@@ -24,6 +24,7 @@ void Nick::execute()
 		if (!checkNicknameForm())
 		{
 			user.checkNick();
+			user.setNickname(getParameters().at(0));
 			std::cout << "nickname completed\n";
 		}
 	}

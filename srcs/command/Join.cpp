@@ -47,7 +47,10 @@ void Join::createAndJoinNewChannel(const std::string &channelName)
 	channel.operators.insert(std::make_pair(user.getNickname(), this->user));
 	channel.users.insert(std::make_pair(user.getNickname(), this->user));
 	user.channels.insert(std::make_pair(channel.getName(), true));
-	std::cout << "JOIN success! New channel created.\n";
+	std::string msg = ":" + this->user.getNickname() + "!" + this->user.getUsername() + "@" + this->user.getServername() + " " + "JOIN :" + this->getParameters().at(0) + "\n";
+	msg += "353 " + this->user.getNickname() + " = " + this->getParameters().at(0) + " : @" + this->user.getNickname() + "\n";
+	msg += "366 " + this->user.getNickname() + " " + this->getParameters().at(0) + " :End of /NAMES list.";
+	ft_send(this->user.getFd(), msg);
 }
 
 void Join::joinExistingChannel(const std::string &channelName, const std::vector<std::string> &passwordList)
@@ -56,10 +59,8 @@ void Join::joinExistingChannel(const std::string &channelName, const std::vector
 	this->channel = &it2->second;
 
 	std::map<std::string, bool>::iterator it_user = this->user.channels.find(channelName);
-	if (it_user == this->user.channels.end()) {
-		// 사용자가 채널에 없는 경우, 무시하고 계속 진행
+	if (it_user != this->user.channels.end())
 		return;
-	}
 	if (checkJoinConditions(passwordList))
 	{
 		channel->users.insert(std::make_pair(user.getNickname(), this->user));
@@ -69,6 +70,21 @@ void Join::joinExistingChannel(const std::string &channelName, const std::vector
 		if (channel->getIsInvite()) {
 			channel->invite.erase(user.getNickname());
 		}
+
+		std::string msg = ":" + this->user.getNickname() + "!" + this->user.getUsername() + "@" + this->user.getServername() + " " + "JOIN :" + this->getParameters().at(0) + "\n";
+		msg += "353 " + this->user.getNickname() + " = " + this->getParameters().at(0) + " :";
+		for (std::map<std::string, UserInfo>::iterator i = channel->users.begin(); i != channel->users.end(); i++) {
+			UserInfo user_info = i->second;
+			std::map<std::string, UserInfo>::iterator it = channel->operators.find(user_info.getNickname());
+			if (it == channel->operators.end())
+				msg += " " + user_info.getNickname();
+			else
+				msg += " @" + user_info.getNickname();
+		}
+		msg += "\n";
+		msg += "366 " + this->user.getNickname() + " " + this->getParameters().at(0) + " :End of /NAMES list.";
+		ft_send(this->user.getFd(), msg);
+		std::cout << msg;
 	}
 }
 
@@ -112,7 +128,8 @@ void Join::execute()
 	if (this->getParameters().size() < 1)
 	{
 		std::cout << "parameter error \n";
-		ft_send(this->user.getFd(), "461 JOIN :Not enough parameters");
+		std::string msg = "461 JOIN :Not enough parameters";
+		ft_send(this->user.getFd(), msg);
 		return;
 	}
 	else if (this->getParameters().size() >= 1)
