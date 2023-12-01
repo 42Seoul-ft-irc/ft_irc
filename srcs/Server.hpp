@@ -22,12 +22,9 @@
 #include "command/Nick.hpp"
 #include "command/User.hpp"
 #include "command/Join.hpp"
-<<<<<<< HEAD
 #include "command/Invite.hpp"
-=======
 #include "Auth.hpp"
 #include "command/Topic.hpp"
->>>>>>> main
 
 class UserInfo;
 class Command;
