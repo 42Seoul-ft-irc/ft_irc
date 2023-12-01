@@ -16,7 +16,6 @@ private:
 
 public:
 	Command(Message *msg);
-	Command(Message &msg);
 	virtual ~Command();
 
 	virtual void execute()=0;
@@ -33,12 +32,6 @@ public:
 	void setCommand(std::string);
 	void setParameters(std::string);
 	void setTrailing(std::string);
-
-	// 여기서부터 커맨드 추가
-	// void commandPass(Server &server, UserInfo &user);
-	// void commandNick(Server &server, UserInfo &user);
-	// int checkNicknameForm(Server &server);
-	// int checkDuplicateNickname(Server &server);
 };
 
 #endif

@@ -1,8 +1,6 @@
 #ifndef NUMERICREPLIES_HPP
 #define NUMERICREPLIES_HPP
 
-#include "Server.hpp"
-
 #define ERR_NEEDMOREPARAMS 461
 #define ERR_ALREADYREGISTRED 462
 
