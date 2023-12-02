@@ -26,6 +26,7 @@
 #include "command/Invite.hpp"
 #include "Auth.hpp"
 #include "command/Topic.hpp"
+#include "command/Privmsg.hpp"
 
 class UserInfo;
 class Command;

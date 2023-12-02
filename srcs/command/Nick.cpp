@@ -6,6 +6,8 @@ Nick::~Nick() {}
 
 void Nick::execute()
 {
+	if (!user.getPass())
+		return;
 	if (getParameters().size() < 2)
 	{
 		// send(ERR_NEEDMOREPARAMS)
@@ -17,7 +19,10 @@ void Nick::execute()
 	if (user.getNick()) // 원래 유저 닉네임 변경
 	{
 		if (!checkNicknameForm())
+		{
+			user.setNickname(getParameters().at(0));
 			std::cout << "nickname update completed\n";
+		}
 	}
 	else // 새 유저 닉네임 생성
 	{

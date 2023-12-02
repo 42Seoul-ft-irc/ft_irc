@@ -153,6 +153,8 @@ Command *Server::createCommand(UserInfo &user, std::string recvStr)
 		cmd = new Topic(&msg, user, this->channels, serverName);
 	else if (msg.getCommand() == "QUIT")
 		cmd = new Quit(&msg, user, &this->channels, &this->users);
+	else if (msg.getCommand() == "PRIVMSG")
+		cmd = new Privmsg(&msg, user, this->users, this->channels);
 
 	return cmd;
 }
