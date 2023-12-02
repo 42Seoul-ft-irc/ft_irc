@@ -116,8 +116,30 @@ void Mode::run()
 	std::string modestring = getParameters()[1];
 
 	saveInputModes(modestring);
+
+	std::cout << "inputModes---\n";
+	for (size_t i = 0; i < inputModes.size(); i++)
+		std::cout << inputModes[i] << std::endl;
+	std::cout << "---------------\n\n";
+
 	removeDuplicates();
+
+	std::cout << "중복 제거 modes--\n";
+	for (size_t i = 0; i < modes.size(); i++)
+		std::cout << modes[i] << std::endl;
+	std::cout << "---------------\n\n";
+
 	executeModes();
+
+	std::cout << "changed-----\n";
+	for (size_t i = 0; i < changed.size(); i++)
+		std::cout << changed[i] << std::endl;
+	std::cout << "---------------\n\n";
+
+	std::cout << "changed Params---\n";
+	for (size_t i = 0; i < changedParams.size(); i++)
+		std::cout << changedParams[i] << std::endl;
+	std::cout << "---------------\n\n";
 
 	if (changed.size())
 		sendReply();
@@ -158,21 +180,27 @@ void Mode::executeModes()
 		switch (mode[1])
 		{
 		case 'i':
+			std::cout << "i mode" << std::endl;
 			executeInviteMode(mode);
 			break;
 		case 'k':
+			std::cout << "k mode" << std::endl;
 			executeKeyMode(mode);
 			break;
 		case 'l':
+			std::cout << "l mode" << std::endl;
 			executeLimitMode(mode);
 			break;
 		case 'o':
+			std::cout << "o mode" << std::endl;
 			executeOperatorMode(mode);
 			break;
 		case 't':
+			std::cout << "t mode" << std::endl;
 			executeTopicMode(mode);
 			break;
 		default:
+			std::cout << "it is not mode" << std::endl;
 			doesntExistMode(mode);
 			break;
 		}
@@ -188,6 +216,7 @@ void Mode::sendReply()
 		str = " :" + str;
 	else
 	{
+		str = " " + str;
 		int i;
 		for (i = 0; i < paramSize - 1; i++)
 			str = str + " " + changedParams[i];
@@ -200,6 +229,8 @@ void Mode::sendReply()
 		UserInfo userInfo = it->second;
 
 		std::string reply = ":" + userInfo.getNickname() + "!" + userInfo.getHostname() + "@" + userInfo.getServername() + " MODE " + channel->getName() + str;
+
+		std::cout << reply << std::endl;
 
 		ft_send(userInfo.getFd(), reply);
 	}
@@ -263,7 +294,7 @@ void Mode::executeLimitMode(std::string mode)
 
 		return;
 	}
-	else if (mode == " +l")
+	else if (mode == "+l")
 	{
 		if (paramsIndex > getParameters().size() - 1) // 파라미터 없을 때
 		{
@@ -298,7 +329,6 @@ void Mode::executeLimitMode(std::string mode)
 
 			return;
 		}
-
 		channel->setLimit(num);
 		channel->setLimitMode(true);
 		changed.push_back(mode);
@@ -401,12 +431,12 @@ std::string Mode::changedModes()
 	for (size_t i = 1; i < changed.size(); ++i)
 	{
 		if (changed[i][0] == flag)
-		{
-			changed[i].erase(0, 1);
-			str += changed[i];
-		}
+			str += changed[i].erase(0, 1);
 		else
+		{
 			str += changed[i];
+			flag = changed[i][0];
+		}
 	}
 
 	return str;
