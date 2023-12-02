@@ -7,7 +7,7 @@ class Channel
 {
 private:
 	std::string name;
-	std::string pass;
+	std::string key;
 	std::string topic;
 	size_t limit;
 	size_t userCount;
@@ -25,7 +25,7 @@ public:
 	Channel(UserInfo &user, std::string name);
 
 	std::string getName() const;
-	std::string getPass() const;
+	std::string getKey() const;
 	std::string getTopic() const;
 	size_t getLimit() const;
 	size_t getUserCount() const;

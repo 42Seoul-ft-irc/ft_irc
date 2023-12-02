@@ -67,7 +67,7 @@ void Join::joinExistingChannel(const std::string &channelName, const std::vector
 		user.channels.insert(std::make_pair(channel->getName(), false));
 		channel->setUserCount(1);
 
-		if (channel->getIsInvite()) {
+		if (channel->getInviteMode()) {
 			channel->invite.erase(user.getNickname());
 		}
 
@@ -90,27 +90,27 @@ void Join::joinExistingChannel(const std::string &channelName, const std::vector
 
 bool Join::checkJoinConditions(const std::vector<std::string> &passwordList)
 {
-	if (channel->getIsLimit() && channel->getLimit() <= this->channel->users.size())
+	if (channel->getLimitMode() && channel->getLimit() <= this->channel->users.size())
 	{
 		std::string msg = "471 " + channel->getName() + " :Cannot join channel (+l)";
 		ft_send(this->user.getFd(), msg);
 		return false;
 	}
 
-	if (channel->getIsKey() && passwordList.empty())
+	if (channel->getKeyMode() && passwordList.empty())
 	{
 		std::string msg = "461 JOIN :Not enough parameters";
 		ft_send(this->user.getFd(), msg);
 		return false;
 	}
-	else if (channel->getIsKey() && passwordList.front() != channel->getPass())
+	else if (channel->getKeyMode() && passwordList.front() != channel->getKey())
 	{
 		std::string msg = "475 " + channel->getName() + " :Cannot join channel (+k)";
 		ft_send(this->user.getFd(), msg);
 		return false;
 	}
 
-	if (channel->getIsInvite() && channel->invite.find(user.getNickname()) == channel->invite.end())
+	if (channel->getInviteMode() && channel->invite.find(user.getNickname()) == channel->invite.end())
 	{
 		std::string msg = "473 " + channel->getName() + " :Cannot join channel (+i)";
 		ft_send(this->user.getFd(), msg);

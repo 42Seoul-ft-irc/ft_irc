@@ -1,6 +1,6 @@
 #include "Channel.hpp"
 
-Channel::Channel(UserInfo &user, std::string name) : pass(""), topic(""), limit(0), userCount(1), inviteMode(false), keyMode(false), limitMode(false), topicMode(true)
+Channel::Channel(UserInfo &user, std::string name) : key(""), topic(""), limit(0), userCount(1), inviteMode(false), keyMode(false), limitMode(false), topicMode(true)
 {
 
 	if (name.length() > 200) {
@@ -16,8 +16,9 @@ Channel::Channel(UserInfo &user, std::string name) : pass(""), topic(""), limit(
 std::string Channel::getName() const{
 	return name;
 }
-std::string Channel::getPass() const{
-	return pass;
+std::string Channel::getKey() const
+{
+	return key;
 }
 std::string Channel::getTopic() const{
 	return topic;
@@ -76,7 +77,7 @@ void Channel::setTopicMode(bool mode)
 std::ostream &operator<<(std::ostream &os, const Channel &obj) {
 	os << "~~ CHANNEL ~~" << std::endl;
 	os << "name: " << obj.getName() << std::endl;
-	os << "password: " << obj.getPass() << " (" << obj.getKeyMode() << ")"<< std::endl;
+	os << "password: " << obj.getKey() << " (" << obj.getKeyMode() << ")" << std::endl;
 	os << "topic: " << obj.getTopic() << std::endl;
 	os << "limit: " << obj.getLimit() << " (" << obj.getLimitMode() << ")" <<std::endl;
 	os << "userCount: " << obj.getUserCount() << std::endl;
