@@ -323,16 +323,31 @@ void Mode::executeLimitMode(std::string mode)
 			}
 		}
 
+		if (num < 0)
+		{
+			std::string reply = ":" + serverName + " 696 " + user.getNickname() + " " + channel->getName() + " l " + getParameters()[paramsIndex] + " :Invalid limit mode parameter. Syntax: <limit>.";
+
+			ft_send(user.getFd(), reply);
+			paramsIndex++;
+
+			return;
+		}
+
 		if (num == channel->getLimit())
 		{
 			paramsIndex++;
 
 			return;
 		}
+
+		std::stringstream ss;
+		ss << num;
+
+		std::string strNumber = ss.str();
 		channel->setLimit(num);
 		channel->setLimitMode(true);
 		changed.push_back(mode);
-		changedParams.push_back(getParameters()[paramsIndex]);
+		changedParams.push_back(strNumber);
 
 		paramsIndex++;
 	}
