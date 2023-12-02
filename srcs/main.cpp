@@ -7,23 +7,31 @@ int main(int argc, char **argv)
 		std::cout << server.getPortNum() << ", " << server.getSocketFd() << ", " << server.getPassword() << std::endl;
 		while (1)
 		{
-			int resultFd = poll(server.pollfds.data(), server.pollfds.size(), -1);
+			int resultFd = poll(server.pollfds.data(), server.pollfds.size(), 3600);
 			if (resultFd == -1)
 				throw std::runtime_error("Error: poll error");
 			if (resultFd > 0)
 			{
-				// 서버
-				if (server.pollfds[0].revents & POLLIN)
+				for (size_t i = 0; i < server.pollfds.size(); i++)
 				{
-					std::cout << "클라이언트가 서버에 접근\n";
-					// todo 서버 암호 확인
-					server.acceptClient();
-				}
-				for (size_t i = 1; i <= server.pollfds.size(); i++)
-				{
-					if (server.pollfds[i].revents & POLLIN)
+					if (server.pollfds[i].revents == 0)
+						continue;
+					if (server.pollfds[i].revents & POLLHUP || server.pollfds[i].revents & POLLERR)
 					{
-						std::cout << "클라이언트가 메세지 보냄\n";
+						UserInfo &user = server.getUserInfoByFd(server.pollfds[i].fd);
+						close(user.getFd());
+						server.pollfds.erase(server.pollfds.begin() + i);
+						std::cout << "클라이언트가 연결을 끊음\n";
+					}
+					else if (i == 0 && server.pollfds[i].revents & POLLIN)
+					{
+						std::cout << "클라이언트가 서버에 접근\n";
+						// todo 서버 암호 확인
+						server.acceptClient();
+					}
+					else if (server.pollfds[i].revents & POLLIN)
+					{
+						std::cout << "클라이언트가 메세지 보냄: "<< i << "\n";
 						int fd = server.pollfds[i].fd;
 						char buffer[512];
 						memset(buffer, 0, sizeof(buffer));
@@ -52,15 +60,15 @@ int main(int argc, char **argv)
 								Command *cmd = server.createCommand(user, commands[i]);
 								server.executeCommand(cmd, user);
 								std::cout << user << std::endl;
+								for (std::map<std::string, bool>::iterator i = user.channels.begin(); i != user.channels.end();i++) {
+									std::cout <<"채널명: " << i->first << std::endl;
+									std::cout <<"운영자 여부: " <<i->second<<std::endl;
+								}
 							}
 							std::strcpy(server.clientBuffer[fd], strBuffer.c_str());
 							//std::cout <<"남은 버퍼: " << strBuffer << std::endl;
 						}
-					} // 클라이언트가 연결을 끊음
-					else if (server.pollfds[i].revents & POLLHUP)
-					{
-						std::cout << "클라이언트가 연결을 끊음\n";
-					}
+					} 
 				}
 			}
 		}
