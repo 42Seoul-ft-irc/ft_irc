@@ -20,12 +20,7 @@ void Auth::sendReplies()
 {
 	std::string name = user.getNickname();
 	std::string reply =
-		// ":irc.local 251 nickwonlim2222 :There are 0 users and 1 invisible on 1 servers\n"
-		// ":irc.local 253 nickwonlim2222 1 :unknown connections"
-		// ":irc.local 254 nickwonlim2222 1 :channels formed"
-		// ":irc.local 255 nickwonlim2222 :I have 1 clients and 0 servers"
-		// ":irc.local 265 nickwonlim2222 :Current local users: 1  Max: 1"
-		// ":irc.local 266 nickwonlim2222 :Current global users: 1  Max: 1"
+		":" + serverName + " 001 " + name + " :Welcome to the Localnet IRC Network\n";
 
 		":" + serverName + " 375 " + name + " :- <server> Message of the day - \n"
 		":" + serverName + " 372 " + name + " :                                            /\n"
