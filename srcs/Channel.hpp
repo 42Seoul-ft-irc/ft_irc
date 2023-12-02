@@ -42,6 +42,8 @@ public:
 	void setKeyMode(bool);
 	void setLimitMode(bool);
 	void setTopicMode(bool);
+
+	bool isOperator(std::string);
 };
 
 std::ostream &operator<<(std::ostream &os, const Channel &obj);

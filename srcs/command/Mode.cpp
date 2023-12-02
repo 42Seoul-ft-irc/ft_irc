@@ -1,6 +1,6 @@
 #include "Mode.hpp"
 
-Mode::Mode(Message *msg, UserInfo &user, std::map<std::string, Channel> &channelList, std::string serverName) : Command(msg), user(user), channelList(channelList), serverName(serverName), paramsIndex(2) {}
+Mode::Mode(Message *msg, UserInfo &user, std::map<std::string, Channel> &channelList, std::map<int, UserInfo> &users, std::string serverName) : Command(msg), user(user), channelList(channelList), users(users), serverName(serverName), paramsIndex(2) {}
 
 Mode::~Mode() {}
 
@@ -33,8 +33,13 @@ void Mode::execute()
 	if (getParameters()[1][0] != '+' && getParameters()[1][0] != '-')
 		return;
 
-	if (!isOperator())
+	if (!channel->isOperator(user.getNickname()))
+	{
+		std::string reply = ":" + serverName + " 482 " + user.getNickname() + " " + channel->getName() + " :You're not channel operator";
+
+		ft_send(user.getFd(), reply);
 		return;
+	}
 
 	run();
 }
@@ -101,21 +106,6 @@ std::string Mode::getModestring()
 	}
 
 	return modestring;
-}
-
-bool Mode::isOperator()
-{
-	std::map<std::string, UserInfo>::iterator it = channel->operators.find(user.getNickname());
-
-	if (it == channel->operators.end()) // 482 ERR_CHANOPRIVSNEEDED
-	{
-		std::string reply = ":" + serverName + " 482 " + user.getNickname() + " " + channel->getName() + " :You're not channel operator";
-
-		ft_send(user.getFd(), reply);
-
-		return false;
-	}
-	return true;
 }
 
 void Mode::run()
@@ -286,7 +276,51 @@ void Mode::executeLimitMode(std::string mode)
 	}
 }
 
-void Mode::executeOperatorMode(std::string mode) {}
+void Mode::executeOperatorMode(std::string mode)
+{
+	if (paramsIndex > getParameters().size() - 1) // 파라미터 없을 때
+	{
+		std::string reply = ":" + serverName + " 696 " + user.getNickname() + " " + channel->getName() + " o * :You must specify a parameter for the op mode. Syntax: <nick>.";
+
+		ft_send(user.getFd(), reply);
+
+		return;
+	}
+
+	// 운영자에 있고 + 면 무시
+
+	// 운영자에 없고 -면 무시
+	// 파라미터 인덱스 증가
+	std::string name = getParameters()[paramsIndex];
+
+	if (!isNicknameExist(name))
+	{
+		std::string reply = ":" + serverName + " 401 " + user.getNickname() + " " + name + " :No such nick";
+
+		ft_send(user.getFd(), reply);
+		paramsIndex++;
+
+		return;
+	}
+
+	if (channel->isOperator(name) && mode == "-o")
+	{
+		std::map<std::string, UserInfo>::iterator it = channel->operators.find(name);
+
+		channel->operators.erase(it);
+		changed.push_back(mode);
+		changedParams.push_back(name);
+	}
+	else if (!channel->isOperator(name) && mode == "+o")
+	{
+		channel->operators.insert(std::make_pair(name, *findUserByNickname(name)));
+		changed.push_back(mode);
+		changedParams.push_back(name);
+	}
+
+	paramsIndex++;
+}
+
 void Mode::executeTopicMode(std::string mode) {}
 
 void Mode::changeInviteMode()
@@ -295,4 +329,26 @@ void Mode::changeInviteMode()
 		channel->setInviteMode(false);
 	else
 		channel->setInviteMode(true);
+}
+
+bool Mode::isNicknameExist(std::string name)
+{
+	std::map<int, UserInfo>::iterator it = users.begin();
+
+	for (; it != users.end(); ++it)
+		if (it->second.getNickname() == name)
+			return true;
+
+	return false;
+}
+
+UserInfo *Mode::findUserByNickname(std::string name)
+{
+	std::map<int, UserInfo>::iterator it = users.begin();
+
+	for (; it != users.end(); ++it)
+		if (it->second.getNickname() == name)
+			return &(it->second);
+
+	return 0;
 }

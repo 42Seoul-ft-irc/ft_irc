@@ -84,6 +84,15 @@ void Channel::setTopicMode(bool mode)
 	topicMode = mode;
 }
 
+bool Channel::isOperator(std::string nickname)
+{
+	std::map<std::string, UserInfo>::iterator it = operators.find(nickname);
+
+	if (it == operators.end())
+		return false;
+	return true;
+}
+
 std::ostream &operator<<(std::ostream &os, const Channel &obj) {
 	os << "~~ CHANNEL ~~" << std::endl;
 	os << "name: " << obj.getName() << std::endl;

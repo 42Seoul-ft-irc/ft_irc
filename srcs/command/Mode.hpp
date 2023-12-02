@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <sstream>
+#include <algorithm>
 #include "Command.hpp"
 #include "../Channel.hpp"
 #include "../UserInfo.hpp"
@@ -12,6 +13,7 @@ class Mode : public Command
 private:
 	UserInfo &user;
 	std::map<std::string, Channel> &channelList;
+	std::map<int, UserInfo> &users;
 	Channel *channel;
 	std::string serverName;
 
@@ -24,7 +26,6 @@ private:
 
 	bool isValidChannelName();
 	std::string getModestring();
-	bool isOperator();
 
 	void run();
 	void saveInputModes(std::string);
@@ -37,9 +38,11 @@ private:
 	void executeTopicMode(std::string);
 
 	void changeInviteMode();
+	bool isNicknameExist(std::string);
+	UserInfo *findUserByNickname(std::string);
 
 public:
-	Mode(Message *, UserInfo &, std::map<std::string, Channel> &, std::string);
+	Mode(Message *, UserInfo &, std::map<std::string, Channel> &, std::map<int, UserInfo> &, std::string);
 	~Mode();
 
 	void execute();
