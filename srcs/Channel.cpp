@@ -1,6 +1,6 @@
 #include "Channel.hpp"
 
-Channel::Channel(UserInfo &user, std::string name) : pass(""), topic(""), limit(0), userCount(1), isInvite(false), isLimit(false), isKey(false), topicMode(true), inviteMode(false)
+Channel::Channel(UserInfo &user, std::string name) : pass(""), topic(""), limit(0), userCount(1), inviteMode(false), keyMode(false), limitMode(false), topicMode(true)
 {
 
 	if (name.length() > 200) {
@@ -14,36 +14,35 @@ Channel::Channel(UserInfo &user, std::string name) : pass(""), topic(""), limit(
 }
 
 std::string Channel::getName() const{
-	return this->name;
+	return name;
 }
 std::string Channel::getPass() const{
-	return this->pass;
+	return pass;
 }
 std::string Channel::getTopic() const{
-	return this->topic;
+	return topic;
 }
 size_t Channel::getLimit() const{
-	return this->limit;
+	return limit;
 }
 size_t Channel::getUserCount() const{
-	return this->userCount;
-}
-bool Channel::getIsInvite() const{
-	return this->isInvite;
-}
-bool Channel::getIsLimit() const{
-	return this->isLimit;
-}
-bool Channel::getIsKey() const{
-	return this->isKey;
-}
-bool Channel::getTopicMode() const
-{
-	return topicMode;
+	return userCount;
 }
 bool Channel::getInviteMode() const
 {
 	return inviteMode;
+}
+bool Channel::getKeyMode() const
+{
+	return keyMode;
+}
+bool Channel::getLimitMode() const
+{
+	return limitMode;
+}
+bool Channel::getTopicMode() const
+{
+	return topicMode;
 }
 
 /* 채팅방 인원 추가하고 싶으면 매개변수에 1, 퇴장시키고 싶으면 매개변수에 2 넣어주세요 */
@@ -68,12 +67,14 @@ void Channel::setInviteMode(bool mode)
 std::ostream &operator<<(std::ostream &os, const Channel &obj) {
 	os << "~~ CHANNEL ~~" << std::endl;
 	os << "name: " << obj.getName() << std::endl;
-	os << "password: " << obj.getPass() << " (" << obj.getIsKey() << ")"<< std::endl;
+	os << "password: " << obj.getPass() << " (" << obj.getKeyMode() << ")"<< std::endl;
 	os << "topic: " << obj.getTopic() << std::endl;
-	os << "limit: " << obj.getLimit() << " (" << obj.getIsLimit() << ")" <<std::endl;
+	os << "limit: " << obj.getLimit() << " (" << obj.getLimitMode() << ")" <<std::endl;
 	os << "userCount: " << obj.getUserCount() << std::endl;
-	os << "isInvite: " << obj.getIsInvite() << std::endl;
-	os << "isKey: " << obj.getIsKey() << std::endl;
+	os << "inviteMode: " << obj.getInviteMode() << std::endl;
+	os << "keyMode: " << obj.getKeyMode() << std::endl;
+	os << "limitMode: " << obj.getLimitMode() << std::endl;
+	os << "topicMode: " << obj.getTopicMode() << std::endl;
 	os << "~~~~~~~~~~~~~~~~" << std::endl;
 	return os;
 }

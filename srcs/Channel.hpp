@@ -11,11 +11,11 @@ private:
 	std::string topic;
 	size_t limit;
 	size_t userCount;
-	bool isInvite;
-	bool isLimit;
-	bool isKey;
-	bool topicMode;
+
 	bool inviteMode;
+	bool keyMode;
+	bool limitMode;
+	bool topicMode;
 
 public:
 	std::map<std::string, UserInfo> operators;
@@ -29,11 +29,10 @@ public:
 	std::string getTopic() const;
 	size_t getLimit() const;
 	size_t getUserCount() const;
-	bool getIsInvite() const;
-	bool getIsLimit() const;
-	bool getIsKey() const;
-	bool getTopicMode() const;
 	bool getInviteMode() const;
+	bool getKeyMode() const;
+	bool getLimitMode() const;
+	bool getTopicMode() const;
 
 	void setUserCount(int count);
 	void setTopic(std::string);
