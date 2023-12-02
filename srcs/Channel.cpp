@@ -84,6 +84,22 @@ void Channel::setTopicMode(bool mode)
 	topicMode = mode;
 }
 
+void Channel::changeInviteMode()
+{
+	if (inviteMode)
+		inviteMode = false;
+	else
+		inviteMode = true;
+}
+
+void Channel::changeTopicMode()
+{
+	if (topicMode)
+		topicMode = false;
+	else
+		topicMode = true;
+}
+
 bool Channel::isOperator(std::string nickname)
 {
 	std::map<std::string, UserInfo>::iterator it = operators.find(nickname);

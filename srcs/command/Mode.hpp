@@ -37,7 +37,6 @@ private:
 	void executeOperatorMode(std::string);
 	void executeTopicMode(std::string);
 
-	void changeInviteMode();
 	bool isNicknameExist(std::string);
 	UserInfo *findUserByNickname(std::string);
 

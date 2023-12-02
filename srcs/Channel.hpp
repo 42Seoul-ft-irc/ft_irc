@@ -43,6 +43,9 @@ public:
 	void setLimitMode(bool);
 	void setTopicMode(bool);
 
+	void changeInviteMode();
+	void changeTopicMode();
+
 	bool isOperator(std::string);
 };
 

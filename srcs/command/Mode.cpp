@@ -180,7 +180,7 @@ void Mode::executeInviteMode(std::string mode)
 	else if (mode == "-i" && !channel->getInviteMode())
 		return;
 
-	changeInviteMode();
+	channel->changeInviteMode();
 	changed.push_back(mode);
 }
 
@@ -321,14 +321,13 @@ void Mode::executeOperatorMode(std::string mode)
 	paramsIndex++;
 }
 
-void Mode::executeTopicMode(std::string mode) {}
-
-void Mode::changeInviteMode()
+void Mode::executeTopicMode(std::string mode)
 {
-	if (channel->getInviteMode())
-		channel->setInviteMode(false);
-	else
-		channel->setInviteMode(true);
+	if ((mode == "+t" && !channel->getTopicMode()) || (mode == "-t" && channel->getTopicMode()))
+	{
+		channel->changeTopicMode();
+		changed.push_back(mode);
+	}
 }
 
 bool Mode::isNicknameExist(std::string name)
