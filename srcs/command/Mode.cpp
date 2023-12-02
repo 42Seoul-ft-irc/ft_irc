@@ -231,7 +231,61 @@ void Mode::executeKeyMode(std::string mode)
 	paramsIndex++;
 }
 
-void Mode::executeLimitMode(std::string mode) {}
+void Mode::executeLimitMode(std::string mode)
+{
+	if (mode == "-l" && channel->getLimitMode())
+	{
+		channel->setLimit(0);
+		channel->setLimitMode(false);
+		changed.push_back(mode);
+
+		return;
+	}
+	else if (mode == " +l")
+	{
+		if (paramsIndex > getParameters().size() - 1) // 파라미터 없을 때
+		{
+			std::string reply = ":" + serverName + " 696 " + user.getNickname() + " " + channel->getName() + " l * :You must specify a parameter for the limit mode. Syntax: <limit>.";
+
+			ft_send(user.getFd(), reply);
+
+			return;
+		}
+
+		std::istringstream iss(getParameters()[paramsIndex]);
+		long long num;
+
+		if (!(iss >> num))
+		{
+			if (std::atoll(getParameters()[paramsIndex].c_str()) == 0)
+				num = 0;
+			else
+			{
+				std::string reply = ":" + serverName + " 696 " + user.getNickname() + " " + channel->getName() + " l " + getParameters()[paramsIndex] + " :Invalid limit mode parameter. Syntax: <limit>.";
+
+				ft_send(user.getFd(), reply);
+				paramsIndex++;
+
+				return;
+			}
+		}
+
+		if (num == channel->getLimit())
+		{
+			paramsIndex++;
+
+			return;
+		}
+
+		channel->setLimit(num);
+		channel->setLimitMode(true);
+		changed.push_back(mode);
+		changedParams.push_back(getParameters()[paramsIndex]);
+
+		paramsIndex++;
+	}
+}
+
 void Mode::executeOperatorMode(std::string mode) {}
 void Mode::executeTopicMode(std::string mode) {}
 
