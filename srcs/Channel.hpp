@@ -9,7 +9,7 @@ private:
 	std::string name;
 	std::string key;
 	std::string topic;
-	size_t limit;
+	long long limit;
 	size_t userCount;
 
 	bool inviteMode;
@@ -36,6 +36,7 @@ public:
 
 	void setKey(std::string);
 	void setTopic(std::string);
+	void setLimit(size_t);
 	void setUserCount(int count);
 	void setInviteMode(bool);
 	void setKeyMode(bool);

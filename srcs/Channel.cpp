@@ -55,6 +55,11 @@ void Channel::setTopic(std::string topic)
 	this->topic = topic;
 }
 
+void Channel::setLimit(size_t limit)
+{
+	this->limit = limit;
+}
+
 /* 채팅방 인원 추가하고 싶으면 매개변수에 1, 퇴장시키고 싶으면 매개변수에 2 넣어주세요 */
 void Channel::setUserCount(int count)
 {
