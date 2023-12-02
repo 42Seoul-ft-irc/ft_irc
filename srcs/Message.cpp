@@ -63,7 +63,6 @@ void Message::splitMsg()
 	while (iss >> token && token[0] != ':' && token.find('\r') == std::string::npos && token.find('\n') == std::string::npos)
 	{
 		setParameters(token);
-		std::cout << token << std::endl;
 
 		left_position = iss.tellg();
 	}
