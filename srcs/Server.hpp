@@ -28,7 +28,7 @@
 #include "command/Topic.hpp"
 #include "command/Privmsg.hpp"
 #include "command/Mode.hpp"
-//#include "command/Quit.hpp"
+#include "command/Quit.hpp"
 
 class UserInfo;
 class Command;

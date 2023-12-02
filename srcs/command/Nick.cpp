@@ -8,11 +8,11 @@ void Nick::execute()
 {
 	if (!user.getPass())
 		return;
-	if (getParameters().size() < 2)
+	if (getParameters().size() < 1)
 	{
 		// send(ERR_NEEDMOREPARAMS)
 	}
-	else if (getParameters().size() != 2)
+	else if (getParameters().size() != 1)
 	{
 		// send(NICK uses 'NICK passparameter')
 	}
@@ -49,7 +49,7 @@ int Nick::checkDuplicateNickname()
 
 int Nick::checkNicknameForm()
 {
-	if (getParameters()[1].size() >= 10)
+	if (getParameters()[0].size() >= 10)
 	{
 		// send(ERR_ERRONEUSNICKNAME)
 		return 1;

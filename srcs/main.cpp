@@ -60,11 +60,8 @@ int main(int argc, char **argv)
 								UserInfo &user = server.getUserInfoByFd(fd);
 								Command *cmd = server.createCommand(user, commands[i]);
 								server.executeCommand(cmd, user);
-
-								for (std::map<std::string, bool>::iterator i = user.channels.begin(); i != user.channels.end();i++) {
-									std::cout <<"채널명: " << i->first << std::endl;
-									std::cout <<"운영자 여부: " <<i->second<<std::endl;
-								}
+								//for(std::map<int, UserInfo>::iterator i = server.users.begin();i != server.users.end(); i++)
+								//	std::cout << i->second <<std::endl; 
 							}
 							std::strcpy(server.clientBuffer[fd], strBuffer.c_str());
 							//std::cout <<"남은 버퍼: " << strBuffer << std::endl;
