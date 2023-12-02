@@ -1,6 +1,6 @@
 #include "Mode.hpp"
 
-Mode::Mode(Message *msg, UserInfo &user, std::map<std::string, Channel> &channelList, std::string serverName) : Command(msg), user(user), channelList(channelList), serverName(serverName) {}
+Mode::Mode(Message *msg, UserInfo &user, std::map<std::string, Channel> &channelList, std::string serverName) : Command(msg), user(user), channelList(channelList), serverName(serverName), paramsIndex(2) {}
 
 Mode::~Mode() {}
 
@@ -27,11 +27,16 @@ void Mode::execute()
 		ft_send(user.getFd(), reply);
 	}
 
+	if (getParameters()[1].length() < 2)
+		return;
+
 	if (getParameters()[1][0] != '+' && getParameters()[1][0] != '-')
 		return;
 
 	if (!isOperator())
 		return;
+
+	run();
 }
 
 bool Mode::isValidChannelName()
@@ -111,4 +116,129 @@ bool Mode::isOperator()
 		return false;
 	}
 	return true;
+}
+
+void Mode::run()
+{
+	std::string modestring = getParameters()[1];
+
+	saveInputModes(modestring);
+	removeDuplicates();
+	executeModes();
+}
+
+void Mode::saveInputModes(std::string modestring)
+{
+	for (size_t i = 0; i < modestring.length(); i++)
+	{
+		if (modestring[i] == '+')
+			sign = "+";
+		else if (modestring[i] == '-')
+			sign = "-";
+		else
+		{
+			std::string mode = sign + modestring[i];
+
+			inputModes.push_back(mode);
+		}
+	}
+}
+
+void Mode::removeDuplicates()
+{
+	modes.push_back(inputModes[0]);
+
+	for (size_t i = 1; i < inputModes.size(); i++)
+		if (modes.back() != inputModes[i])
+			modes.push_back(inputModes[i]);
+}
+
+void Mode::executeModes()
+{
+	for (size_t i = 0; i < modes.size(); i++)
+	{
+		std::string mode = modes[i];
+
+		switch (mode[1])
+		{
+		case 'i':
+			executeInviteMode(mode);
+			break;
+		case 'k':
+			executeKeyMode(mode);
+			break;
+		case 'l':
+			executeLimitMode(mode);
+			break;
+		case 'o':
+			executeOperatorMode(mode);
+			break;
+		case 't':
+			executeTopicMode(mode);
+			break;
+		default:
+
+			break;
+		}
+	}
+}
+
+void Mode::executeInviteMode(std::string mode)
+{
+	if (mode == "+i" && channel->getInviteMode())
+		return;
+	else if (mode == "-i" && !channel->getInviteMode())
+		return;
+
+	changeInviteMode();
+	changed.push_back(mode);
+}
+
+void Mode::executeKeyMode(std::string mode)
+{
+	if (paramsIndex > getParameters().size() - 1)
+	{
+		std::string reply = ":" + serverName + " 696 " + user.getNickname() + " " + channel->getName() + " k * :You must specify a parameter for the key mode. Syntax: <key>.";
+
+		ft_send(user.getFd(), reply);
+
+		return;
+	}
+
+	if (!channel->getKeyMode() && mode == "+k")
+	{
+		channel->setKey(getParameters()[paramsIndex]);
+		channel->setKeyMode(true);
+		changed.push_back(mode);
+		changedParams.push_back(channel->getKey());
+	}
+	else if (channel->getKeyMode() && mode == "-k")
+	{
+		if (getParameters()[paramsIndex] == channel->getKey())
+		{
+			channel->setKeyMode(false);
+			changed.push_back(mode);
+			changedParams.push_back(channel->getKey());
+			channel->setKey("");
+		}
+		else
+		{
+			std::string reply = ":" + serverName + " 467 " + user.getNickname() + " " + channel->getName() + " :Channel key already set";
+
+			ft_send(user.getFd(), reply);
+		}
+	}
+	paramsIndex++;
+}
+
+void Mode::executeLimitMode(std::string mode) {}
+void Mode::executeOperatorMode(std::string mode) {}
+void Mode::executeTopicMode(std::string mode) {}
+
+void Mode::changeInviteMode()
+{
+	if (channel->getInviteMode())
+		channel->setInviteMode(false);
+	else
+		channel->setInviteMode(true);
 }

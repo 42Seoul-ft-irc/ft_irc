@@ -15,14 +15,28 @@ private:
 	Channel *channel;
 	std::string serverName;
 
-	bool flag;
-	std::vector<std::string> input;
-	std::vector<std::string> removeDup;
-	std::vector<std::string> changes;
+	std::string sign;
+	std::vector<std::string> inputModes;
+	std::vector<std::string> modes;
+	std::vector<std::string> changed;
+	std::vector<std::string> changedParams;
+	int paramsIndex;
 
 	bool isValidChannelName();
 	std::string getModestring();
 	bool isOperator();
+
+	void run();
+	void saveInputModes(std::string);
+	void removeDuplicates();
+	void executeModes();
+	void executeInviteMode(std::string);
+	void executeKeyMode(std::string);
+	void executeLimitMode(std::string);
+	void executeOperatorMode(std::string);
+	void executeTopicMode(std::string);
+
+	void changeInviteMode();
 
 public:
 	Mode(Message *, UserInfo &, std::map<std::string, Channel> &, std::string);

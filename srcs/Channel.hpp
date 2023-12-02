@@ -34,8 +34,9 @@ public:
 	bool getLimitMode() const;
 	bool getTopicMode() const;
 
-	void setUserCount(int count);
+	void setKey(std::string);
 	void setTopic(std::string);
+	void setUserCount(int count);
 	void setInviteMode(bool);
 	void setKeyMode(bool);
 	void setLimitMode(bool);

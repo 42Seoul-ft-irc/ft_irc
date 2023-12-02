@@ -46,14 +46,19 @@ bool Channel::getTopicMode() const
 	return topicMode;
 }
 
-/* 채팅방 인원 추가하고 싶으면 매개변수에 1, 퇴장시키고 싶으면 매개변수에 2 넣어주세요 */
-void Channel::setUserCount(int count){
-	this->userCount = static_cast<size_t>(static_cast<int>(this->userCount) + count);
+void Channel::setKey(std::string key)
+{
+	this->key = key;
 }
-
 void Channel::setTopic(std::string topic)
 {
 	this->topic = topic;
+}
+
+/* 채팅방 인원 추가하고 싶으면 매개변수에 1, 퇴장시키고 싶으면 매개변수에 2 넣어주세요 */
+void Channel::setUserCount(int count)
+{
+	this->userCount = static_cast<size_t>(static_cast<int>(this->userCount) + count);
 }
 
 void Channel::setInviteMode(bool mode)
