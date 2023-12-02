@@ -114,10 +114,9 @@ std::ostream &operator<<(std::ostream &os, const UserInfo &obj)
 	os << "realname : " << obj.getRealname() << std::endl
 	   << std::endl;
 
-	os << "PASS : " << (obj.getPass() ? "✅" : "❌") << std::endl;
-	os << "NICK : " << (obj.getNick() ? "✅" : "❌") << std::endl;
-	os << "USER : " << (obj.getUser() ? "✅" : "❌") << std::endl;
-	os << "ACTIVE : " << (obj.getActive() ? "✅" : "❌") << std::endl;
+	os << "PASS" << (obj.getPass() ? "✅" : "❌")
+	   << " NICK" << (obj.getNick() ? "✅" : "❌")
+	   << " USER" << (obj.getUser() ? "✅" : "❌") << " ACTIVE" << (obj.getActive() ? "✅" : "❌") << std::endl;
 	os << "~~~~~~~~~~~~~~~~~" << std::endl;
 
 	return os;
