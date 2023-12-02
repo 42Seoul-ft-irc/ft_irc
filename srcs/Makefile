@@ -18,8 +18,10 @@ SRCS = main.cpp \
 		Auth.cpp \
 		command/Topic.cpp \
 		command/Privmsg.cpp \
+		command/Mode.cpp \
 		command/Quit.cpp \
-		command/Mode.cpp
+    command/Ping.cpp
+
 
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(SRCS:.cpp=.d)
