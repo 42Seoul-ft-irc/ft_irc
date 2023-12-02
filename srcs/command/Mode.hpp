@@ -31,14 +31,18 @@ private:
 	void saveInputModes(std::string);
 	void removeDuplicates();
 	void executeModes();
+	void sendReply();
+
 	void executeInviteMode(std::string);
 	void executeKeyMode(std::string);
 	void executeLimitMode(std::string);
 	void executeOperatorMode(std::string);
 	void executeTopicMode(std::string);
+	void doesntExistMode(std::string);
 
 	bool isNicknameExist(std::string);
 	UserInfo *findUserByNickname(std::string);
+	std::string changedModes();
 
 public:
 	Mode(Message *, UserInfo &, std::map<std::string, Channel> &, std::map<int, UserInfo> &, std::string);

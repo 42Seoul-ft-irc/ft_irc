@@ -115,6 +115,7 @@ void Mode::run()
 	saveInputModes(modestring);
 	removeDuplicates();
 	executeModes();
+	sendReply();
 }
 
 void Mode::saveInputModes(std::string modestring)
@@ -167,9 +168,35 @@ void Mode::executeModes()
 			executeTopicMode(mode);
 			break;
 		default:
-
+			doesntExistMode(mode);
 			break;
 		}
+	}
+}
+
+void Mode::sendReply()
+{
+	std::string str = changedModes();
+	int paramSize = changedParams.size();
+
+	if (!paramSize)
+		str = " :" + str;
+	else
+	{
+		size_t i;
+		for (i = 0; i < paramSize - 1; i++)
+			str = str + " " + changedParams[i];
+		str = str + " :" + changedParams[i];
+	}
+	std::map<std::string, UserInfo>::iterator it = channel->users.begin();
+
+	for (; it != channel->users.end(); ++it)
+	{
+		UserInfo userInfo = it->second;
+
+		std::string reply = ":" + userInfo.getNickname() + "!" + userInfo.getHostname() + "@" + userInfo.getServername() + " MODE " + channel->getName() + str;
+
+		ft_send(user.getFd(), reply);
 	}
 }
 
@@ -287,10 +314,6 @@ void Mode::executeOperatorMode(std::string mode)
 		return;
 	}
 
-	// 운영자에 있고 + 면 무시
-
-	// 운영자에 없고 -면 무시
-	// 파라미터 인덱스 증가
 	std::string name = getParameters()[paramsIndex];
 
 	if (!isNicknameExist(name))
@@ -330,6 +353,14 @@ void Mode::executeTopicMode(std::string mode)
 	}
 }
 
+void Mode::doesntExistMode(std::string mode)
+{
+	mode.erase(0, 1);
+	std::string reply = ":" + serverName + " 472 " + user.getNickname() + " " + mode + " :is not a recognised channel mode.";
+
+	ft_send(user.getFd(), reply);
+}
+
 bool Mode::isNicknameExist(std::string name)
 {
 	std::map<int, UserInfo>::iterator it = users.begin();
@@ -350,4 +381,28 @@ UserInfo *Mode::findUserByNickname(std::string name)
 			return &(it->second);
 
 	return 0;
+}
+
+std::string Mode::changedModes()
+{
+	std::string str = changed[0];
+	char flag;
+
+	if (changed[0][0] == '+')
+		flag = '+';
+	else
+		flag = '-';
+
+	for (size_t i = 1; i < changed.size(); ++i)
+	{
+		if (changed[i][0] == flag)
+		{
+			changed[i].erase(0, 1);
+			str += changed[i];
+		}
+		else
+			str += changed[i];
+	}
+
+	return str;
 }
