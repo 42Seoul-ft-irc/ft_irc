@@ -25,6 +25,7 @@ void Mode::execute()
 		std::string reply = ":" + serverName + " 324 " + user.getNickname() + " " + getParameters()[0] + " " + modestring;
 
 		ft_send(user.getFd(), reply);
+		return;
 	}
 
 	if (getParameters()[1].length() < 2)
@@ -68,6 +69,8 @@ bool Mode::isValidChannelName()
 
 			return false;
 		}
+		else
+			channel = &(it->second);
 	}
 	return true;
 }
@@ -115,7 +118,9 @@ void Mode::run()
 	saveInputModes(modestring);
 	removeDuplicates();
 	executeModes();
-	sendReply();
+
+	if (changed.size())
+		sendReply();
 }
 
 void Mode::saveInputModes(std::string modestring)
@@ -196,7 +201,7 @@ void Mode::sendReply()
 
 		std::string reply = ":" + userInfo.getNickname() + "!" + userInfo.getHostname() + "@" + userInfo.getServername() + " MODE " + channel->getName() + str;
 
-		ft_send(user.getFd(), reply);
+		ft_send(userInfo.getFd(), reply);
 	}
 }
 
