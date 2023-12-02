@@ -27,7 +27,7 @@
 #include "Auth.hpp"
 #include "command/Topic.hpp"
 #include "command/Privmsg.hpp"
-#include "command/Quit.hpp"
+//#include "command/Quit.hpp"
 
 class UserInfo;
 class Command;
