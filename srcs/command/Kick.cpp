@@ -1,18 +1,45 @@
 #include "Kick.hpp"
 
-Kick::Kick(Message *msg, UserInfo &user, std::map<int, UserInfo> users, std::map<std::string, Channel> channels) : Command(msg), user(user), users(users), channels(channels){}
+Kick::Kick(Message *msg, UserInfo &user, std::map<int, UserInfo> *users, std::map<std::string, Channel> *channels) : Command(msg), user(user), users(users), channels(channels){}
 
 Kick::~Kick() {}
 
-int Kick::isChannel(std::string channel)
+int Kick::checkChannel(std::string parameter)
 {
 	std::map<std::string, Channel>::iterator iter;
 
-	for (iter = channels.begin(); iter != channels.end(); iter++)
+	for (iter = channels->begin(); iter != channels->end(); iter++)
 	{
-		if ((*iter).second.getName() == channel)
+		if ((*iter).second.getName() == parameter)
 		{
-			kickChannels.push_back((*iter).second);
+			kickChannel = &(*iter).second;
+			return 0;
+		}
+	}
+    return 1;
+}
+
+int Kick::checkOperator(std::string channel)
+{
+	std::map<std::string, bool>::iterator iter;
+
+	for (iter = user.channels.begin(); iter != user.channels.end(); iter++)
+	{
+		if ((*iter).first == channel && (*iter).second == true)
+			return 0;
+	}
+    return 1;
+}
+
+int Kick::checkUsers(std::string userName)
+{ 
+    std::map<std::string, UserInfo>::iterator iter;
+
+	for (iter = kickChannel->users.begin(); iter != kickChannel->users.end(); iter++)
+	{
+		if ((*iter).first == userName)
+		{
+			kickUser = &(*iter).second;
 			return 0;
 		}
 	}
@@ -26,51 +53,51 @@ void Kick::splitParameter(std::string parameter)
 	commaPos = parameter.find(',');
 	if (commaPos == std::string::npos)
 	{
-		kickChannelsName.push_back(parameter);
+		kickUsersName.push_back(parameter);
 		return ;
 	}
 	while (commaPos != std::string::npos)
 	{
-		kickChannelsName.push_back(parameter.substr(0, commaPos - 1));
+		kickUsersName.push_back(parameter.substr(0, commaPos - 1));
 		if (!parameter[commaPos + 1] || parameter[commaPos + 1] == ',')
 			return ;
 		parameter = parameter.substr(commaPos + 1);
 		commaPos = parameter.find(',');
 	}
-	kickChannelsName.push_back(parameter);
+	kickUsersName.push_back(parameter);
 }
 
-int Kick::checkChannels(std::string parameter)
+void Kick::eraseUser()
 {
-    splitParameter(parameter);
-    for (size_t i = 0; kickChannelsName.size(); i++)
+	std::map<std::string, UserInfo>::iterator iterUsers;
+	std::map<std::string, bool>::iterator iterChannels;
+
+	for (iterUsers = kickChannel->users.begin(); iterUsers != kickChannel->users.end(); iterUsers++)
 	{
-		if (isChannel(kickChannelsName[i]))
-			return 1;
+		if ((*iterUsers).first == kickUser->getNickname())
+			//kickUser = &(*iterUsers).second;
 	}
-	return 0;
+	for (iterChannels = kickUser->channels.begin(); iterChannels != kickUser->channels.end(); iterChannels++)
+	{
+		if ((*iterChannels).first == kickChannel->getName())
+			//kickUser = &(*iterUsers).second;
+	}
 }
 
-int Kick::isOperator(std::string channel)
-{ 
-    std::map<std::string, bool>::iterator iter;
-
-	for (iter = user.channels.begin(); iter != user.channels.end(); iter++)
-	{
-		if ((*iter).first == channel && (*iter).second == true)
-			return 0;
-	}
-    return 1;
-}
-
-int Kick::checkOperator()
+void Kick::kickUsers(std::string parameter)
 {
-    for (size_t i = 0; kickChannels.size(); i++)
+	splitParameter(parameter);
+	for (size_t i = 0; i < kickUsersName.size(); i++)
 	{
-		if (isOperator(kickChannels[i]))
-			return 1;
+		if (checkUsers(kickUsersName[i]))
+		{
+			//ft_send();
+		}
+		else
+		{
+			eraseUser();
+		}
 	}
-	return 0;
 }
 
 void Kick::execute()
@@ -80,20 +107,16 @@ void Kick::execute()
         //ft_send();
         return ;
     }
-    if (checkChannels(getParameters().at(0)))
+    if (checkChannel(getParameters().at(0)))
     {
         //ft_send(ERR_NOSUCHCHANNEL);
         return ;
-    } //콤마기준. 있는 채널인지 확인
-    if (checkOperator())
+    }
+    if (checkOperator(kickChannel->getName()))
     {
         //ft_send(ERR_CHANOPRIVSNEEDED);
         return ;
-    }//내가 그 채널에 운영자인지 확인
-    if (checkUsers())
-    {
+    }
+    kickUsers(getParameters().at(1));
 
-    }//콤마기준. 그 채널에 사용자가 있는지 확인
-    //커멘트 확인?
-    //채널서 사용자 삭제
 }

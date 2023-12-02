@@ -11,17 +11,27 @@ class Kick : public Command
 {
 private:
 	UserInfo &user;
-	std::map<int, UserInfo> users;
-	std::map<std::string, Channel> channels;
+	std::map<int, UserInfo> *users;
+	std::map<std::string, Channel> *channels;
 
-    std::vector<std::string> kickChannelsName;
-    std::vector<Channel> kickChannels;
+	Channel *kickChannel;
+    std::vector<std::string> kickUsersName;
+	UserInfo *kickUser;
 
 public:
-	Kick(Message *msg, UserInfo &user, std::map<int, UserInfo> users, std::map<std::string, Channel> channels);
+	Kick(Message *msg, UserInfo &user, std::map<int, UserInfo> *users, std::map<std::string, Channel> *channels);
 	~Kick();
 
 	void execute();
+	int checkChannel(std::string parameter);
+
+	int checkOperator(std::string channel);
+
+	void kickUsers(std::string parameter);
+	void splitParameter(std::string parameter);
+	int checkUsers(std::string channel);
+
+	void eraseUser();
 
 };
 
