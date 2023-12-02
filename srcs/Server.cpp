@@ -152,7 +152,7 @@ Command *Server::createCommand(UserInfo &user, std::string recvStr)
 	else if (msg.getCommand() == "TOPIC")
 		cmd = new Topic(&msg, user, this->channels, serverName);
 	else if (msg.getCommand() == "QUIT")
-		cmd = new Quit(&msg, user, &this->channels, &this->users);
+		cmd = new Quit(&msg, user, &this->channels, &this->users, &this->pollfds);
 	else if (msg.getCommand() == "PRIVMSG")
 		cmd = new Privmsg(&msg, user, this->users, this->channels);
 	else if (msg.getCommand() == "MODE")

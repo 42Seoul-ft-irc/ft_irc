@@ -97,7 +97,7 @@ void UserInfo::checkUser()
 
 void UserInfo::checkActive()
 {
-	active = true;
+	active = active==false? true : false;
 }
 
 UserInfo::UserInfo() : nickname(""), username(""), hostname(""), servername(""), realname(""), pass(false), nick(false), user(false), active(false) {}
