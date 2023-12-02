@@ -75,13 +75,23 @@ void Topic::editTopic(std::string channelName)
 
 	if (userIt != user.channels.end())
 	{
+		if (getTrailing() == channel.getTopic())
+			return;
+
 		if (userIt->second || !channel.getTopicMode())
 		{
 			channel.setTopic(getTrailing());
 
-			std::string reply = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getHostname() + " TOPIC " + channelName + " :" + getTrailing();
+			std::map<std::string, UserInfo>::iterator it = channel.users.begin();
 
-			ft_send(user.getFd(), reply);
+			for (; it != channel.users.end(); ++it)
+			{
+				UserInfo userInfo = it->second;
+
+				std::string reply = ":" + userInfo.getNickname() + "!" + userInfo.getUsername() + "@" + user.getHostname() + " TOPIC " + channelName + " :" + getTrailing();
+
+				ft_send(userInfo.getFd(), reply);
+			}
 		}
 		else
 		{
