@@ -36,8 +36,10 @@ public:
 
 	void setUserCount(int count);
 	void setTopic(std::string);
-	void setTopicMode(bool);
 	void setInviteMode(bool);
+	void setKeyMode(bool);
+	void setLimitMode(bool);
+	void setTopicMode(bool);
 };
 
 std::ostream &operator<<(std::ostream &os, const Channel &obj);

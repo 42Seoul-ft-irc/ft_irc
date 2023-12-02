@@ -55,13 +55,22 @@ void Channel::setTopic(std::string topic)
 	this->topic = topic;
 }
 
-void Channel::setTopicMode(bool mode)
-{
-	topicMode = mode;
-}
 void Channel::setInviteMode(bool mode)
 {
 	inviteMode = mode;
+}
+
+void Channel::setKeyMode(bool mode)
+{
+	keyMode = mode;
+}
+void  Channel::setLimitMode(bool mode)
+{
+	limitMode = mode;
+}
+void Channel::setTopicMode(bool mode)
+{
+	topicMode = mode;
 }
 
 std::ostream &operator<<(std::ostream &os, const Channel &obj) {
