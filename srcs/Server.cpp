@@ -158,7 +158,7 @@ Command *Server::createCommand(UserInfo &user, std::string recvStr)
 	else if (msg.getCommand() == "MODE")
 		cmd = new Mode(&msg, user, channels, users, serverName);
 	else if (msg.getCommand() == "PING")
-		cmd = new Ping(&msg, user, serverName);
+		cmd = new Ping(&msg, user);
 
 	return cmd;
 }
