@@ -26,7 +26,6 @@ int main(int argc, char **argv)
 					else if (i == 0 && server.pollfds[i].revents & POLLIN)
 					{
 						std::cout << "클라이언트가 서버에 접근\n";
-						// todo 서버 암호 확인
 						server.acceptClient();
 					}
 					else if (server.pollfds[i].revents & POLLIN)
@@ -56,10 +55,12 @@ int main(int argc, char **argv)
 							}
 							for (size_t i = 0; i < commands.size(); i++)
 							{
+								std::cout << "들어온 메세지 : " << commands[i] << std::endl;
+
 								UserInfo &user = server.getUserInfoByFd(fd);
 								Command *cmd = server.createCommand(user, commands[i]);
 								server.executeCommand(cmd, user);
-								std::cout << user << std::endl;
+
 								for (std::map<std::string, bool>::iterator i = user.channels.begin(); i != user.channels.end();i++) {
 									std::cout <<"채널명: " << i->first << std::endl;
 									std::cout <<"운영자 여부: " <<i->second<<std::endl;

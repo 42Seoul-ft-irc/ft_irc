@@ -7,15 +7,15 @@ class Channel
 {
 private:
 	std::string name;
-	std::string pass;
+	std::string key;
 	std::string topic;
-	size_t limit;
+	long long limit;
 	size_t userCount;
-	bool isInvite;
-	bool isLimit;
-	bool isKey;
-	bool topicMode;
+
 	bool inviteMode;
+	bool keyMode;
+	bool limitMode;
+	bool topicMode;
 
 public:
 	std::map<std::string, UserInfo> operators;
@@ -25,20 +25,28 @@ public:
 	Channel(UserInfo &user, std::string name);
 
 	std::string getName() const;
-	std::string getPass() const;
+	std::string getKey() const;
 	std::string getTopic() const;
-	size_t getLimit() const;
+	long long getLimit() const;
 	size_t getUserCount() const;
-	bool getIsInvite() const;
-	bool getIsLimit() const;
-	bool getIsKey() const;
-	bool getTopicMode() const;
 	bool getInviteMode() const;
+	bool getKeyMode() const;
+	bool getLimitMode() const;
+	bool getTopicMode() const;
 
-	void setUserCount(int count);
+	void setKey(std::string);
 	void setTopic(std::string);
-	void setTopicMode(bool);
+	void setLimit(size_t);
+	void setUserCount(int count);
 	void setInviteMode(bool);
+	void setKeyMode(bool);
+	void setLimitMode(bool);
+	void setTopicMode(bool);
+
+	void changeInviteMode();
+	void changeTopicMode();
+
+	bool isOperator(std::string);
 };
 
 std::ostream &operator<<(std::ostream &os, const Channel &obj);
