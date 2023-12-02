@@ -22,7 +22,7 @@ private:
 	std::vector<std::string> modes;
 	std::vector<std::string> changed;
 	std::vector<std::string> changedParams;
-	int paramsIndex;
+	size_t paramsIndex;
 
 	bool isValidChannelName();
 	std::string getModestring();

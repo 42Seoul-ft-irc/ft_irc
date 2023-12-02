@@ -23,7 +23,8 @@ std::string Channel::getKey() const
 std::string Channel::getTopic() const{
 	return topic;
 }
-size_t Channel::getLimit() const{
+long long Channel::getLimit() const
+{
 	return limit;
 }
 size_t Channel::getUserCount() const{

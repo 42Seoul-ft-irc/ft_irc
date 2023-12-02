@@ -183,7 +183,7 @@ void Mode::sendReply()
 		str = " :" + str;
 	else
 	{
-		size_t i;
+		int i;
 		for (i = 0; i < paramSize - 1; i++)
 			str = str + " " + changedParams[i];
 		str = str + " :" + changedParams[i];

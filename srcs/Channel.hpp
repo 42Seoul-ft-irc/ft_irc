@@ -27,7 +27,7 @@ public:
 	std::string getName() const;
 	std::string getKey() const;
 	std::string getTopic() const;
-	size_t getLimit() const;
+	long long getLimit() const;
 	size_t getUserCount() const;
 	bool getInviteMode() const;
 	bool getKeyMode() const;

@@ -90,7 +90,7 @@ void Join::joinExistingChannel(const std::string &channelName, const std::vector
 
 bool Join::checkJoinConditions(const std::vector<std::string> &passwordList)
 {
-	if (channel->getLimitMode() && channel->getLimit() <= this->channel->users.size())
+	if (channel->getLimitMode() && channel->getLimit() <= static_cast<long long>(this->channel->users.size()))
 	{
 		std::string msg = "471 " + channel->getName() + " :Cannot join channel (+l)";
 		ft_send(this->user.getFd(), msg);
