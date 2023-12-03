@@ -32,6 +32,8 @@ public:
 	int checkUsers(std::string channel);
 
 	void eraseUser();
+	void eraseChannelInUserInfo(UserInfo *userInfo);
+	void eraseUserInChannel(Channel *channel);
 
 };
 

@@ -30,6 +30,7 @@
 #include "command/Mode.hpp"
 #include "command/Ping.hpp"
 #include "command/Quit.hpp"
+#include "command/Kick.hpp"
 
 class UserInfo;
 class Command;
