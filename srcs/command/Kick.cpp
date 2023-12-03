@@ -126,18 +126,20 @@ void Kick::kickUsers(std::string parameter)
 		if (checkUsers(kickUsersName[i]))
 		{
 			//ft_send();
+			return ;
 		}
 		else
 		{
 			eraseUser();
-			std::string chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " KICK " + kickChannel->getName() + " " + kickUser->getNickname() + " :";
-			if (!getTrailing().empty())
-				chanMsg += getTrailing();
-			std::cout << chanMsg << std::endl;
-			ft_send(user.getFd(), chanMsg);
-			ft_send(kickUser->getFd(), chanMsg);
 		}
 	}
+	std::string chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " KICK " + kickChannel->getName() + " " + kickUser->getNickname() + " :";
+	if (!getTrailing().empty())
+		chanMsg += getTrailing();
+	std::cout << chanMsg << std::endl;
+	std::map<std::string, UserInfo>::iterator iterUsers;
+	for (iterUsers = kickChannel->users.begin(); iterUsers !=kickChannel->users.end(); iterUsers++)
+		ft_send((*iterUsers).second.getFd(), chanMsg);
 }
 
 void Kick::execute()

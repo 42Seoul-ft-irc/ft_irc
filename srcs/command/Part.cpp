@@ -91,7 +91,8 @@ void Part::partUsers()
 	{
 		if (eraseChannelInUserInfo(partChannelName[i]))
 		{
-			//ft_send();
+			std::string msg = ":irc.local 442 " + user.getNickname() + " " + partChannelName[i] + " :You're not on that channel";
+			ft_send(user.getFd(), msg);
 			return ;
 		}
 		eraseUser(partChannelName[i]);
@@ -103,22 +104,22 @@ void Part::partUsers()
 		}
 		else 
 			chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " PART " + partChannelName[i] + " :" + getTrailing();
-		std::cout << chanMsg << std::endl;
 		ft_send(user.getFd(), chanMsg);
 	}
-	//std::cout << "-------" << std::endl;
 }
 
 void Part::execute()
 {
 	if (getParameters().size() < 1)
     {
-        //ft_send();
-        return ;
+        std::string msg = "461 " + user.getNickname() + " PART :Not enough parameters";
+		ft_send(user.getFd(), msg);
+		return;
     }
     if (checkChannel(getParameters().at(0)))
     {
-        //ft_send(ERR_NOSUCHCHANNEL);
+        std::string msg = ":irc.local 403 " + user.getNickname() + " " + getParameters().at(0) + " :No such channel";
+		ft_send(user.getFd(), msg);
         return ;
     }
     partUsers();
