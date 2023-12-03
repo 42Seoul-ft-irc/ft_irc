@@ -83,7 +83,16 @@ void Join::joinExistingChannel(const std::string &channelName, const std::vector
 		}
 		msg += "\n";
 		msg += "366 " + this->user.getNickname() + " " + this->getParameters().at(0) + " :End of /NAMES list.";
+		
 		ft_send(this->user.getFd(), msg);
+		for (std::map<std::string, UserInfo>::iterator i = channel->users.begin(); i != channel->users.end(); i++) {
+			UserInfo user_info = i->second;
+			if (user_info.getFd() == user.getFd())
+				continue;
+			//:soobin_!root@127.0.0.1 JOIN :#hello
+			std::string msgN = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " JOIN :" + this->getParameters().at(0);
+			ft_send(user_info.getFd(), msgN);
+		}
 		std::cout << msg;
 	}
 }
