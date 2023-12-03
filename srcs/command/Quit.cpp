@@ -8,13 +8,18 @@ Quit::Quit(Message *msg, UserInfo &user, std::map<std::string, Channel> *channel
 
 void Quit::execute() {
 	std::string cause = "";
+
+	std::istringstream iss(this->getOriginalMessage());
+	std::string command, rest;
+	std::getline(iss, command, ':');
+	std::getline(iss, rest);
+	std::cout << rest << std::endl;
 	
-	if (this->getTrailing() != "")
-		cause = this->getTrailing();
+	if (rest != "")
+		cause = rest;
 	else 
 		 cause = "leaving";
 	
-
 	// response message
 	std::string msg = "Error :Closing link: (" + user.getUsername() + "@" + user.getServername() + ") [Quit:" + cause + "]";
 	ft_send(user.getFd(), msg);
