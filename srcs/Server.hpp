@@ -54,6 +54,7 @@ public:
 	std::map<int, UserInfo> users;
 	std::map<std::string, Channel> channels;
 	char clientBuffer[SOMAXCONN][BUFSIZ];
+	char sendBuffer[SOMAXCONN][BUFSIZ];
 	std::vector<pollfd> pollfds;
 
 	Server(int argc, char **argv);

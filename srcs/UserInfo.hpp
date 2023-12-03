@@ -17,6 +17,8 @@ class UserInfo {
 		bool nick;
 		bool user;
 		bool active;
+
+		std::string sendBuffer;
 		
 	public:
 		std::map<std::string, bool> channels;
@@ -43,7 +45,7 @@ class UserInfo {
 		bool getPass() const;
 		bool getNick() const;
 		bool getUser() const;
-		bool getActive() const; 
+		bool getActive() const;
 
 		void checkPass();
 		void checkNick();

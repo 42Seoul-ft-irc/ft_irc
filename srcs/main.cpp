@@ -19,8 +19,10 @@ int main(int argc, char **argv)
 					if (server.pollfds[i].revents & POLLHUP || server.pollfds[i].revents & POLLERR)
 					{
 						UserInfo &user = server.getUserInfoByFd(server.pollfds[i].fd);
+						server.users.erase(user.getFd());
 						close(user.getFd());
 						server.pollfds.erase(server.pollfds.begin() + i);
+						
 						std::cout << "클라이언트가 연결을 끊음\n";
 					}
 					else if (i == 0 && server.pollfds[i].revents & POLLIN)
@@ -66,7 +68,7 @@ int main(int argc, char **argv)
 							std::strcpy(server.clientBuffer[fd], strBuffer.c_str());
 							//std::cout <<"남은 버퍼: " << strBuffer << std::endl;
 						}
-					} 
+					}
 				}
 			}
 		}
