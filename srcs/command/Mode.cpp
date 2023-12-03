@@ -217,7 +217,7 @@ void Mode::sendReply()
 	{
 		UserInfo userInfo = it->second;
 
-		std::string reply = ":" + userInfo.getNickname() + "!" + userInfo.getHostname() + "@" + userInfo.getServername() + " MODE " + channel->getName() + str;
+		std::string reply = ":" + user.getNickname() + "!" + userInfo.getHostname() + "@" + userInfo.getServername() + " MODE " + channel->getName() + str;
 
 		ft_send(userInfo.getFd(), reply);
 	}
