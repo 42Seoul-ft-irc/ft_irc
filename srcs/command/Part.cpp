@@ -95,7 +95,14 @@ void Part::partUsers()
 			return ;
 		}
 		eraseUser(partChannelName[i]);
-		std::string chanMsg = user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " PART " + partChannelName[i] + getTrailing();
+		std::string chanMsg;
+		if (getTrailing().empty())
+		{
+			std::string lastParameter = getParameters().back();
+			chanMsg = user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " PART :" + lastParameter;
+		}
+		else 
+			chanMsg = user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " PART " + partChannelName[i] + " :" + getTrailing();
 		std::cout << chanMsg << std::endl;
 		ft_send(user.getFd(), chanMsg);
 	}
