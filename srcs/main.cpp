@@ -60,8 +60,14 @@ int main(int argc, char **argv)
 								std::cout << "들어온 메세지 : " << commands[i] << std::endl;
 
 								UserInfo &user = server.getUserInfoByFd(fd);
-								Command *cmd = server.createCommand(user, commands[i]);
-								server.executeCommand(cmd, user);
+								try {
+									Command *cmd = server.createCommand(user, commands[i]);
+									server.executeCommand(cmd, user);
+								} catch (const std::exception &e){
+									std::cerr << e.what() << std::endl;
+									continue;
+								}
+								
 								//for(std::map<int, UserInfo>::iterator i = server.users.begin();i != server.users.end(); i++)
 								//	std::cout << i->second <<std::endl; 
 							}
@@ -98,6 +104,6 @@ void ft_send(int fd, std::string str)
 
 	int result = send(fd, const_cast<char *>(reply), strlen(reply), 0);
 
-    if (result == -1)
-        throw std::runtime_error("Error: send error");
+	if (result == -1)
+		throw std::runtime_error("Error: send error");
 }
