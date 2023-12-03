@@ -74,7 +74,10 @@ void Kick::eraseChannelInUserInfo(UserInfo *userInfo)
 	for (iterChannels = userInfo->channels.begin(); iterChannels != userInfo->channels.end(); iterChannels++)
 	{
 		if ((*iterChannels).first == kickChannel->getName())
+		{
 			userInfo->channels.erase(iterChannels);
+			return ;
+		}
 	}
 }
 
@@ -85,7 +88,10 @@ void Kick::eraseUserInChannel(Channel *channel)
 	for (iterUsers = channel->users.begin(); iterUsers != channel->users.end(); iterUsers++)
 	{
 		if ((*iterUsers).first == kickChannel->getName())
+		{
 			channel->users.erase(iterUsers);
+			return ;
+		}
 	}
 }
 
@@ -97,12 +103,18 @@ void Kick::eraseUser()
 	for (iterUsers = users->begin(); iterUsers != users->end(); iterUsers++)
 	{
 		if ((*iterUsers).second.getNickname() == kickUser->getNickname())
+		{
 			eraseChannelInUserInfo(&(*iterUsers).second);
+			return ;
+		}
 	}
 	for (iterChannels = channels->begin(); iterChannels != channels->end(); iterChannels++)
 	{
 		if ((*iterChannels).second.getName() == kickChannel->getName())
+		{
 			eraseUserInChannel(&(*iterChannels).second);
+			return ;
+		}
 	}
 }
 
@@ -118,8 +130,12 @@ void Kick::kickUsers(std::string parameter)
 		else
 		{
 			eraseUser();
-			std::string chanMsg = user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " KICK " + kickChannel->getName() + " " + kickUser->getNickname();
+			std::string chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " KICK " + kickChannel->getName() + " " + kickUser->getNickname() + " :";
+			if (!getTrailing().empty())
+				chanMsg += getTrailing();
+			std::cout << chanMsg << std::endl;
 			ft_send(user.getFd(), chanMsg);
+			ft_send(kickUser->getFd(), chanMsg);
 		}
 	}
 }

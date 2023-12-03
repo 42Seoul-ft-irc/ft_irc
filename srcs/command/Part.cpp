@@ -99,10 +99,10 @@ void Part::partUsers()
 		if (getTrailing().empty())
 		{
 			std::string lastParameter = getParameters().back();
-			chanMsg = user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " PART :" + lastParameter;
+			chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " PART :" + lastParameter;
 		}
 		else 
-			chanMsg = user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " PART " + partChannelName[i] + " :" + getTrailing();
+			chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " PART " + partChannelName[i] + " :" + getTrailing();
 		std::cout << chanMsg << std::endl;
 		ft_send(user.getFd(), chanMsg);
 	}
