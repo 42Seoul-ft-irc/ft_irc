@@ -151,10 +151,14 @@ Command *Server::createCommand(UserInfo &user, std::string recvStr)
 		cmd = new Invite(&msg, user, &this->channels, &this->users);
 	else if (msg.getCommand() == "TOPIC")
 		cmd = new Topic(&msg, user, this->channels, serverName);
-	//else if (msg.getCommand() == "QUIT")
-	//	cmd = new Quit(&msg, user, &this->channels, &this->users);
+	else if (msg.getCommand() == "QUIT")
+		cmd = new Quit(&msg, user, &this->channels, &this->users, &this->pollfds);
 	else if (msg.getCommand() == "PRIVMSG")
 		cmd = new Privmsg(&msg, user, this->users, this->channels);
+	else if (msg.getCommand() == "MODE")
+		cmd = new Mode(&msg, user, channels, users, serverName);
+	else if (msg.getCommand() == "PING")
+		cmd = new Ping(&msg, user);
 
 	return cmd;
 }
@@ -166,7 +170,7 @@ void Server::executeCommand(Command *cmd, UserInfo &user)
 		cmd->execute();
 
 		if (!user.getActive() && (cmd->getCommand() == "NICK" || cmd->getCommand() == "USER"))
-			Auth auth(user, serverName);
+			Auth auth(user, users);
 
 		delete (cmd);
 	}
