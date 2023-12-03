@@ -49,6 +49,6 @@ public:
 	bool isOperator(std::string);
 };
 
-std::ostream &operator<<(std::ostream &os, const Channel &obj);
+std::ostream &operator<<(std::ostream &os,  Channel &obj);
 
 #endif

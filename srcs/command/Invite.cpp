@@ -49,7 +49,7 @@ void Invite::execute() {
 		return ;
 	}
 	// 채널 invite 목록에 넣고 341 반환, 초대받는 대상에게는 메시지 반환
-	this->channel->operators[this->getParameters().at(1)] = *this->client;
+	this->channel->operators[this->getParameters().at(0)] = *this->client;
 	std::string msg = "341 " + this->user.getNickname() + " " + this->getParameters().at(0) + " :" + this->getParameters().at(1);
 	ft_send(user.getFd(), msg);
 	msg.clear();
