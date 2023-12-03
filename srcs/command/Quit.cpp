@@ -7,17 +7,13 @@ Quit::Quit(Message *msg, UserInfo &user, std::map<std::string, Channel> *channel
 }
 
 void Quit::execute() {
-	std::string cause;
+	std::string cause = "";
 	
-	if (this->getParameters().size() >= 1){
-		for(size_t i = 0; i < this->getParameters().size(); i++) {
-			cause += this->getParameters().at(0);
-			if (i != this->getParameters().size() - 1)
-				cause += " ";
-		}
-	}
+	if (this->getTrailing() != "")
+		cause = this->getTrailing();
 	else 
 		 cause = "leaving";
+	
 
 	// response message
 	std::string msg = "Error :Closing link: (" + user.getUsername() + "@" + user.getServername() + ") [Quit:" + cause + "]";

@@ -58,16 +58,14 @@ int main(int argc, char **argv)
 							for (size_t i = 0; i < commands.size(); i++)
 							{
 								std::cout << "들어온 메세지 : " << commands[i] << std::endl;
-
-								UserInfo &user = server.getUserInfoByFd(fd);
 								try {
+									UserInfo &user = server.getUserInfoByFd(fd);
 									Command *cmd = server.createCommand(user, commands[i]);
 									server.executeCommand(cmd, user);
 								} catch (const std::exception &e){
 									std::cerr << e.what() << std::endl;
 									continue;
 								}
-								
 								//for(std::map<int, UserInfo>::iterator i = server.users.begin();i != server.users.end(); i++)
 								//	std::cout << i->second <<std::endl; 
 							}

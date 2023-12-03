@@ -110,7 +110,7 @@ bool Channel::isOperator(std::string nickname)
 	return true;
 }
 
-std::ostream &operator<<(std::ostream &os, const Channel &obj) {
+std::ostream &operator<<(std::ostream &os, Channel &obj) {
 	os << "~~ CHANNEL ~~" << std::endl;
 	os << "name: " << obj.getName() << std::endl;
 	os << "password: " << obj.getKey() << " (" << obj.getKeyMode() << ")" << std::endl;
@@ -121,6 +121,18 @@ std::ostream &operator<<(std::ostream &os, const Channel &obj) {
 	os << "keyMode: " << obj.getKeyMode() << std::endl;
 	os << "limitMode: " << obj.getLimitMode() << std::endl;
 	os << "topicMode: " << obj.getTopicMode() << std::endl;
+	os << "[ 초대 목록 ]" << std::endl;
+	for(std::map<std::string, UserInfo>::iterator it = obj.invite.begin(); it != obj.invite.end(); it++) {
+		os <<  it->first << std::endl;
+	}
+	os << "[ 사용자 목록 ]" << std::endl;
+	for(std::map<std::string, UserInfo>::iterator it = obj.users.begin(); it != obj.users.end(); it++) {
+		os <<  it->first << std::endl;
+	}
+	os << "[ 운영자 목록 ]" << std::endl;
+	for(std::map<std::string, UserInfo>::iterator it = obj.operators.begin(); it != obj.operators.end(); it++) {
+		os <<  it->first << std::endl;
+	}
 	os << "~~~~~~~~~~~~~~~~" << std::endl;
 	return os;
 }
