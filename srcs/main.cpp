@@ -19,8 +19,10 @@ int main(int argc, char **argv)
 					if (server.pollfds[i].revents & POLLHUP || server.pollfds[i].revents & POLLERR)
 					{
 						UserInfo &user = server.getUserInfoByFd(server.pollfds[i].fd);
+						server.users.erase(user.getFd());
 						close(user.getFd());
 						server.pollfds.erase(server.pollfds.begin() + i);
+						
 						std::cout << "클라이언트가 연결을 끊음\n";
 					}
 					else if (i == 0 && server.pollfds[i].revents & POLLIN)
@@ -56,17 +58,21 @@ int main(int argc, char **argv)
 							for (size_t i = 0; i < commands.size(); i++)
 							{
 								std::cout << "들어온 메세지 : " << commands[i] << std::endl;
-
-								UserInfo &user = server.getUserInfoByFd(fd);
-								Command *cmd = server.createCommand(user, commands[i]);
-								server.executeCommand(cmd, user);
+								try {
+									UserInfo &user = server.getUserInfoByFd(fd);
+									Command *cmd = server.createCommand(user, commands[i]);
+									server.executeCommand(cmd, user);
+								} catch (const std::exception &e){
+									std::cerr << e.what() << std::endl;
+									continue;
+								}
 								//for(std::map<int, UserInfo>::iterator i = server.users.begin();i != server.users.end(); i++)
 								//	std::cout << i->second <<std::endl; 
 							}
 							std::strcpy(server.clientBuffer[fd], strBuffer.c_str());
 							//std::cout <<"남은 버퍼: " << strBuffer << std::endl;
 						}
-					} 
+					}
 				}
 			}
 		}
@@ -96,6 +102,6 @@ void ft_send(int fd, std::string str)
 
 	int result = send(fd, const_cast<char *>(reply), strlen(reply), 0);
 
-    if (result == -1)
-        throw std::runtime_error("Error: send error");
+	if (result == -1)
+		throw std::runtime_error("Error: send error");
 }

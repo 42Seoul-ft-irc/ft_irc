@@ -83,7 +83,16 @@ void Join::joinExistingChannel(const std::string &channelName, const std::vector
 		}
 		msg += "\n";
 		msg += "366 " + this->user.getNickname() + " " + this->getParameters().at(0) + " :End of /NAMES list.";
+		
 		ft_send(this->user.getFd(), msg);
+		for (std::map<std::string, UserInfo>::iterator i = channel->users.begin(); i != channel->users.end(); i++) {
+			UserInfo user_info = i->second;
+			if (user_info.getFd() == user.getFd())
+				continue;
+			//:soobin_!root@127.0.0.1 JOIN :#hello
+			std::string msgN = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " JOIN :" + this->getParameters().at(0);
+			ft_send(user_info.getFd(), msgN);
+		}
 		std::cout << msg;
 	}
 }
@@ -92,27 +101,22 @@ bool Join::checkJoinConditions(const std::vector<std::string> &passwordList)
 {
 	if (channel->getLimitMode() && channel->getLimit() <= static_cast<long long>(this->channel->users.size()))
 	{
-		std::string msg = "471 " + channel->getName() + " :Cannot join channel (+l)";
+		std::string msg = ":irc.local 471 " + user.getNickname() + " " + channel->getName() + " :Cannot join channel (channel is full)";
 		ft_send(this->user.getFd(), msg);
 		return false;
 	}
 
-	if (channel->getKeyMode() && passwordList.empty())
+	if ((channel->getKeyMode() && passwordList.empty()) || (channel->getKeyMode() && passwordList.front() != channel->getKey()))
 	{
-		std::string msg = "461 JOIN :Not enough parameters";
-		ft_send(this->user.getFd(), msg);
-		return false;
-	}
-	else if (channel->getKeyMode() && passwordList.front() != channel->getKey())
-	{
-		std::string msg = "475 " + channel->getName() + " :Cannot join channel (+k)";
+		std::string msg = ":irc.local 475 " + user.getNickname() + " " + channel->getName() + " :Cannot join channel (incorrect channel key)";
 		ft_send(this->user.getFd(), msg);
 		return false;
 	}
 
-	if (channel->getInviteMode() && channel->invite.find(user.getNickname()) == channel->invite.end())
+	if (channel->getInviteMode() && (channel->invite.find(user.getNickname()) == channel->invite.end()))
 	{
-		std::string msg = "473 " + channel->getName() + " :Cannot join channel (+i)";
+		std::cout << *channel << std::endl;
+		std::string msg = ":irc.local 473 " + user.getNickname() + " "  + channel->getName() + " :Cannot join channel (invite only)";
 		ft_send(this->user.getFd(), msg);
 		return false;
 	}
