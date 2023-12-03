@@ -47,9 +47,9 @@ void Join::createAndJoinNewChannel(const std::string &channelName)
 	channel.operators.insert(std::make_pair(user.getNickname(), this->user));
 	channel.users.insert(std::make_pair(user.getNickname(), this->user));
 	user.channels.insert(std::make_pair(channel.getName(), true));
-	std::string msg = ":" + this->user.getNickname() + "!" + this->user.getUsername() + "@" + this->user.getServername() + " " + "JOIN :" + this->getParameters().at(0) + "\n";
-	msg += "353 " + this->user.getNickname() + " = " + this->getParameters().at(0) + " : @" + this->user.getNickname() + "\n";
-	msg += "366 " + this->user.getNickname() + " " + this->getParameters().at(0) + " :End of /NAMES list.";
+	std::string msg = ":" + this->user.getNickname() + "!" + this->user.getUsername() + "@" + this->user.getServername() + " " + "JOIN :" + channelName + "\n";
+	msg += "353 " + this->user.getNickname() + " = " + channelName + " : @" + this->user.getNickname() + "\n";
+	msg += "366 " + this->user.getNickname() + " " + channelName + " :End of /NAMES list.";
 	ft_send(this->user.getFd(), msg);
 }
 
@@ -71,8 +71,8 @@ void Join::joinExistingChannel(const std::string &channelName, const std::vector
 			channel->invite.erase(user.getNickname());
 		}
 
-		std::string msg = ":" + this->user.getNickname() + "!" + this->user.getUsername() + "@" + this->user.getServername() + " " + "JOIN :" + this->getParameters().at(0) + "\n";
-		msg += "353 " + this->user.getNickname() + " = " + this->getParameters().at(0) + " :";
+		std::string msg = ":" + this->user.getNickname() + "!" + this->user.getUsername() + "@" + this->user.getServername() + " " + "JOIN :" + channelName + "\n";
+		msg += "353 " + this->user.getNickname() + " = " + channelName + " :";
 		for (std::map<std::string, UserInfo>::iterator i = channel->users.begin(); i != channel->users.end(); i++) {
 			UserInfo user_info = i->second;
 			std::map<std::string, UserInfo>::iterator it = channel->operators.find(user_info.getNickname());
@@ -82,7 +82,7 @@ void Join::joinExistingChannel(const std::string &channelName, const std::vector
 				msg += " @" + user_info.getNickname();
 		}
 		msg += "\n";
-		msg += "366 " + this->user.getNickname() + " " + this->getParameters().at(0) + " :End of /NAMES list.";
+		msg += "366 " + this->user.getNickname() + " " + channelName + " :End of /NAMES list.";
 		
 		ft_send(this->user.getFd(), msg);
 		for (std::map<std::string, UserInfo>::iterator i = channel->users.begin(); i != channel->users.end(); i++) {
@@ -90,7 +90,7 @@ void Join::joinExistingChannel(const std::string &channelName, const std::vector
 			if (user_info.getFd() == user.getFd())
 				continue;
 			//:soobin_!root@127.0.0.1 JOIN :#hello
-			std::string msgN = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " JOIN :" + this->getParameters().at(0);
+			std::string msgN = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " JOIN :" + channelName;
 			ft_send(user_info.getFd(), msgN);
 		}
 		std::cout << msg;
@@ -146,6 +146,7 @@ void Join::execute()
 
 	for (size_t i = 0; i < channelList.size(); ++i)
 	{
+		std::cout << channelList[i] <<std::endl;
 		const std::string &channelName = channelList[i];
 		handleChannelJoin(channelName, passwordList);
 	}
