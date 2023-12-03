@@ -159,7 +159,10 @@ Command *Server::createCommand(UserInfo &user, std::string recvStr)
 		cmd = new Mode(&msg, user, channels, users, serverName);
 	else if (msg.getCommand() == "PING")
 		cmd = new Ping(&msg, user);
-
+	else if (msg.getCommand() == "KICK")
+		cmd = new Kick(&msg, user, &this->users, &this->channels);
+	else if (msg.getCommand() == "PART")
+		cmd = new Part(&msg, user, &this->users, &this->channels);
 	return cmd;
 }
 
