@@ -74,7 +74,10 @@ void Kick::eraseChannelInUserInfo(UserInfo *userInfo)
 	for (iterChannels = userInfo->channels.begin(); iterChannels != userInfo->channels.end(); iterChannels++)
 	{
 		if ((*iterChannels).first == kickChannel->getName())
+		{
 			userInfo->channels.erase(iterChannels);
+			return ;
+		}
 	}
 }
 
@@ -85,7 +88,10 @@ void Kick::eraseUserInChannel(Channel *channel)
 	for (iterUsers = channel->users.begin(); iterUsers != channel->users.end(); iterUsers++)
 	{
 		if ((*iterUsers).first == kickChannel->getName())
+		{
 			channel->users.erase(iterUsers);
+			return ;
+		}
 	}
 }
 
@@ -97,12 +103,18 @@ void Kick::eraseUser()
 	for (iterUsers = users->begin(); iterUsers != users->end(); iterUsers++)
 	{
 		if ((*iterUsers).second.getNickname() == kickUser->getNickname())
+		{
 			eraseChannelInUserInfo(&(*iterUsers).second);
+			return ;
+		}
 	}
 	for (iterChannels = channels->begin(); iterChannels != channels->end(); iterChannels++)
 	{
 		if ((*iterChannels).second.getName() == kickChannel->getName())
+		{
 			eraseUserInChannel(&(*iterChannels).second);
+			return ;
+		}
 	}
 }
 
@@ -113,32 +125,41 @@ void Kick::kickUsers(std::string parameter)
 	{
 		if (checkUsers(kickUsersName[i]))
 		{
-			//ft_send();
+			std::string msg = ":irc.local 441 " + user.getNickname() + " " + kickUsersName[i] + " " + kickChannel->getName() + " :They are not on that channel";
+			ft_send(user.getFd(), msg);
+			std::cout << msg << std::endl;
+			return ;
 		}
 		else
-		{
 			eraseUser();
-			std::string chanMsg = user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " KICK " + kickChannel->getName() + " " + kickUser->getNickname();
-			ft_send(user.getFd(), chanMsg);
-		}
 	}
+	std::string chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " KICK " + kickChannel->getName() + " " + kickUser->getNickname() + " :";
+	if (!getTrailing().empty())
+		chanMsg += getTrailing();
+	std::cout << chanMsg << std::endl;
+	std::map<std::string, UserInfo>::iterator iterUsers;
+	for (iterUsers = kickChannel->users.begin(); iterUsers !=kickChannel->users.end(); iterUsers++)
+		ft_send((*iterUsers).second.getFd(), chanMsg);
 }
 
 void Kick::execute()
 {
     if (getParameters().size() < 2)
     {
-        //ft_send();
-        return ;
+		std::string msg = "461 KICK :Not enough parameters";
+		ft_send(user.getFd(), msg);
+		return;
     }
     if (checkChannel(getParameters().at(0)))
     {
-        //ft_send(ERR_NOSUCHCHANNEL);
+        std::string msg = ":irc.local 403 " + user.getNickname() + " " + getParameters().at(0) + " :No such channel";
+		ft_send(user.getFd(), msg);
         return ;
     }
     if (checkOperator(kickChannel->getName()))
     {
-        //ft_send(ERR_CHANOPRIVSNEEDED);
+        std::string msg = ":irc.local 482 " + user.getNickname() + " " + kickChannel->getName() + " :You must be a channel operator";
+		ft_send(user.getFd(), msg);
         return ;
     }
     kickUsers(getParameters().at(1));

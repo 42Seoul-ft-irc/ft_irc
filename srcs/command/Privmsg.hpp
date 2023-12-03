@@ -16,7 +16,7 @@ private:
 
 	std::vector<std::string> recipients;
 	std::vector<Channel> recipientChannels;
-	std::vector<int> recipientUsersFd;
+	std::vector<UserInfo> recipientUsers;
 	
 
 public:
