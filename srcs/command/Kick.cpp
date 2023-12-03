@@ -142,5 +142,4 @@ void Kick::execute()
         return ;
     }
     kickUsers(getParameters().at(1));
-
 }

@@ -31,6 +31,7 @@
 #include "command/Ping.hpp"
 #include "command/Quit.hpp"
 #include "command/Kick.hpp"
+#include "command/Part.hpp"
 
 class UserInfo;
 class Command;

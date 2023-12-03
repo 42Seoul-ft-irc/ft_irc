@@ -21,7 +21,8 @@ SRCS = main.cpp \
 		command/Mode.cpp \
 		command/Quit.cpp \
     	command/Ping.cpp \
-		command/Kick.cpp 
+		command/Kick.cpp \
+		command/Part.cpp
 
 
 OBJS = $(SRCS:.cpp=.o)
