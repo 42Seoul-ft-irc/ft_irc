@@ -102,6 +102,7 @@ void Kick::eraseUserInChannel(Channel *channel, std::map<std::string, int>::iter
 		if ((*iterUsers).first == kickedUser->first)
 		{
 			channel->users.erase(iterUsers);
+			channel->operators.erase(iterUsers->first);
 			return ;
 		}
 	}
