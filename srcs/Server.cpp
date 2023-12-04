@@ -164,6 +164,8 @@ Command *Server::createCommand(UserInfo &user, std::string recvStr)
 		cmd = new Kick(&msg, user, &this->users, &this->channels);
 	else if (msg.getCommand() == "PART")
 		cmd = new Part(&msg, user, &this->users, &this->channels);
+	else if (msg.getCommand() == "DINNER")
+		cmd = new Bot(&msg, user);
 	return cmd;
 }
 

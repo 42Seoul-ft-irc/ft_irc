@@ -32,6 +32,7 @@
 #include "command/Quit.hpp"
 #include "command/Kick.hpp"
 #include "command/Part.hpp"
+#include "command/Bot.hpp"
 
 class UserInfo;
 class Command;
