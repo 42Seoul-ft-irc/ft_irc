@@ -132,7 +132,7 @@ void Join::execute()
 	if (this->getParameters().size() < 1)
 	{
 		std::cout << "parameter error \n";
-		std::string msg = "461 JOIN :Not enough parameters";
+		std::string msg = ":irs.local 461 JOIN :Not enough parameters";
 		ft_send(this->user.getFd(), msg);
 		return;
 	}

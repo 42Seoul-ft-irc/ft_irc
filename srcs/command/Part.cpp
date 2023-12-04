@@ -56,7 +56,7 @@ int Part::eraseChannelInUserInfo(std::string partChannelName)
 	{
 		if ((*iter).first == partChannelName)
 		{
-			user.channels.erase(iter);
+			user.channels.erase(iter->first);
 			return 0;
 		}
 	}
