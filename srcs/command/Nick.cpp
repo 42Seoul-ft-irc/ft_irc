@@ -15,22 +15,12 @@ void Nick::execute()
 		ft_send(user.getFd(), reply); 
 		return;
 	}
-	if (user.getNick()) // 원래 유저 닉네임 변경
+
+	if (!checkNicknameForm())
 	{
-		if (!checkNicknameForm())
-		{
-			user.setNickname(getParameters().at(0));
-			std::cout << "nickname update completed\n";
-		}
-	}
-	else // 새 유저 닉네임 생성
-	{
-		if (!checkNicknameForm())
-		{
-			user.checkNick();
-			user.setNickname(getParameters().at(0));
-			std::cout << "nickname completed\n";
-		}
+		user.checkNick();
+		user.setNickname(getParameters().at(0));
+		std::cout << "nickname completed\n";
 	}
 }
 
