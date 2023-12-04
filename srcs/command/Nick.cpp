@@ -10,11 +10,9 @@ void Nick::execute()
 		return;
 	if (getParameters().size() < 1)
 	{
-		// send(ERR_NEEDMOREPARAMS)
-	}
-	else if (getParameters().size() != 1)
-	{
-		// send(NICK uses 'NICK passparameter')
+		std::string reply = ":" + user.getHostname() + " 431 " + user.getNickname() + " :No nickname given";
+		ft_send(user.getFd(), reply); 
+		return;
 	}
 	if (user.getNick()) // 원래 유저 닉네임 변경
 	{
@@ -35,28 +33,13 @@ void Nick::execute()
 	}
 }
 
-int Nick::checkDuplicateNickname()
-{
-	std::map<int, UserInfo>::iterator iter;
-
-	for (iter = users.begin(); iter != users.end(); iter++)
-	{
-		if ((*iter).second.getNickname() == getParameters()[0])
-			return 1;
-	}
-	return 0;
-}
-
 int Nick::checkNicknameForm()
 {
 	if (getParameters()[0].size() >= 10)
 	{
 		// send(ERR_ERRONEUSNICKNAME)
-		return 1;
-	}
-	if (checkDuplicateNickname())
-	{
-		// send(ERR_NICKNAMEINUSE)
+		std::string msg = ":" + user.getHostname() + "432 " + getParameters().at(0) + " :Erroneus nickname";
+		ft_send(user.getFd(), msg);
 		return 1;
 	}
 	return 0;

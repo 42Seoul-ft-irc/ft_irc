@@ -61,9 +61,24 @@ void Auth::sendReplies()
 	ft_send(user.getFd(), reply);
 }
 
+int Auth::isInuseNick()
+{
+	std::map<int, UserInfo>::iterator iter;
+
+	for (iter = users.begin(); iter != users.end(); iter++)
+	{
+		if (iter->second.getNickname() == user.getNickname() && iter->second.getActive() == true){
+			std::string msg = ":" + user.getHostname() + " 433 " + user.getNickname() + " :Nickname is already in use";
+			ft_send(user.getFd(), msg);
+			return 0;
+		}
+	}
+	return 1;
+}
+
 Auth::Auth(UserInfo &user, std::map<int, UserInfo> &users) : user(user), users(users)
 {
-	if (!isNamesEmpty() && isAllPass())
+	if (!isNamesEmpty() && isAllPass() && isInuseNick())
 	{
 		user.checkActive();
 		sendReplies();

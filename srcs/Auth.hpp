@@ -14,6 +14,7 @@ private:
 	bool isNamesEmpty();
 	bool isAllPass();
 	void sendReplies();
+	int isInuseNick();
 
 public:
 	Auth(UserInfo &, std::map<int, UserInfo> &);

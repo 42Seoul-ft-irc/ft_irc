@@ -3,6 +3,7 @@
 
 #include "Command.hpp"
 #include "../UserInfo.hpp"
+#include "../utils.hpp"
 #include <map>
 
 class Nick : public Command
