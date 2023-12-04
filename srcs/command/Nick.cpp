@@ -11,7 +11,7 @@ void Nick::execute()
 
 	if (getParameters().size() < 1)
 	{
-		std::string reply = "431 " + user.getNickname() + " :No nickname given";
+		std::string reply = "431 :No nickname given";
 		ft_send(user.getFd(), reply); 
 		return;
 	}

@@ -11,14 +11,14 @@ void User::execute()
 
 	if (user.getActive())
 	{
-		std::string reply = ":" + user.getHostname() + " 462 " + user.getNickname() + " :You may not reregister";
+		std::string reply = "462 USER :You may not reregister";
 
 		ft_send(user.getFd(), reply); // ERR_ALREADYREGISTRED
 		return;
 	}
 	if (getParameters().size() < 3 || getTrailing().empty())
 	{
-		std::string reply = ":" + user.getHostname() + " 461 " + user.getNickname() + " USER :You may not reregister";
+		std::string reply = "461 USER :You may not reregister";
 
 		ft_send(user.getFd(), reply); // ERR_NEEDMOREPARAMS
 		return;
