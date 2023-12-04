@@ -1,6 +1,6 @@
 #include "Mode.hpp"
 
-Mode::Mode(Message *msg, UserInfo &user, std::map<std::string, Channel> &channelList, std::map<int, UserInfo> &users, std::string serverName) : Command(msg), user(user), channelList(channelList), users(users), serverName(serverName), paramsIndex(2) {}
+Mode::Mode(Message *msg, UserInfo &user, std::map<std::string, Channel> &channelList, std::map<int, UserInfo> &users) : Command(msg), user(user), channelList(channelList), users(users), paramsIndex(2) {}
 
 Mode::~Mode() {}
 
@@ -22,7 +22,7 @@ void Mode::execute()
 		this->channel = &(it->second);
 
 		std::string modestring = getModestring();
-		std::string reply = ":" + serverName + " 324 " + user.getNickname() + " " + getParameters()[0] + " " + modestring;
+		std::string reply = ":" + user.getHostname() + " 324 " + user.getNickname() + " " + getParameters()[0] + " " + modestring;
 
 		ft_send(user.getFd(), reply);
 		return;
@@ -36,7 +36,7 @@ void Mode::execute()
 
 	if (!channel->isOperator(user.getNickname()))
 	{
-		std::string reply = ":" + serverName + " 482 " + user.getNickname() + " " + channel->getName() + " :You're not channel operator";
+		std::string reply = ":" + user.getHostname() + " 482 " + user.getNickname() + " " + channel->getName() + " :You're not channel operator";
 
 		ft_send(user.getFd(), reply);
 		return;
@@ -51,7 +51,7 @@ bool Mode::isValidChannelName()
 
 	if (channelName[0] != '#') // 401 ERR_NOSUCHNICK
 	{
-		std::string reply = ":" + serverName + " 401 " + user.getNickname() + " " + channelName + " :No such nick";
+		std::string reply = ":" + user.getHostname() + " 401 " + user.getNickname() + " " + channelName + " :No such nick";
 
 		ft_send(user.getFd(), reply);
 
@@ -63,7 +63,7 @@ bool Mode::isValidChannelName()
 
 		if (it == channelList.end())
 		{
-			std::string reply = ":" + serverName + " 403 " + user.getNickname() + " " + channelName + " :No such channel";
+			std::string reply = ":" + user.getHostname() + " 403 " + user.getNickname() + " " + channelName + " :No such channel";
 
 			ft_send(user.getFd(), reply);
 
@@ -238,7 +238,7 @@ void Mode::executeKeyMode(std::string mode)
 {
 	if (paramsIndex > getParameters().size() - 1)
 	{
-		std::string reply = ":" + serverName + " 696 " + user.getNickname() + " " + channel->getName() + " k * :You must specify a parameter for the key mode. Syntax: <key>.";
+		std::string reply = ":" + user.getHostname() + " 696 " + user.getNickname() + " " + channel->getName() + " k * :You must specify a parameter for the key mode. Syntax: <key>.";
 
 		ft_send(user.getFd(), reply);
 
@@ -263,7 +263,7 @@ void Mode::executeKeyMode(std::string mode)
 		}
 		else
 		{
-			std::string reply = ":" + serverName + " 467 " + user.getNickname() + " " + channel->getName() + " :Channel key already set";
+			std::string reply = ":" + user.getHostname() + " 467 " + user.getNickname() + " " + channel->getName() + " :Channel key already set";
 
 			ft_send(user.getFd(), reply);
 		}
@@ -285,7 +285,7 @@ void Mode::executeLimitMode(std::string mode)
 	{
 		if (paramsIndex > getParameters().size() - 1) // 파라미터 없을 때
 		{
-			std::string reply = ":" + serverName + " 696 " + user.getNickname() + " " + channel->getName() + " l * :You must specify a parameter for the limit mode. Syntax: <limit>.";
+			std::string reply = ":" + user.getHostname() + " 696 " + user.getNickname() + " " + channel->getName() + " l * :You must specify a parameter for the limit mode. Syntax: <limit>.";
 
 			ft_send(user.getFd(), reply);
 
@@ -301,7 +301,7 @@ void Mode::executeLimitMode(std::string mode)
 				num = 0;
 			else
 			{
-				std::string reply = ":" + serverName + " 696 " + user.getNickname() + " " + channel->getName() + " l " + getParameters()[paramsIndex] + " :Invalid limit mode parameter. Syntax: <limit>.";
+				std::string reply = ":" + user.getHostname() + " 696 " + user.getNickname() + " " + channel->getName() + " l " + getParameters()[paramsIndex] + " :Invalid limit mode parameter. Syntax: <limit>.";
 
 				ft_send(user.getFd(), reply);
 				paramsIndex++;
@@ -312,7 +312,7 @@ void Mode::executeLimitMode(std::string mode)
 
 		if (num < 0)
 		{
-			std::string reply = ":" + serverName + " 696 " + user.getNickname() + " " + channel->getName() + " l " + getParameters()[paramsIndex] + " :Invalid limit mode parameter. Syntax: <limit>.";
+			std::string reply = ":" + user.getHostname() + " 696 " + user.getNickname() + " " + channel->getName() + " l " + getParameters()[paramsIndex] + " :Invalid limit mode parameter. Syntax: <limit>.";
 
 			ft_send(user.getFd(), reply);
 			paramsIndex++;
@@ -344,7 +344,7 @@ void Mode::executeOperatorMode(std::string mode)
 {
 	if (paramsIndex > getParameters().size() - 1) // 파라미터 없을 때
 	{
-		std::string reply = ":" + serverName + " 696 " + user.getNickname() + " " + channel->getName() + " o * :You must specify a parameter for the op mode. Syntax: <nick>.";
+		std::string reply = ":" + user.getHostname() + " 696 " + user.getNickname() + " " + channel->getName() + " o * :You must specify a parameter for the op mode. Syntax: <nick>.";
 
 		ft_send(user.getFd(), reply);
 
@@ -355,7 +355,7 @@ void Mode::executeOperatorMode(std::string mode)
 
 	if (!isNicknameExist(name))
 	{
-		std::string reply = ":" + serverName + " 401 " + user.getNickname() + " " + name + " :No such nick";
+		std::string reply = ":" + user.getHostname() + " 401 " + user.getNickname() + " " + name + " :No such nick";
 
 		ft_send(user.getFd(), reply);
 		paramsIndex++;
@@ -393,7 +393,7 @@ void Mode::executeTopicMode(std::string mode)
 void Mode::doesntExistMode(std::string mode)
 {
 	mode.erase(0, 1);
-	std::string reply = ":" + serverName + " 472 " + user.getNickname() + " " + mode + " :is not a recognised channel mode.";
+	std::string reply = ":" + user.getHostname() + " 472 " + user.getNickname() + " " + mode + " :is not a recognised channel mode.";
 
 	ft_send(user.getFd(), reply);
 }
