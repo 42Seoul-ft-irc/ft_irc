@@ -87,7 +87,7 @@ void UserInfo::checkPass()
 
 void UserInfo::checkNick()
 {
-	nick = true;
+	nick = nick==false?true:false;
 };
 
 void UserInfo::checkUser()
