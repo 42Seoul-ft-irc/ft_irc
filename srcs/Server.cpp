@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-Server::Server(int argc, char **argv) : serverName("irc.local")
+Server::Server(int argc, char **argv) : serverName("poke")
 {
 	if (argc != 3)
 		throw std::invalid_argument("Error: invalid argument");
@@ -145,19 +145,19 @@ Command *Server::createCommand(UserInfo &user, std::string recvStr)
 	else if (msg.getCommand() == "NICK")
 		cmd = new Nick(&msg, user, users);
 	else if (msg.getCommand() == "USER")
-		cmd = new User(&msg, user, serverName);
+		cmd = new User(&msg, user);
 	else if (msg.getCommand() == "JOIN")
 		cmd = new Join(&msg, user, &this->channels);
 	else if (msg.getCommand() == "INVITE")
 		cmd = new Invite(&msg, user, &this->channels, &this->users);
 	else if (msg.getCommand() == "TOPIC")
-		cmd = new Topic(&msg, user, this->channels, serverName);
+		cmd = new Topic(&msg, user, this->channels);
 	else if (msg.getCommand() == "QUIT")
 		cmd = new Quit(&msg, user, &this->channels, &this->users, &this->pollfds);
 	else if (msg.getCommand() == "PRIVMSG")
 		cmd = new Privmsg(&msg, user, this->users, this->channels);
 	else if (msg.getCommand() == "MODE")
-		cmd = new Mode(&msg, user, channels, users, serverName);
+		cmd = new Mode(&msg, user, channels, users);
 	else if (msg.getCommand() == "PING")
 		cmd = new Ping(&msg, user);
 	else if (msg.getCommand() == "KICK")

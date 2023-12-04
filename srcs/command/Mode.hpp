@@ -15,7 +15,6 @@ private:
 	std::map<std::string, Channel> &channelList;
 	std::map<int, UserInfo> &users;
 	Channel *channel;
-	std::string serverName;
 
 	std::string sign;
 	std::vector<std::string> inputModes;
@@ -45,7 +44,7 @@ private:
 	std::string changedModes();
 
 public:
-	Mode(Message *, UserInfo &, std::map<std::string, Channel> &, std::map<int, UserInfo> &, std::string);
+	Mode(Message *, UserInfo &, std::map<std::string, Channel> &, std::map<int, UserInfo> &);
 	~Mode();
 
 	void execute();
