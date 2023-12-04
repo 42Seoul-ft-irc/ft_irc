@@ -68,7 +68,8 @@ int Privmsg::checkRecipient(std::string recipient)
 	{
 		if (checkChannels(recipient))
 		{
-			//send(ERR_CANNOTSENDTOCHAN);
+			std::string msg = ":" + user.getHostname() + " 404 " + user.getNickname() + " " + recipient + " :Cannot send to channel";
+			ft_send(user.getFd(), msg);
 			return 1;
 		}
 	}
@@ -76,7 +77,8 @@ int Privmsg::checkRecipient(std::string recipient)
 	{
 		if (checkUsers(recipient))
 		{
-			//send (ERR_NOSUCHNICK);
+			std::string msg = ":" + user.getHostname() + " 401 " + user.getNickname() + " " + recipient + " :No such nick";
+			ft_send(user.getFd(), msg);
 			return 1;
 		}
 	}
@@ -117,6 +119,8 @@ int Privmsg::checkParameters(std::string parameter)
 	if (recipientChannels.size() == 0 && recipientUsers.size() == 0)
 	{
 		//send (ERR_NORECIPIENT);
+		std::string msg = ":" + user.getHostname() + " 411 " + user.getNickname() + " :No recipient given";
+		ft_send(user.getFd(), msg);
 		return 1;
 	}
 	return 0;
@@ -129,11 +133,16 @@ void Privmsg::execute()
 	if (parameters[0].empty())
 	{
 		//send (ERR_NORECIPIENT);
+		std::string msg = ":" + user.getHostname() + " 411 " + user.getNickname() + " :No recipient given";
+		ft_send(user.getFd(), msg);
 		return ;
 	}
 	if (getTrailing() == "")
 	{
 		//send (ERR_NOTEXTTOSEND);
+		std::string msg = ":" + user.getHostname() + " 412 " + user.getNickname() + " :No text to send";
+		ft_send(user.getFd(), msg);
+
 		return ;
 	}
 	if (checkParameters(parameters[0]))
