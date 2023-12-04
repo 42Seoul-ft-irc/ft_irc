@@ -31,8 +31,6 @@ class UserInfo {
 		void setHostname(std::string hostname);
 		void setServername(std::string servername);
 		void setRealname(std::string realname);
-		void setMode(std::string mode);
-		void setUnused(std::string unused);
 
 		int getFd() const;
 		std::string getNickname() const;
