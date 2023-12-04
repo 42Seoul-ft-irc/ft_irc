@@ -54,24 +54,28 @@ int Part::eraseChannelInUserInfo(std::string partChannelName)
 
 	for (iter = user.channels.begin(); iter != user.channels.end(); ++iter)
 	{
+		//std::cout << iter->first << std::endl;
+		//std::cout << partChannelName << std::endl;
+
 		if (iter->first == partChannelName)
 		{
-			user.channels.erase(iter->first);
+			user.channels.erase(iter);
 			return 0;
 		}
 	}
     return 1;
 }
 
-void Part::eraseUserInChannel(Channel *channel, std::string partChannelName)
+void Part::eraseUserInChannel(Channel *channel)
 {
 	std::map<std::string, UserInfo>::iterator iterUsers;
 
 	for (iterUsers = channel->users.begin(); iterUsers != channel->users.end(); ++iterUsers)
 	{
-		if (iterUsers->first == partChannelName)
+		if (iterUsers->first == user.getNickname())
 		{
 			channel->users.erase(iterUsers);
+			channel->operators.erase(iterUsers->first);
 			return ;
 		}
 	}
@@ -85,7 +89,7 @@ void Part::eraseUser(std::string partChannelName)
 	{
 		if (iterChannels->second.getName() == partChannelName)
 		{
-			eraseUserInChannel(&(iterChannels->second), partChannelName);
+			eraseUserInChannel(&(iterChannels->second));
 			return ;
 		}
 	}
@@ -101,6 +105,7 @@ void Part::partUsers()
 			ft_send(user.getFd(), msg);
 			return ;
 		}
+		std::cout << partChannelName[i] << std::endl;
 		eraseUser(partChannelName[i]);
 		std::string chanMsg;
 		if (getTrailing().empty())
@@ -108,9 +113,14 @@ void Part::partUsers()
 			std::string lastParameter = getParameters().back();
 			chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " PART :" + lastParameter;
 		}
-		else 
+		else
 			chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " PART " + partChannelName[i] + " :" + getTrailing();
 		ft_send(user.getFd(), chanMsg);
+		std::map<std::string, UserInfo>::iterator iterUsers;
+		partChannel = &(channels->find(partChannelName[i])->second);
+
+		for (iterUsers = partChannel->users.begin(); iterUsers != partChannel->users.end(); iterUsers++)
+			ft_send((*iterUsers).second.getFd(), chanMsg);
 	}
 }
 
