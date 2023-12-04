@@ -27,7 +27,7 @@ void Auth::sendReplies()
 		":" + user.getHostname() + " 001 " + name + " :Welcome to the Localnet IRC Network\n"
 		":" + user.getHostname() + " 002 " + name + " :running version ft_irc-42\n"
 		":" + user.getHostname() + " 002 " + name + " :Current local users: " + num + "\n"
-		":" + user.getHostname() + " 375 " + name + " :- <server> Message of the day - \n"
+		":" + user.getHostname() + " 375 " + name + " :- <" + serverName + "> Message of the day - \n"
 		":" + user.getHostname() + " 372 " + name + " :                                            /\n"
 		":" + user.getHostname() + " 372 " + name + " :                         _,.------....___,.' ',.-.\n"
 		":" + user.getHostname() + " 372 " + name + " :                      ,-'          _,.--\"        |\n"
@@ -77,7 +77,7 @@ int Auth::isInuseNick()
 	return 1;
 }
 
-Auth::Auth(UserInfo &user, std::map<int, UserInfo> &users) : user(user), users(users)
+Auth::Auth(UserInfo &user, std::map<int, UserInfo> &users, std::string serverName) : user(user), users(users), serverName(serverName)
 {
 	if (!isNamesEmpty() && isAllPass() && isInuseNick())
 	{
