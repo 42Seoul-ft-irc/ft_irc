@@ -10,7 +10,7 @@ void Pass::execute()
 
 	if (getParameters().size() < 1)
 	{
-		std::string msg = ":irc.local 461 " + user.getNickname() + " PASS :Not enough parameters";
+		std::string msg = ":"+user.getHostname()+" 461 " + user.getNickname() + " PASS :Not enough parameters";
 		ft_send(user.getFd(), msg);
 		return;
 	}
