@@ -7,6 +7,8 @@ Invite::Invite(Message *msg, UserInfo &user, std::map<std::string, Channel> *cha
 }
 
 void Invite::execute() {
+	if (!user.getActive())
+		return;
 	// argument 확인 (2개 이상)
 	if (this->getParameters().size() < 2) {
 		std::string msg = ":"+user.getHostname()+" 461 INVITE :Not enough parameters";

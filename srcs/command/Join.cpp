@@ -126,6 +126,8 @@ bool Join::checkJoinConditions(const std::vector<std::string> &passwordList)
 
 void Join::execute()
 {
+	if (!user.getActive())
+		return;
 	std::vector<std::string> channelList;
 	std::vector<std::string> passwordList;
 
