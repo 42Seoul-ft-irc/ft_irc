@@ -14,7 +14,7 @@ private:
 	std::map<int, UserInfo> *users;
 	std::map<std::string, Channel> *channels;
 
-	Channel *PartChannel;
+	Channel *partChannel;
     std::vector<std::string> partChannelName;
 
 public:
@@ -30,7 +30,7 @@ public:
 	int checkChannel(std::string parameter);
 
 	int eraseChannelInUserInfo(std::string partChannelName);
-	void eraseUserInChannel(Channel *channel, std::string partChannelName);
+	void eraseUserInChannel(Channel *channel);
 	void eraseUser(std::string partChannelName);
 };
 
