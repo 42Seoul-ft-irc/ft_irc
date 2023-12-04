@@ -24,6 +24,7 @@ public:
 
 	void execute();
 	int checkChannel(std::string parameter);
+	int checkUser(std::string parameter);
 
 	int checkOperator(std::string channel);
 
