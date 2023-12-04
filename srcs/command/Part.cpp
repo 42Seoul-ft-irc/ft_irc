@@ -56,7 +56,7 @@ int Part::eraseChannelInUserInfo(std::string partChannelName)
 	{
 		if (iter->first == partChannelName)
 		{
-			user.channels.erase(iter);
+			user.channels.erase(iter->first);
 			return 0;
 		}
 	}
@@ -97,7 +97,7 @@ void Part::partUsers()
 	{
 		if (eraseChannelInUserInfo(partChannelName[i]))
 		{
-			std::string msg = ":irc.local 442 " + user.getNickname() + " " + partChannelName[i] + " :You're not on that channel";
+			std::string msg = ":"+user.getHostname()+" 442 " + user.getNickname() + " " + partChannelName[i] + " :You're not on that channel";
 			ft_send(user.getFd(), msg);
 			return ;
 		}
@@ -124,22 +124,10 @@ void Part::execute()
     }
     if (checkChannel(getParameters().at(0)))
     {
-        std::string msg = ":irc.local 403 " + user.getNickname() + " " + getParameters().at(0) + " :No such channel";
+        std::string msg = ":"+user.getHostname()+" 403 " + user.getNickname() + " " + getParameters().at(0) + " :No such channel";
 		ft_send(user.getFd(), msg);
         return ;
     }
     partUsers();
-
-	// 	std::map<std::string, bool>::iterator iter = user.channels.begin();
-
-	// for (iter = user.channels.begin(); iter != user.channels.end(); ++iter)
-	// {
-	// 	if ((*iter).first == partChannelName)
-	// 	{
-	// 		user.channels.erase(iter);
-	// 		return 0;
-	// 	}
-	// }
-
 
 }

@@ -7,9 +7,11 @@ Invite::Invite(Message *msg, UserInfo &user, std::map<std::string, Channel> *cha
 }
 
 void Invite::execute() {
+	if (!user.getActive())
+		return;
 	// argument 확인 (2개 이상)
 	if (this->getParameters().size() < 2) {
-		std::string msg = "461 INVITE :Not enough parameters";
+		std::string msg = ":"+user.getHostname()+" 461 INVITE :Not enough parameters";
 		ft_send(this->user.getFd(), msg);
 		return ;
 	}
@@ -22,14 +24,14 @@ void Invite::execute() {
 		}
 	}
 	if (user_it == this->users->end()) {
-		std::string msg = "401 " + this->getParameters().at(0) +" :No such nick";
+		std::string msg = ":"+user.getHostname()+" 401 " + this->getParameters().at(0) +" :No such nick";
 		ft_send(this->user.getFd(), msg);
 		return ;
 	}
 	// 채널 존재하는지 확인
 	std::map<std::string, Channel>::iterator chan_it = this->channels->find(this->getParameters().at(1));
 	if (chan_it == this->channels->end()) {
-		std::string msg = "403 " + this->getParameters().at(1) +" :No such channel";
+		std::string msg = ":"+user.getHostname()+" 403 " + this->getParameters().at(1) +" :No such channel";
 		ft_send(user.getFd(), msg);
 		return ;
 	}

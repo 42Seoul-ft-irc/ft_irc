@@ -101,14 +101,14 @@ bool Join::checkJoinConditions(const std::vector<std::string> &passwordList)
 {
 	if (channel->getLimitMode() && channel->getLimit() <= static_cast<long long>(this->channel->users.size()))
 	{
-		std::string msg = ":irc.local 471 " + user.getNickname() + " " + channel->getName() + " :Cannot join channel (channel is full)";
+		std::string msg = ":"+user.getHostname()+" 471 " + user.getNickname() + " " + channel->getName() + " :Cannot join channel (channel is full)";
 		ft_send(this->user.getFd(), msg);
 		return false;
 	}
 
 	if ((channel->getKeyMode() && passwordList.empty()) || (channel->getKeyMode() && passwordList.front() != channel->getKey()))
 	{
-		std::string msg = ":irc.local 475 " + user.getNickname() + " " + channel->getName() + " :Cannot join channel (incorrect channel key)";
+		std::string msg = ":"+user.getHostname()+" 475 " + user.getNickname() + " " + channel->getName() + " :Cannot join channel (incorrect channel key)";
 		ft_send(this->user.getFd(), msg);
 		return false;
 	}
@@ -116,7 +116,7 @@ bool Join::checkJoinConditions(const std::vector<std::string> &passwordList)
 	if (channel->getInviteMode() && (channel->invite.find(user.getNickname()) == channel->invite.end()))
 	{
 		std::cout << *channel << std::endl;
-		std::string msg = ":irc.local 473 " + user.getNickname() + " "  + channel->getName() + " :Cannot join channel (invite only)";
+		std::string msg = ":"+user.getHostname()+" 473 " + user.getNickname() + " "  + channel->getName() + " :Cannot join channel (invite only)";
 		ft_send(this->user.getFd(), msg);
 		return false;
 	}
@@ -126,13 +126,15 @@ bool Join::checkJoinConditions(const std::vector<std::string> &passwordList)
 
 void Join::execute()
 {
+	if (!user.getActive())
+		return;
 	std::vector<std::string> channelList;
 	std::vector<std::string> passwordList;
 
 	if (this->getParameters().size() < 1)
 	{
 		std::cout << "parameter error \n";
-		std::string msg = "461 JOIN :Not enough parameters";
+		std::string msg = ":"+user.getHostname()+" 461 JOIN :Not enough parameters";
 		ft_send(this->user.getFd(), msg);
 		return;
 	}

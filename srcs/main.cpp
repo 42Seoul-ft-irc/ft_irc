@@ -12,23 +12,42 @@ int main(int argc, char **argv)
 				throw std::runtime_error("Error: poll error");
 			if (resultFd > 0)
 			{
-				for (size_t i = 0; i < server.pollfds.size(); i++)
+				if (server.pollfds[0].revents & POLLIN)
 				{
-					if (server.pollfds[i].revents == 0)
+					std::cout << "클라이언트가 서버에 접근\n";
+					server.acceptClient();
+				}
+				for (size_t i = 1; i < server.pollfds.size(); i++)
+				{
+					if (i != 0 && server.pollfds[i].revents == 0)
 						continue;
 					if (server.pollfds[i].revents & POLLHUP || server.pollfds[i].revents & POLLERR)
 					{
 						UserInfo &user = server.getUserInfoByFd(server.pollfds[i].fd);
+						for (std::map<std::string, bool>::iterator chan = user.channels.begin(); chan != user.channels.end(); chan++) {
+							std::string chanName = chan->first;
+							std::map<std::string, Channel>::iterator chanIt = server.channels.find(chanName);
+
+							Channel &channel = chanIt->second;
+							channel.users.erase(user.getNickname());
+							channel.operators.erase(user.getNickname());
+							channel.invite.erase(user.getNickname());
+
+							for(std::map<std::string, UserInfo>::iterator userIt = channel.users.begin(); userIt != channel.users.end(); userIt++){
+								UserInfo &thisUser = userIt->second;
+								if (thisUser.getFd() == user.getFd())
+									continue;
+								std::cout<<"send user: " << thisUser.getFd() <<std::endl;
+								// sooyang!root@127.0.0.1 QUIT :Quit: leaving
+								std::string chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " QUIT :Quit: leaving";
+								ft_send(thisUser.getFd(), chanMsg);
+							}
+						}
 						server.users.erase(user.getFd());
 						close(user.getFd());
 						server.pollfds.erase(server.pollfds.begin() + i);
 						
 						std::cout << "클라이언트가 연결을 끊음\n";
-					}
-					else if (i == 0 && server.pollfds[i].revents & POLLIN)
-					{
-						std::cout << "클라이언트가 서버에 접근\n";
-						server.acceptClient();
 					}
 					else if (server.pollfds[i].revents & POLLIN)
 					{
