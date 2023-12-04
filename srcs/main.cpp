@@ -24,30 +24,7 @@ int main(int argc, char **argv)
 						continue;
 					if (server.pollfds[i].revents & POLLHUP || server.pollfds[i].revents & POLLERR)
 					{
-						UserInfo &user = server.getUserInfoByFd(server.pollfds[i].fd);
-						for (std::map<std::string, bool>::iterator chan = user.channels.begin(); chan != user.channels.end(); chan++) {
-							std::string chanName = chan->first;
-							std::map<std::string, Channel>::iterator chanIt = server.channels.find(chanName);
-
-							Channel &channel = chanIt->second;
-							channel.users.erase(user.getNickname());
-							channel.operators.erase(user.getNickname());
-							channel.invite.erase(user.getNickname());
-
-							for(std::map<std::string, UserInfo>::iterator userIt = channel.users.begin(); userIt != channel.users.end(); userIt++){
-								UserInfo &thisUser = userIt->second;
-								if (thisUser.getFd() == user.getFd())
-									continue;
-								std::cout<<"send user: " << thisUser.getFd() <<std::endl;
-								// sooyang!root@127.0.0.1 QUIT :Quit: leaving
-								std::string chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " QUIT :Quit: leaving";
-								ft_send(thisUser.getFd(), chanMsg);
-							}
-						}
-						server.users.erase(user.getFd());
-						close(user.getFd());
-						server.pollfds.erase(server.pollfds.begin() + i);
-						
+						ft_quit(server, i);
 						std::cout << "클라이언트가 연결을 끊음\n";
 					}
 					else if (server.pollfds[i].revents & POLLIN)
@@ -58,23 +35,20 @@ int main(int argc, char **argv)
 						memset(buffer, 0, sizeof(buffer));
 						ssize_t recvByte = recv(fd, buffer, sizeof(buffer), 0);
 						if (recvByte < 0)
-						{
 							throw std::runtime_error("Error: Fail read");
-						}
 						else
 						{
 							std::strcat(server.clientBuffer[fd], buffer);
 							std::string recvStr(server.clientBuffer[fd]);
-							if (recvStr.find("\r\n") == std::string::npos) {
+							if (recvStr.find("\r\n") == std::string::npos)
 								continue ;
-							}
+
 							std::vector<std::string> commands = splitByCRLF(recvStr);
-							// std::string으로 복사하여 사용
 							std::string strBuffer(server.clientBuffer[fd]);
 							std::size_t lastCRLFPos = strBuffer.rfind("\r\n");
-							if (lastCRLFPos != std::string::npos) {
+							if (lastCRLFPos != std::string::npos)
 								strBuffer.erase(0, lastCRLFPos + 2);
-							}
+
 							for (size_t i = 0; i < commands.size(); i++)
 							{
 								std::cout << "들어온 메세지 : " << commands[i] << std::endl;
@@ -86,8 +60,6 @@ int main(int argc, char **argv)
 									std::cerr << e.what() << std::endl;
 									continue;
 								}
-								//for(std::map<int, UserInfo>::iterator i = server.users.begin();i != server.users.end(); i++)
-								//	std::cout << i->second <<std::endl; 
 							}
 							std::strcpy(server.clientBuffer[fd], strBuffer.c_str());
 							//std::cout <<"남은 버퍼: " << strBuffer << std::endl;
@@ -120,8 +92,39 @@ void ft_send(int fd, std::string str)
     str += "\r\n";
 	const char *reply = str.c_str();
 
+	std::cout << str;
+
 	int result = send(fd, const_cast<char *>(reply), strlen(reply), 0);
 
 	if (result == -1)
 		throw std::runtime_error("Error: send error");
+}
+
+void ft_quit(Server &server, size_t i)
+{
+	UserInfo &user = server.getUserInfoByFd(server.pollfds[i].fd);
+
+	for (std::map<std::string, bool>::iterator chan = user.channels.begin(); chan != user.channels.end(); chan++)
+	{
+		std::string chanName = chan->first;
+		std::map<std::string, Channel>::iterator chanIt = server.channels.find(chanName);
+
+		Channel &channel = chanIt->second;
+		channel.users.erase(user.getNickname());
+		channel.operators.erase(user.getNickname());
+		channel.invite.erase(user.getNickname());
+
+		for (std::map<std::string, UserInfo>::iterator userIt = channel.users.begin(); userIt != channel.users.end(); userIt++)
+		{
+			UserInfo &thisUser = userIt->second;
+			if (thisUser.getFd() == user.getFd())
+				continue;
+			std::cout << "send user: " << thisUser.getFd() << std::endl;
+			std::string chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " QUIT :Quit: leaving";
+			ft_send(thisUser.getFd(), chanMsg);
+		}
+	}
+	server.users.erase(user.getFd());
+	close(user.getFd());
+	server.pollfds.erase(server.pollfds.begin() + i);
 }

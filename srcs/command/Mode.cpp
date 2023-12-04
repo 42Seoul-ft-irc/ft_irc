@@ -368,12 +368,14 @@ void Mode::executeOperatorMode(std::string mode)
 		std::map<std::string, UserInfo>::iterator it = channel->operators.find(name);
 
 		channel->operators.erase(it);
+		changeUserInfo(*findUserByNickname(name), false);
 		changed.push_back(mode);
 		changedParams.push_back(name);
 	}
 	else if (!channel->isOperator(name) && mode == "+o")
 	{
 		channel->operators.insert(std::make_pair(name, *findUserByNickname(name)));
+		changeUserInfo(*findUserByNickname(name), true);
 		changed.push_back(mode);
 		changedParams.push_back(name);
 	}
@@ -442,4 +444,13 @@ std::string Mode::changedModes()
 	}
 
 	return str;
+}
+
+void Mode::changeUserInfo(UserInfo &user, bool type)
+{
+	std::map<std::string, bool>::iterator it = user.channels.begin();
+
+	for (; it != user.channels.end(); ++it)
+		if (it->first == channel->getName())
+			user.channels[it->first] = type;
 }
