@@ -42,6 +42,8 @@ private:
 	bool isNicknameExist(std::string);
 	UserInfo *findUserByNickname(std::string);
 	std::string changedModes();
+	void changeUserInfo(UserInfo &, bool);
+
 
 public:
 	Mode(Message *, UserInfo &, std::map<std::string, Channel> &, std::map<int, UserInfo> &);
