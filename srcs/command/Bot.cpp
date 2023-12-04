@@ -1,19 +1,17 @@
 #include "Bot.hpp"
 
 Bot::Bot(Message *msg, UserInfo &user): Command(msg), user(user){
-	
-}
+	std::srand(static_cast<unsigned int>(std::time(0)));
+ }
 
 void Bot::execute() {
-	// 오늘의 저녁 메뉴를 추천하고 출력
 	std::string dinnerMenu = recommendDinnerMenu();
-	std::string response = "PRIVMSG " + user.getNickname() + " :" + dinnerMenu;
+	//:sooyang!root@127.0.0.1
+	std::string response = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " DINNER :"+ dinnerMenu;
 	ft_send(user.getFd(), response);
 }
 
-// 오늘의 저녁 메뉴 추천 함수
 std::string Bot::recommendDinnerMenu() {
-	// 간단한 메뉴 리스트
 	std::vector<std::string> menuList;
 	menuList.push_back("마라탕");
 	menuList.push_back("떡볶이");
@@ -23,8 +21,7 @@ std::string Bot::recommendDinnerMenu() {
 	menuList.push_back("피자");
 	menuList.push_back("찜닭");
 
-	// 현재 시간을 이용하여 랜덤하게 메뉴를 선택
-	std::srand(static_cast<unsigned int>(std::time(0)));
+	std::rand();
 	int randomIndex = std::rand() % menuList.size();
 
 	return "오늘의 저녁 메뉴는 '" + menuList[randomIndex] + "' 어떠세요?";
