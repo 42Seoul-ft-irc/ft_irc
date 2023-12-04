@@ -10,7 +10,7 @@ void Nick::execute()
 		return;
 	if (getParameters().size() < 1)
 	{
-		std::string reply = ":" + user.getHostname() + " 431 " + user.getNickname() + " :No nickname given";
+		std::string reply = "431 " + user.getNickname() + " :No nickname given";
 		ft_send(user.getFd(), reply); 
 		return;
 	}
@@ -38,7 +38,7 @@ int Nick::checkNicknameForm()
 	if (getParameters()[0].size() >= 10)
 	{
 		// send(ERR_ERRONEUSNICKNAME)
-		std::string msg = ":" + user.getHostname() + "432 " + getParameters().at(0) + " :Erroneus nickname";
+		std::string msg = "432 " + getParameters().at(0) + " :Erroneus nickname";
 		ft_send(user.getFd(), msg);
 		return 1;
 	}
