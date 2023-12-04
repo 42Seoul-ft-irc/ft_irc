@@ -16,6 +16,7 @@ int main(int argc, char **argv)
 				{
 					std::cout << "클라이언트가 서버에 접근\n";
 					server.acceptClient();
+					continue;
 				}
 				for (size_t i = 1; i < server.pollfds.size(); i++)
 				{
