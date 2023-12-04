@@ -19,6 +19,17 @@ int Kick::checkChannel(std::string parameter)
     return 1;
 }
 
+int Kick::checkUser(std::string parameter)
+{
+	std::map<std::string, bool>::iterator iter;
+	for (iter = user.channels.begin(); iter != user.channels.end(); iter++)
+	{
+		if (iter->first == parameter)
+			return 0;
+	}
+    return 1;
+}
+
 int Kick::checkOperator(std::string channel)
 {
 	std::map<std::string, bool>::iterator iter;
@@ -87,7 +98,7 @@ void Kick::eraseUserInChannel(Channel *channel)
 
 	for (iterUsers = channel->users.begin(); iterUsers != channel->users.end(); iterUsers++)
 	{
-		if ((*iterUsers).first == kickChannel->getName())
+		if ((*iterUsers).first == kickUser->getNickname())
 		{
 			channel->users.erase(iterUsers);
 			return ;
@@ -105,7 +116,7 @@ void Kick::eraseUser()
 		if ((*iterUsers).second.getNickname() == kickUser->getNickname())
 		{
 			eraseChannelInUserInfo(&(*iterUsers).second);
-			return ;
+			break ;
 		}
 	}
 	for (iterChannels = channels->begin(); iterChannels != channels->end(); iterChannels++)
@@ -131,15 +142,21 @@ void Kick::kickUsers(std::string parameter)
 			return ;
 		}
 		else
+		{
 			eraseUser();
+			std::string msg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " KICK " + kickChannel->getName() + " " + kickUser->getNickname() + " :";
+			if (!getTrailing().empty())
+				msg += getTrailing();
+			std::cout << msg << std::endl;
+			ft_send(kickUser->getFd(), msg);
+		}
 	}
-	std::string chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " KICK " + kickChannel->getName() + " " + kickUser->getNickname() + " :";
+	std::string msg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " KICK " + kickChannel->getName() + " " + kickUser->getNickname() + " :";
 	if (!getTrailing().empty())
-		chanMsg += getTrailing();
-	std::cout << chanMsg << std::endl;
+		msg += getTrailing();
 	std::map<std::string, UserInfo>::iterator iterUsers;
 	for (iterUsers = kickChannel->users.begin(); iterUsers !=kickChannel->users.end(); iterUsers++)
-		ft_send((*iterUsers).second.getFd(), chanMsg);
+		ft_send((*iterUsers).second.getFd(), msg);
 }
 
 void Kick::execute()
@@ -156,6 +173,12 @@ void Kick::execute()
 		ft_send(user.getFd(), msg);
         return ;
     }
+	if (checkUser(getParameters().at(0)))
+	{
+		std::string msg = ":"+user.getHostname()+" 442 " + user.getNickname() + " " + getParameters().at(0) + " :You're not on that channel!";
+		ft_send(user.getFd(), msg);
+        return ;
+	}
     if (checkOperator(kickChannel->getName()))
     {
         std::string msg = ":"+user.getHostname()+" 482 " + user.getNickname() + " " + kickChannel->getName() + " :You must be a channel operator";
