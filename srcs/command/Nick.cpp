@@ -6,8 +6,9 @@ Nick::~Nick() {}
 
 void Nick::execute()
 {
-	if (!user.getPass())
+	if (user.getActive() || !user.getPass())
 		return;
+
 	if (getParameters().size() < 1)
 	{
 		std::string reply = "431 " + user.getNickname() + " :No nickname given";

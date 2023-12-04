@@ -6,8 +6,9 @@ User::~User() {}
 
 void User::execute()
 {
-	if (!user.getPass())
+	if (user.getActive() || !user.getPass())
 		return;
+
 	if (user.getActive())
 	{
 		std::string reply = ":" + user.getHostname() + " 462 " + user.getNickname() + " :You may not reregister";
