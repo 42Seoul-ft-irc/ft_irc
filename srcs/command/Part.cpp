@@ -74,8 +74,9 @@ void Part::eraseUserInChannel(Channel *channel)
 	{
 		if (iterUsers->first == user.getNickname())
 		{
+			std::string iterUserName = iterUsers->first;
 			channel->users.erase(iterUsers);
-			channel->operators.erase(iterUsers->first);
+			channel->operators.erase(iterUserName);
 			return ;
 		}
 	}
