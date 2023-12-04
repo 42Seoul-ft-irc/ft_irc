@@ -52,9 +52,9 @@ int Part::eraseChannelInUserInfo(std::string partChannelName)
 {
 	std::map<std::string, bool>::iterator iter = user.channels.begin();
 
-	for (iter = user.channels.begin(); iter != user.channels.end(); iter++)
+	for (iter = user.channels.begin(); iter != user.channels.end(); ++iter)
 	{
-		if ((*iter).first == partChannelName)
+		if (iter->first == partChannelName)
 		{
 			user.channels.erase(iter);
 			return 0;
@@ -67,10 +67,13 @@ void Part::eraseUserInChannel(Channel *channel, std::string partChannelName)
 {
 	std::map<std::string, UserInfo>::iterator iterUsers;
 
-	for (iterUsers = channel->users.begin(); iterUsers != channel->users.end(); iterUsers++)
+	for (iterUsers = channel->users.begin(); iterUsers != channel->users.end(); ++iterUsers)
 	{
-		if ((*iterUsers).first == partChannelName)
+		if (iterUsers->first == partChannelName)
+		{
 			channel->users.erase(iterUsers);
+			return ;
+		}
 	}
 }
 
@@ -80,8 +83,11 @@ void Part::eraseUser(std::string partChannelName)
 
 	for (iterChannels = channels->begin(); iterChannels != channels->end(); iterChannels++)
 	{
-		if ((*iterChannels).second.getName() == partChannelName)
-			eraseUserInChannel(&(*iterChannels).second, partChannelName);
+		if (iterChannels->second.getName() == partChannelName)
+		{
+			eraseUserInChannel(&(iterChannels->second), partChannelName);
+			return ;
+		}
 	}
 }
 
@@ -123,4 +129,17 @@ void Part::execute()
         return ;
     }
     partUsers();
+
+	// 	std::map<std::string, bool>::iterator iter = user.channels.begin();
+
+	// for (iter = user.channels.begin(); iter != user.channels.end(); ++iter)
+	// {
+	// 	if ((*iter).first == partChannelName)
+	// 	{
+	// 		user.channels.erase(iter);
+	// 		return 0;
+	// 	}
+	// }
+
+
 }
