@@ -16,7 +16,7 @@ private:
 
 	Channel *kickChannel;
     std::vector<std::string> kickUsersName;
-	UserInfo *kickUser;
+	std::map<std::string, int> kickUser;
 
 public:
 	Kick(Message *msg, UserInfo &user, std::map<int, UserInfo> *users, std::map<std::string, Channel> *channels);
@@ -32,10 +32,9 @@ public:
 	void splitParameter(std::string parameter);
 	int checkUsers(std::string channel);
 
-	void eraseUser();
+	void eraseUser(std::map<std::string, int>::iterator);
 	void eraseChannelInUserInfo(UserInfo *userInfo);
-	void eraseUserInChannel(Channel *channel);
-
+	void eraseUserInChannel(Channel *channel, std::map<std::string, int>::iterator);
 };
 
 void ft_send(int fd, std::string str);

@@ -50,7 +50,8 @@ int Kick::checkUsers(std::string userName)
 	{
 		if ((*iter).first == userName)
 		{
-			kickUser = &(*iter).second;
+			UserInfo u = iter->second;
+			kickUser.insert(std::make_pair(u.getNickname(), u.getFd()));
 			return 0;
 		}
 	}
@@ -92,13 +93,13 @@ void Kick::eraseChannelInUserInfo(UserInfo *userInfo)
 	}
 }
 
-void Kick::eraseUserInChannel(Channel *channel)
+void Kick::eraseUserInChannel(Channel *channel, std::map<std::string, int>::iterator kickedUser)
 {
 	std::map<std::string, UserInfo>::iterator iterUsers;
 
 	for (iterUsers = channel->users.begin(); iterUsers != channel->users.end(); iterUsers++)
 	{
-		if ((*iterUsers).first == kickUser->getNickname())
+		if ((*iterUsers).first == kickedUser->first)
 		{
 			channel->users.erase(iterUsers);
 			return ;
@@ -106,14 +107,14 @@ void Kick::eraseUserInChannel(Channel *channel)
 	}
 }
 
-void Kick::eraseUser()
+void Kick::eraseUser(std::map<std::string, int>::iterator kickedUser)
 {
 	std::map<int, UserInfo>::iterator iterUsers;
 	std::map<std::string, Channel>::iterator iterChannels;
 
 	for (iterUsers = users->begin(); iterUsers != users->end(); iterUsers++)
 	{
-		if ((*iterUsers).second.getNickname() == kickUser->getNickname())
+		if ((*iterUsers).second.getNickname() == kickedUser->first)
 		{
 			eraseChannelInUserInfo(&(*iterUsers).second);
 			break ;
@@ -123,7 +124,7 @@ void Kick::eraseUser()
 	{
 		if ((*iterChannels).second.getName() == kickChannel->getName())
 		{
-			eraseUserInChannel(&(*iterChannels).second);
+			eraseUserInChannel(&(*iterChannels).second, kickedUser);
 			return ;
 		}
 	}
@@ -132,31 +133,35 @@ void Kick::eraseUser()
 void Kick::kickUsers(std::string parameter)
 {
 	splitParameter(parameter);
+
 	for (size_t i = 0; i < kickUsersName.size(); i++)
 	{
 		if (checkUsers(kickUsersName[i]))
 		{
-			std::string msg = ":"+user.getHostname()+" 441 " + user.getNickname() + " " + kickUsersName[i] + " " + kickChannel->getName() + " :They are not on that channel";
+			std::string msg = ":" + user.getHostname() + " 441 " + user.getNickname() + " " + kickUsersName[i] + " " + kickChannel->getName() + " :They are not on that channel";
 			ft_send(user.getFd(), msg);
-			std::cout << msg << std::endl;
 			return ;
 		}
 		else
 		{
-			eraseUser();
-			std::string msg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " KICK " + kickChannel->getName() + " " + kickUser->getNickname() + " :";
+			// 강퇴당한 애만 메세지 보냄
+			// 강퇴 당한 애
+			std::map<std::string, int>::iterator kickedUser = kickUser.find(kickUsersName[i]);
+
+			eraseUser(kickedUser); // 강퇴 시키기
+
+			std::string msg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " KICK " + kickChannel->getName() + " " + kickUsersName[i] + " :";
 			if (!getTrailing().empty())
 				msg += getTrailing();
-			std::cout << msg << std::endl;
-			ft_send(kickUser->getFd(), msg);
+			ft_send(kickUser.find(kickUsersName[i])->second, msg);
+
+			// 채널에 있는 모든 사람한테
+			std::map<std::string, UserInfo>::iterator iterUsers;
+
+			for (iterUsers = kickChannel->users.begin(); iterUsers != kickChannel->users.end(); iterUsers++)
+				ft_send((*iterUsers).second.getFd(), msg);
 		}
 	}
-	std::string msg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " KICK " + kickChannel->getName() + " " + kickUser->getNickname() + " :";
-	if (!getTrailing().empty())
-		msg += getTrailing();
-	std::map<std::string, UserInfo>::iterator iterUsers;
-	for (iterUsers = kickChannel->users.begin(); iterUsers !=kickChannel->users.end(); iterUsers++)
-		ft_send((*iterUsers).second.getFd(), msg);
 }
 
 void Kick::execute()
