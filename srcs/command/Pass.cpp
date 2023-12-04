@@ -10,13 +10,13 @@ void Pass::execute()
 
 	if (getParameters().size() < 1)
 	{
-		std::string msg = "461 " + user.getNickname() + " PASS :Not enough parameters";
+		std::string msg = ":"+user.getHostname()+" 461 " + user.getNickname() + " PASS :Not enough parameters";
 		ft_send(user.getFd(), msg);
 		return;
 	}
 	if (user.getActive() == true)
 	{
-		std::string msg = "462 :You may not reregister";
+		std::string msg = ":irc.local 462 :You may not reregister";
 		ft_send(user.getFd(), msg);
 		return;
 	}
@@ -27,7 +27,7 @@ void Pass::execute()
 	}
 	else
 	{
-		std::string msg = "464 :Password incorrect";
+		std::string msg = ":irc.local 464 :Password incorrect";
 		ft_send(user.getFd(), msg);
 		return	;
 	}

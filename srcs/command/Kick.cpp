@@ -125,7 +125,7 @@ void Kick::kickUsers(std::string parameter)
 	{
 		if (checkUsers(kickUsersName[i]))
 		{
-			std::string msg = ":irc.local 441 " + user.getNickname() + " " + kickUsersName[i] + " " + kickChannel->getName() + " :They are not on that channel";
+			std::string msg = ":"+user.getHostname()+" 441 " + user.getNickname() + " " + kickUsersName[i] + " " + kickChannel->getName() + " :They are not on that channel";
 			ft_send(user.getFd(), msg);
 			std::cout << msg << std::endl;
 			return ;
@@ -152,13 +152,13 @@ void Kick::execute()
     }
     if (checkChannel(getParameters().at(0)))
     {
-        std::string msg = ":irc.local 403 " + user.getNickname() + " " + getParameters().at(0) + " :No such channel";
+        std::string msg = ":"+user.getHostname()+" 403 " + user.getNickname() + " " + getParameters().at(0) + " :No such channel";
 		ft_send(user.getFd(), msg);
         return ;
     }
     if (checkOperator(kickChannel->getName()))
     {
-        std::string msg = ":irc.local 482 " + user.getNickname() + " " + kickChannel->getName() + " :You must be a channel operator";
+        std::string msg = ":"+user.getHostname()+" 482 " + user.getNickname() + " " + kickChannel->getName() + " :You must be a channel operator";
 		ft_send(user.getFd(), msg);
         return ;
     }
