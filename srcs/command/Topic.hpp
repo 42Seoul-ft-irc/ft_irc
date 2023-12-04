@@ -13,14 +13,13 @@ class Topic : public Command
 private:
 	UserInfo &user;
 	std::map<std::string, Channel> &channelList;
-	std::string serverName;
 
 	bool isError();
 	void checkTopic(std::string);
 	void editTopic(std::string);
 
 public:
-	Topic(Message *, UserInfo &, std::map<std::string, Channel> &, std::string);
+	Topic(Message *, UserInfo &, std::map<std::string, Channel> &);
 	~Topic();
 	void execute();
 };

@@ -1,6 +1,6 @@
 #include "User.hpp"
 
-User::User(Message *msg, UserInfo &user, std::string serverName) : Command(msg), user(user), serverName(serverName) {}
+User::User(Message *msg, UserInfo &user) : Command(msg), user(user) {}
 
 User::~User() {}
 
@@ -10,14 +10,14 @@ void User::execute()
 		return;
 	if (user.getActive())
 	{
-		std::string reply = ":" + serverName + " 462 " + user.getNickname() + " :You may not reregister";
+		std::string reply = ":" + user.getHostname() + " 462 " + user.getNickname() + " :You may not reregister";
 
 		ft_send(user.getFd(), reply); // ERR_ALREADYREGISTRED
 		return;
 	}
 	if (getParameters().size() < 3 || getTrailing().empty())
 	{
-		std::string reply = ":" + serverName + " 461 " + user.getNickname() + " USER :You may not reregister";
+		std::string reply = ":" + user.getHostname() + " 461 " + user.getNickname() + " USER :You may not reregister";
 
 		ft_send(user.getFd(), reply); // ERR_NEEDMOREPARAMS
 		return;
