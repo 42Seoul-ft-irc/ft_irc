@@ -176,7 +176,7 @@ void Server::executeCommand(Command *cmd, UserInfo &user)
 		cmd->execute();
 
 		if (!user.getActive() && (cmd->getCommand() == "NICK" || cmd->getCommand() == "USER"))
-			Auth auth(user, users);
+			Auth auth(user, users, this->getServerName());
 
 		delete (cmd);
 	}
