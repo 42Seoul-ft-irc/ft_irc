@@ -161,6 +161,8 @@ void Kick::kickUsers(std::string parameter)
 
 void Kick::execute()
 {
+	if (!user.getActive())
+		return;
     if (getParameters().size() < 2)
     {
 		std::string msg = "461 KICK :Not enough parameters";

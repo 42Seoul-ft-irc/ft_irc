@@ -126,6 +126,8 @@ void Part::partUsers()
 
 void Part::execute()
 {
+	if (!user.getActive())
+		return;
 	if (getParameters().size() < 1)
     {
         std::string msg = "461 " + user.getNickname() + " PART :Not enough parameters";

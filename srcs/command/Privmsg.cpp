@@ -128,6 +128,8 @@ int Privmsg::checkParameters(std::string parameter)
 
 void Privmsg::execute()
 {
+	if (!user.getActive())
+		return;
 	std::vector<std::string> parameters = getParameters();
 	
 	if (parameters[0].empty())
