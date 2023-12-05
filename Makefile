@@ -6,16 +6,16 @@ RM = rm -rf
 NAME = ircserv
 SRCS = main.cpp \
 		Server.cpp \
+		Channel.cpp \
 		UserInfo.cpp \
 		Message.cpp \
-		Channel.cpp \
+		Auth.cpp \
 		command/Command.cpp \
 		command/Pass.cpp \
 		command/Nick.cpp \
 		command/User.cpp \
 		command/Join.cpp \
 		command/Invite.cpp \
-		Auth.cpp \
 		command/Topic.cpp \
 		command/Privmsg.cpp \
 		command/Mode.cpp \
@@ -23,11 +23,12 @@ SRCS = main.cpp \
     	command/Ping.cpp \
 		command/Kick.cpp \
 		command/Part.cpp \
-		command/Bot.cpp \
+		command/Bot.cpp
 
+FT_IRC = $(addprefix srcs/, $(SRCS))
 
-OBJS = $(SRCS:.cpp=.o)
-DEPS = $(SRCS:.cpp=.d)
+OBJS = $(FT_IRC:.cpp=.o)
+DEPS = $(FT_IRC:.cpp=.d)
 -include $(DEPS)
 
 %.o : %.cpp
