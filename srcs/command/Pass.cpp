@@ -12,12 +12,14 @@ void Pass::execute()
 		ft_send(user.getFd(), msg);
 		return;
 	}
+
 	if (user.getActive() == true)
 	{
 		std::string msg = "462 :You may not reregister";
 		ft_send(user.getFd(), msg);
 		return;
 	}
+	
 	if (*getParametersBegin()++ == password)
 	{
 		user.checkPass();

@@ -9,9 +9,7 @@ Command::Command(Message *message)
 	trailing = message->getTrailing();
 }
 
-Command::~Command()
-{
-}
+Command::~Command() {}
 
 int Command::getFd() const
 {

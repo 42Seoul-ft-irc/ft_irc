@@ -38,8 +38,6 @@ class UserInfo {
 		std::string getHostname() const;
 		std::string getServername() const;
 		std::string getRealname() const;
-		std::string getMode() const;
-		std::string getUnused() const;
 		bool getPass() const;
 		bool getNick() const;
 		bool getUser() const;

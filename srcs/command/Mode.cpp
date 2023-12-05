@@ -15,7 +15,7 @@ void Mode::execute()
 	if (!isValidChannelName())
 		return;
 
-	if (getParameters().size() == 1) // 324 RPL_CHANNELMODEIS
+	if (getParameters().size() == 1) // modestring 없는 경우 324 RPL_CHANNELMODEIS
 	{
 		std::map<std::string, Channel>::iterator it = channelList.find(getParameters()[0]);
 
@@ -52,7 +52,6 @@ bool Mode::isValidChannelName()
 	if (channelName[0] != '#') // 401 ERR_NOSUCHNICK
 	{
 		std::string reply = ":" + user.getHostname() + " 401 " + user.getNickname() + " " + channelName + " :No such nick";
-
 		ft_send(user.getFd(), reply);
 
 		return false;
@@ -64,7 +63,6 @@ bool Mode::isValidChannelName()
 		if (it == channelList.end())
 		{
 			std::string reply = ":" + user.getHostname() + " 403 " + user.getNickname() + " " + channelName + " :No such channel";
-
 			ft_send(user.getFd(), reply);
 
 			return false;

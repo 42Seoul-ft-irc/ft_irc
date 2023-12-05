@@ -37,6 +37,4 @@ public:
 	void eraseUserInChannel(Channel *channel, std::map<std::string, int>::iterator);
 };
 
-void ft_send(int fd, std::string str);
-
 #endif

@@ -35,6 +35,4 @@ public:
 
 };
 
-void ft_send(int fd, std::string str);
-
 #endif

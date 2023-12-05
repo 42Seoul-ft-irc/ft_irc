@@ -21,6 +21,7 @@ private:
 public:
 	Topic(Message *, UserInfo &, std::map<std::string, Channel> &);
 	~Topic();
+
 	void execute();
 };
 

@@ -13,7 +13,7 @@ static std::vector<std::string> splitByComma(std::string &input)
 
 	while (found != std::string::npos)
 	{
-			result.push_back(input.substr(start, found - start));
+		result.push_back(input.substr(start, found - start));
 		start = found + 1;
 		found = input.find(',', start);
 	}
@@ -62,6 +62,7 @@ void Join::joinExistingChannel(const std::string &channelName, const std::vector
 	std::map<std::string, bool>::iterator it_user = this->user.channels.find(channelName);
 	if (it_user != this->user.channels.end())
 		return;
+
 	if (checkJoinConditions(passwordList))
 	{
 		channel->users.insert(std::make_pair(user.getNickname(), this->user));
@@ -90,7 +91,6 @@ void Join::joinExistingChannel(const std::string &channelName, const std::vector
 			UserInfo user_info = i->second;
 			if (user_info.getFd() == user.getFd())
 				continue;
-			//:soobin_!root@127.0.0.1 JOIN :#hello
 			std::string msgN = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " JOIN :" + channelName;
 			ft_send(user_info.getFd(), msgN);
 		}
@@ -139,9 +139,8 @@ void Join::execute()
 	else if (this->getParameters().size() >= 1)
 	{
 		channelList = splitByComma(this->getParameters().at(0));
-		if (this->getParameters().size() >= 2) {
+		if (this->getParameters().size() >= 2)
 			passwordList = splitByComma(this->getParameters().at(1));
-		}
 	}
 
 	for (size_t i = 0; i < channelList.size(); ++i)

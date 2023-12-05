@@ -113,7 +113,9 @@ void Part::partUsers()
 		}
 		else
 			chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " PART " + partChannelName[i] + " :" + getTrailing();
+
 		ft_send(user.getFd(), chanMsg);
+
 		std::map<std::string, UserInfo>::iterator iterUsers;
 		partChannel = &(channels->find(partChannelName[i])->second);
 
@@ -126,18 +128,20 @@ void Part::execute()
 {
 	if (!user.getActive())
 		return;
+
 	if (getParameters().size() < 1)
     {
         std::string msg = "461 " + user.getNickname() + " PART :Not enough parameters";
 		ft_send(user.getFd(), msg);
 		return;
     }
-    if (checkChannel(getParameters().at(0)))
-    {
-        std::string msg = ":"+user.getHostname()+" 403 " + user.getNickname() + " " + getParameters().at(0) + " :No such channel";
+
+	if (checkChannel(getParameters().at(0)))
+	{
+		std::string msg = ":" + user.getHostname() + " 403 " + user.getNickname() + " " + getParameters().at(0) + " :No such channel";
 		ft_send(user.getFd(), msg);
         return ;
-    }
-    partUsers();
+	}
 
+	partUsers();
 }

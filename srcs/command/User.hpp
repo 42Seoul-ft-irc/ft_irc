@@ -12,6 +12,7 @@ private:
 public:
 	User(Message *, UserInfo &);
 	~User();
+
 	void execute();
 };
 

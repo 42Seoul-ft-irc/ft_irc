@@ -13,7 +13,7 @@ Server::Server(int argc, char **argv) : serverName("poke")
 	pushServerPollfd();
 }
 
-int Server::convertPort(char *portStr)
+int Server::convertPort(char *portStr) // port 번호 파싱
 {
 	for (size_t i = 0; i < strlen(portStr); i++)
 		if (!isdigit(portStr[i]))
@@ -35,12 +35,12 @@ void Server::openServer()
 	{
 		// 소켓 포트 연결
 		struct sockaddr_in serverAddr;
-		setServerAddr(serverAddr, getPortNum());
+		setServerAddr(serverAddr, getPortNum()); // socketaddr_in 구조체 초기화
 
-		if (bind(getSocketFd(), reinterpret_cast<const struct sockaddr *>(&serverAddr), sizeof(serverAddr)) == -1)
+		if (bind(getSocketFd(), reinterpret_cast<const struct sockaddr *>(&serverAddr), sizeof(serverAddr)) == -1) // 소켓에 IP주소와 포트번호 지정
 			throw std::runtime_error("Error: bind error");
 
-		if (listen(getSocketFd(), SOMAXCONN) == -1)
+		if (listen(getSocketFd(), SOMAXCONN) == -1) // 클라이언트의 접속 요청을 기다림 (합리적인 최대 값으로 설정)
 			throw std::runtime_error("Error: listen error");
 	}
 	catch (const std::exception &e)
@@ -53,7 +53,7 @@ void Server::openServer()
 
 void Server::createSocket()
 {
-	int socketFd = socket(AF_INET, SOCK_STREAM, 0);
+	int socketFd = socket(AF_INET, SOCK_STREAM, 0); // ipv4 통신, TCP 통신, type에서 미리 정해짐
 
 	if (socketFd == -1)
 		throw std::runtime_error("socket error");
@@ -61,13 +61,14 @@ void Server::createSocket()
 	setSocketFd(socketFd);
 }
 
+// socketaddr_in 구조체 초기화
 void Server::setServerAddr(struct sockaddr_in &serverAddr, int portNum)
 {
 	std::memset(&serverAddr, 0, sizeof(serverAddr));
 
-	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	serverAddr.sin_port = htons(portNum);
+	serverAddr.sin_family = AF_INET;				// ipv4
+	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY); // IP 주소 설정 long intger -> byte order
+	serverAddr.sin_port = htons(portNum);			// port 번호 설정
 }
 
 void Server::pushServerPollfd()
@@ -120,11 +121,13 @@ void Server::acceptClient()
 	sockaddr_in client;
 	socklen_t clientLen = sizeof(client);
 
-	int clientFd = accept(getSocketFd(), reinterpret_cast<sockaddr *>(&client), &clientLen);
+	int clientFd = accept(getSocketFd(), reinterpret_cast<sockaddr *>(&client), &clientLen); // 소켓 연결 허용
 
 	users.insert(std::make_pair(clientFd, UserInfo()));
 	users[clientFd].setFd(clientFd);
 
+
+	// 클라이언트 pollfd 저장
 	pollfd newPollfd;
 	newPollfd.fd = clientFd;
 	newPollfd.events = POLLIN;

@@ -9,18 +9,18 @@ void User::execute()
 	if (user.getActive() || !user.getPass())
 		return;
 
-	if (user.getActive())
+	if (user.getActive()) // ERR_ALREADYREGISTRED
 	{
 		std::string reply = "462 USER :You may not reregister";
 
-		ft_send(user.getFd(), reply); // ERR_ALREADYREGISTRED
+		ft_send(user.getFd(), reply);
 		return;
 	}
-	if (getParameters().size() < 3 || getTrailing().empty())
+	if (getParameters().size() < 3 || getTrailing().empty()) // ERR_NEEDMOREPARAMS
 	{
 		std::string reply = "461 USER :You may not reregister";
 
-		ft_send(user.getFd(), reply); // ERR_NEEDMOREPARAMS
+		ft_send(user.getFd(), reply);
 		return;
 	}
 

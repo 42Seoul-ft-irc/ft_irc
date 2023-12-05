@@ -67,10 +67,12 @@ int Auth::isInuseNick()
 
 	for (iter = users.begin(); iter != users.end(); iter++)
 	{
-		if (iter->second.getNickname() == user.getNickname() && iter->second.getActive() == true){
+		if (iter->second.getNickname() == user.getNickname() && iter->second.getActive() == true)
+		{
 			std::string msg = ":" + user.getHostname() + " 433 " + user.getNickname() + " :Nickname is already in use";
 			ft_send(user.getFd(), msg);
 			user.checkNick();
+
 			return 0;
 		}
 	}
