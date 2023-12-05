@@ -13,7 +13,7 @@ static std::vector<std::string> splitByComma(std::string &input)
 
 	while (found != std::string::npos)
 	{
-		result.push_back(input.substr(start, found - start));
+			result.push_back(input.substr(start, found - start));
 		start = found + 1;
 		found = input.find(',', start);
 	}
@@ -21,23 +21,24 @@ static std::vector<std::string> splitByComma(std::string &input)
 	return result;
 }
 
-void Join::handleChannelJoin(const std::string &channelName, const std::vector<std::string> &passwordList)
+int Join::handleChannelJoin(const std::string &channelName, const std::vector<std::string> &passwordList)
 {
 	if (this->user.channels.size() >= 10)
 	{
-		std::string msg = "405 " + channelName + " :You have joined too many channels";
+		std::string msg = ":" + user.getHostname() + " 405 " + user.getNickname() + " " + channelName + " :You have joined too many channels";
 		ft_send(this->user.getFd(), msg);
-		return;
+		return 1;
 	}
 	std::map<std::string, Channel>::iterator it1 = this->channels->find(channelName);
 	if (it1 == this->channels->end()) {
 		if (channelName[0] != '#')
-			return ;
+			return 1;
 		createAndJoinNewChannel(channelName);
 	}
 	else {
 		joinExistingChannel(channelName, passwordList);
 	}
+	return 0;
 }
 
 void Join::createAndJoinNewChannel(const std::string &channelName)
@@ -150,6 +151,7 @@ void Join::execute()
 	{
 		std::cout << channelList[i] <<std::endl;
 		const std::string &channelName = channelList[i];
-		handleChannelJoin(channelName, passwordList);
+		if (handleChannelJoin(channelName, passwordList))
+			break;
 	}
 }
