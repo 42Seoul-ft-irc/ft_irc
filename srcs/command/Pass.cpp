@@ -6,8 +6,6 @@ Pass::~Pass() {}
 
 void Pass::execute()
 {
-	std::cout << "pass 명령어 실행\n";
-
 	if (getParameters().size() < 1)
 	{
 		std::string msg = "461 PASS :Not enough parameters";

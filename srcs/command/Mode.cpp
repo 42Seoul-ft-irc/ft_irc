@@ -116,25 +116,8 @@ void Mode::run()
 	std::string modestring = getParameters()[1];
 
 	saveInputModes(modestring);
-
 	removeDuplicates();
-
-	std::cout << "---중복 제거 mode---\n";
-	for (size_t i = 0; i < modes.size(); i++)
-		std::cout << modes[i] << std::endl;
-	std::cout << "------------------\n\n";
-
 	executeModes();
-
-	std::cout << "-----changed-----\n";
-	for (size_t i = 0; i < changed.size(); i++)
-		std::cout << changed[i] << std::endl;
-	std::cout << "-----------------\n\n";
-
-	std::cout << "--changed Params--\n";
-	for (size_t i = 0; i < changedParams.size(); i++)
-		std::cout << changedParams[i] << std::endl;
-	std::cout << "------------------\n\n";
 
 	if (changed.size())
 		sendReply();

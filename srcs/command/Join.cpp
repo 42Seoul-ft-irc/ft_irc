@@ -94,7 +94,6 @@ void Join::joinExistingChannel(const std::string &channelName, const std::vector
 			std::string msgN = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " JOIN :" + channelName;
 			ft_send(user_info.getFd(), msgN);
 		}
-		std::cout << msg;
 	}
 }
 
@@ -116,7 +115,6 @@ bool Join::checkJoinConditions(const std::vector<std::string> &passwordList)
 
 	if (channel->getInviteMode() && (channel->invite.find(user.getNickname()) == channel->invite.end()))
 	{
-		std::cout << *channel << std::endl;
 		std::string msg = ":"+user.getHostname()+" 473 " + user.getNickname() + " "  + channel->getName() + " :Cannot join channel (invite only)";
 		ft_send(this->user.getFd(), msg);
 		return false;
@@ -134,7 +132,6 @@ void Join::execute()
 
 	if (this->getParameters().size() < 1)
 	{
-		std::cout << "parameter error \n";
 		std::string msg = ":"+user.getHostname()+" 461 JOIN :Not enough parameters";
 		ft_send(this->user.getFd(), msg);
 		return;
@@ -149,7 +146,6 @@ void Join::execute()
 
 	for (size_t i = 0; i < channelList.size(); ++i)
 	{
-		std::cout << channelList[i] <<std::endl;
 		const std::string &channelName = channelList[i];
 		if (handleChannelJoin(channelName, passwordList))
 			break;

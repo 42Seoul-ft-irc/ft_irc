@@ -4,7 +4,9 @@ int main(int argc, char **argv)
 	try
 	{
 		Server server(argc, argv);
-		std::cout << server.getPortNum() << ", " << server.getSocketFd() << ", " << server.getPassword() << std::endl;
+
+		std::cout << server.getPortNum() << ", " << server.getPassword() << std::endl;
+
 		while (1)
 		{
 			int resultFd = poll(server.pollfds.data(), server.pollfds.size(), 3600);
@@ -15,6 +17,7 @@ int main(int argc, char **argv)
 				if (server.pollfds[0].revents & POLLIN)
 				{
 					std::cout << "클라이언트가 서버에 접근\n";
+
 					server.acceptClient();
 					continue;
 				}
@@ -25,11 +28,11 @@ int main(int argc, char **argv)
 					if (server.pollfds[i].revents & POLLHUP || server.pollfds[i].revents & POLLERR)
 					{
 						ft_quit(server, i);
+
 						std::cout << "클라이언트가 연결을 끊음\n";
 					}
 					else if (server.pollfds[i].revents & POLLIN)
 					{
-						std::cout << "클라이언트가 메세지 보냄: "<< i << "\n";
 						int fd = server.pollfds[i].fd;
 						char buffer[512];
 						memset(buffer, 0, sizeof(buffer));
@@ -51,7 +54,9 @@ int main(int argc, char **argv)
 
 							for (size_t i = 0; i < commands.size(); i++)
 							{
+								std::cout << "보낸 사람 fd : " << fd << std::endl;
 								std::cout << "들어온 메세지 : " << commands[i] << std::endl;
+
 								try {
 									UserInfo &user = server.getUserInfoByFd(fd);
 									Command *cmd = server.createCommand(user, commands[i]);
@@ -62,7 +67,6 @@ int main(int argc, char **argv)
 								}
 							}
 							std::strcpy(server.clientBuffer[fd], strBuffer.c_str());
-							//std::cout <<"남은 버퍼: " << strBuffer << std::endl;
 						}
 					}
 				}
@@ -74,6 +78,7 @@ int main(int argc, char **argv)
 		std::cerr << e.what() << std::endl;
 	}
 }
+
 std::vector<std::string> splitByCRLF(std::string& input) {
 	std::vector<std::string> result;
 	size_t start = 0;
@@ -119,7 +124,6 @@ void ft_quit(Server &server, size_t i)
 			UserInfo &thisUser = userIt->second;
 			if (thisUser.getFd() == user.getFd())
 				continue;
-			std::cout << "send user: " << thisUser.getFd() << std::endl;
 			std::string chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " QUIT :Quit: leaving";
 			ft_send(thisUser.getFd(), chanMsg);
 		}

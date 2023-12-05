@@ -13,8 +13,7 @@ void Quit::execute() {
 	std::string command, rest;
 	std::getline(iss, command, ':');
 	std::getline(iss, rest);
-	std::cout << rest << std::endl;
-	
+
 	if (rest != "")
 		cause = rest;
 	else 
@@ -37,8 +36,6 @@ void Quit::execute() {
 			UserInfo &thisUser = userIt->second;
 			if (thisUser.getFd() == user.getFd())
 				continue;
-			std::cout<<"send user: " << thisUser.getFd() <<std::endl;
-			// sooyang!root@127.0.0.1 QUIT :Quit: leaving
 			std::string chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " QUIT :Quit: " + cause;
 			ft_send(thisUser.getFd(), chanMsg);
 		}
