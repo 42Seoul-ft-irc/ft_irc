@@ -12,7 +12,6 @@ private:
 	UserInfo &user;
 	std::map<int, UserInfo> users;
 
-	int checkDuplicateNickname();
 	int checkNicknameForm();
 
 public:

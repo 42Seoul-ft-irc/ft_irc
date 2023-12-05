@@ -8,11 +8,13 @@
 
 class UserInfo;
 
-class Bot : public Command {
-	private: 
-		UserInfo &user;
-		std::string recommendDinnerMenu();
-	public:
-		Bot(Message *msg, UserInfo &user);
-		void execute();
+class Bot : public Command
+{
+private:
+	UserInfo &user;
+	std::string recommendDinnerMenu();
+
+public:
+	Bot(Message *msg, UserInfo &user);
+	void execute();
 };

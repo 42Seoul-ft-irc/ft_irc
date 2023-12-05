@@ -7,17 +7,19 @@
 class UserInfo;
 class Channel;
 
-class Invite : public Command {
-	private:
-		UserInfo &user;
-	public:
-		UserInfo *client;
-		Channel *channel;
-		std::map<std::string, Channel> *channels;
-		std::map<int, UserInfo> *users;
-		
-		Invite(Message *msg, UserInfo &user, std::map<std::string, Channel> *channels, std::map<int, UserInfo> *users);
-		void execute();
+class Invite : public Command
+{
+private:
+	UserInfo &user;
+
+public:
+	UserInfo *client;
+	Channel *channel;
+	std::map<std::string, Channel> *channels;
+	std::map<int, UserInfo> *users;
+
+	Invite(Message *msg, UserInfo &user, std::map<std::string, Channel> *channels, std::map<int, UserInfo> *users);
+	void execute();
 };
 
 #endif

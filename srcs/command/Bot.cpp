@@ -1,17 +1,20 @@
 #include "Bot.hpp"
 
-Bot::Bot(Message *msg, UserInfo &user): Command(msg), user(user){
+Bot::Bot(Message *msg, UserInfo &user) : Command(msg), user(user)
+{
 	std::srand(static_cast<unsigned int>(std::time(0)));
- }
+}
 
-void Bot::execute() {
+void Bot::execute()
+{
 	std::string dinnerMenu = recommendDinnerMenu();
-	//:sooyang!root@127.0.0.1
-	std::string response = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " DINNER :"+ dinnerMenu;
+	std::string response = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " DINNER :" + dinnerMenu;
+
 	ft_send(user.getFd(), response);
 }
 
-std::string Bot::recommendDinnerMenu() {
+std::string Bot::recommendDinnerMenu()
+{
 	std::vector<std::string> menuList;
 	menuList.push_back("마라탕");
 	menuList.push_back("떡볶이");

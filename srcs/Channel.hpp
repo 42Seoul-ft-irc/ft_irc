@@ -24,6 +24,7 @@ public:
 
 	Channel(UserInfo &user, std::string name);
 
+	// getter
 	std::string getName() const;
 	std::string getKey() const;
 	std::string getTopic() const;
@@ -34,6 +35,7 @@ public:
 	bool getLimitMode() const;
 	bool getTopicMode() const;
 
+	// setter
 	void setKey(std::string);
 	void setTopic(std::string);
 	void setLimit(size_t);

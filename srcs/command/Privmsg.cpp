@@ -11,7 +11,7 @@ void Privmsg::sendUsersOfChannel(Channel channel)
 	for (iterUsers = channel.users.begin(); iterUsers != channel.users.end(); iterUsers++)
 	{
 		std::string msg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " PRIVMSG " +  + " " + channel.getName() + " :" + getTrailing();
-		std::cout << msg << std::endl;
+
 		if (user.getFd() != (*iterUsers).second.getFd())
 			ft_send((*iterUsers).second.getFd(), msg);
 	}
@@ -109,16 +109,13 @@ void Privmsg::splitParameter(std::string parameter)
 int Privmsg::checkParameters(std::string parameter)
 {
 	splitParameter(parameter);
-	std::cout << recipients.size() << std::endl;
+
 	for (size_t i = 0; i < recipients.size(); i++)
-	{
-		std::cout << recipients[i] << std::endl;
 		if (checkRecipient(recipients[i]))
 			return 1;
-	}
+
 	if (recipientChannels.size() == 0 && recipientUsers.size() == 0)
 	{
-		//send (ERR_NORECIPIENT);
 		std::string msg = ":" + user.getHostname() + " 411 " + user.getNickname() + " :No recipient given";
 		ft_send(user.getFd(), msg);
 		return 1;
@@ -131,40 +128,34 @@ void Privmsg::execute()
 	if (!user.getActive())
 		return;
 	std::vector<std::string> parameters = getParameters();
-	
-	if (parameters[0].empty())
+
+	if (parameters[0].empty()) // ERR_NORECIPIENT
 	{
-		//send (ERR_NORECIPIENT);
 		std::string msg = ":" + user.getHostname() + " 411 " + user.getNickname() + " :No recipient given";
 		ft_send(user.getFd(), msg);
 		return ;
 	}
-	if (getTrailing() == "")
+	if (getTrailing() == "") // ERR_NOTEXTTOSEND
 	{
-		//send (ERR_NOTEXTTOSEND);
 		std::string msg = ":" + user.getHostname() + " 412 " + user.getNickname() + " :No text to send";
 		ft_send(user.getFd(), msg);
 
-		return ;
+		return;
 	}
+
 	if (checkParameters(parameters[0]))
 		return ;
-	//채널의 사용자들로 전송
-	if (recipientChannels.size() > 0)
-	{
-		for (size_t i = 0; i < recipientChannels.size(); i++)
-		{
-			sendUsersOfChannel(recipientChannels[i]);
-		}
 
-	}
-	//사용자들로 전송
-	if (recipientUsers.size() > 0)
+	if (recipientChannels.size() > 0) // 채널의 사용자들로 전송
+		for (size_t i = 0; i < recipientChannels.size(); i++)
+			sendUsersOfChannel(recipientChannels[i]);
+
+	if (recipientUsers.size() > 0) // 사용자들로 전송
 	{
 		for (size_t i = 0; i < recipientUsers.size(); i++)
 		{
 			std::string msg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " PRIVMSG " +  + " " + recipientUsers[i].getNickname() + " :" + getTrailing();
-			std::cout << msg << std::endl;
+
 			if (user.getFd() != (recipientUsers[i].getFd()))
 				ft_send(recipientUsers[i].getFd(), msg);
 		}

@@ -34,6 +34,4 @@ public:
 	void eraseUser(std::string partChannelName);
 };
 
-void ft_send(int fd, std::string str);
-
 #endif

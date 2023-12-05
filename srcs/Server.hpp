@@ -62,11 +62,13 @@ public:
 
 	Server(int argc, char **argv);
 
+	// getter
 	int getPortNum() const;
 	std::string getPassword() const;
 	int getSocketFd() const;
 	std::string getServerName() const;
 
+	// setter
 	void setPortNum(int portNum);
 	void setPassword(std::string password);
 	void setSocketFd(int fd);

@@ -15,7 +15,7 @@ void Mode::execute()
 	if (!isValidChannelName())
 		return;
 
-	if (getParameters().size() == 1) // 324 RPL_CHANNELMODEIS
+	if (getParameters().size() == 1) // modestring 없는 경우 324 RPL_CHANNELMODEIS
 	{
 		std::map<std::string, Channel>::iterator it = channelList.find(getParameters()[0]);
 
@@ -52,7 +52,6 @@ bool Mode::isValidChannelName()
 	if (channelName[0] != '#') // 401 ERR_NOSUCHNICK
 	{
 		std::string reply = ":" + user.getHostname() + " 401 " + user.getNickname() + " " + channelName + " :No such nick";
-
 		ft_send(user.getFd(), reply);
 
 		return false;
@@ -64,7 +63,6 @@ bool Mode::isValidChannelName()
 		if (it == channelList.end())
 		{
 			std::string reply = ":" + user.getHostname() + " 403 " + user.getNickname() + " " + channelName + " :No such channel";
-
 			ft_send(user.getFd(), reply);
 
 			return false;
@@ -116,25 +114,8 @@ void Mode::run()
 	std::string modestring = getParameters()[1];
 
 	saveInputModes(modestring);
-
 	removeDuplicates();
-
-	std::cout << "---중복 제거 mode---\n";
-	for (size_t i = 0; i < modes.size(); i++)
-		std::cout << modes[i] << std::endl;
-	std::cout << "------------------\n\n";
-
 	executeModes();
-
-	std::cout << "-----changed-----\n";
-	for (size_t i = 0; i < changed.size(); i++)
-		std::cout << changed[i] << std::endl;
-	std::cout << "-----------------\n\n";
-
-	std::cout << "--changed Params--\n";
-	for (size_t i = 0; i < changedParams.size(); i++)
-		std::cout << changedParams[i] << std::endl;
-	std::cout << "------------------\n\n";
 
 	if (changed.size())
 		sendReply();

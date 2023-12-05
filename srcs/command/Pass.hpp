@@ -5,14 +5,14 @@
 #include "../utils.hpp"
 #include "../UserInfo.hpp"
 
-class Pass : public Command {
+class Pass : public Command
+{
 private:
 	UserInfo &user;
 	std::string password;
 
 public:
 	Pass(Message *msg, UserInfo &user, std::string password);
-	Pass();
 	~Pass();
 	void execute();
 };

@@ -26,9 +26,8 @@ void Nick::execute()
 
 int Nick::checkNicknameForm()
 {
-	if (getParameters()[0].size() >= 10)
+	if (getParameters()[0].size() >= 10) // ERR_ERRONEUSNICKNAME
 	{
-		// send(ERR_ERRONEUSNICKNAME)
 		std::string msg = "432 " + getParameters().at(0) + " :Erroneus nickname";
 		ft_send(user.getFd(), msg);
 		return 1;

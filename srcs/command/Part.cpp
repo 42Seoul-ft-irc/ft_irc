@@ -54,8 +54,6 @@ int Part::eraseChannelInUserInfo(std::string partChannelName)
 
 	for (iter = user.channels.begin(); iter != user.channels.end(); ++iter)
 	{
-		//std::cout << iter->first << std::endl;
-		//std::cout << partChannelName << std::endl;
 
 		if (iter->first == partChannelName)
 		{
@@ -106,7 +104,6 @@ void Part::partUsers()
 			ft_send(user.getFd(), msg);
 			return ;
 		}
-		std::cout << partChannelName[i] << std::endl;
 		eraseUser(partChannelName[i]);
 		std::string chanMsg;
 		if (getTrailing().empty())
@@ -116,7 +113,9 @@ void Part::partUsers()
 		}
 		else
 			chanMsg = ":" + user.getNickname() + "!" + user.getUsername() + "@" + user.getServername() + " PART " + partChannelName[i] + " :" + getTrailing();
+
 		ft_send(user.getFd(), chanMsg);
+
 		std::map<std::string, UserInfo>::iterator iterUsers;
 		partChannel = &(channels->find(partChannelName[i])->second);
 
@@ -129,18 +128,20 @@ void Part::execute()
 {
 	if (!user.getActive())
 		return;
+
 	if (getParameters().size() < 1)
     {
         std::string msg = "461 " + user.getNickname() + " PART :Not enough parameters";
 		ft_send(user.getFd(), msg);
 		return;
     }
-    if (checkChannel(getParameters().at(0)))
-    {
-        std::string msg = ":"+user.getHostname()+" 403 " + user.getNickname() + " " + getParameters().at(0) + " :No such channel";
+
+	if (checkChannel(getParameters().at(0)))
+	{
+		std::string msg = ":" + user.getHostname() + " 403 " + user.getNickname() + " " + getParameters().at(0) + " :No such channel";
 		ft_send(user.getFd(), msg);
         return ;
-    }
-    partUsers();
+	}
 
+	partUsers();
 }

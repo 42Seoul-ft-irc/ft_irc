@@ -6,15 +6,18 @@ Invite::Invite(Message *msg, UserInfo &user, std::map<std::string, Channel> *cha
 	this->users = users;
 }
 
-void Invite::execute() {
+void Invite::execute()
+{
 	if (!user.getActive())
 		return;
+
 	// argument 확인 (2개 이상)
 	if (this->getParameters().size() < 2) {
 		std::string msg = ":"+user.getHostname()+" 461 INVITE :Not enough parameters";
 		ft_send(this->user.getFd(), msg);
 		return ;
 	}
+
 	// 초대받을 유저 존재하는지 확인
 	std::map<int, UserInfo>::iterator user_it = this->users->begin();
 	for( ; user_it != this->users->end(); ++user_it) {
@@ -28,6 +31,7 @@ void Invite::execute() {
 		ft_send(this->user.getFd(), msg);
 		return ;
 	}
+
 	// 채널 존재하는지 확인
 	std::map<std::string, Channel>::iterator chan_it = this->channels->find(this->getParameters().at(1));
 	if (chan_it == this->channels->end()) {
@@ -35,6 +39,7 @@ void Invite::execute() {
 		ft_send(user.getFd(), msg);
 		return ;
 	}
+
 	this->channel = &chan_it->second;
 	// 채널에 초대받을 유저가 있는지 확인
 	std::map<std::string, UserInfo>::iterator chan_user_it = this->channel->users.find(this->getParameters().at(0));
@@ -43,6 +48,7 @@ void Invite::execute() {
 		ft_send(user.getFd(), msg);
 		return ;
 	}
+
 	// 채널의 operator인지 확인
 	std::map<std::string, UserInfo>::iterator operator_it = this->channel->operators.find(this->user.getNickname());
 	if (operator_it == this->channel->operators.end()){
@@ -50,10 +56,12 @@ void Invite::execute() {
 		ft_send(user.getFd(), msg);
 		return ;
 	}
+
 	// 채널 invite 목록에 넣고 341 반환, 초대받는 대상에게는 메시지 반환
 	this->channel->invite[this->getParameters().at(0)] = *this->client;
 	std::string msg = "341 " + this->user.getNickname() + " " + this->getParameters().at(0) + " :" + this->getParameters().at(1);
 	ft_send(user.getFd(), msg);
+
 	msg.clear();
 	msg = ":" + this->user.getNickname() + "!" + this->user.getUsername() + "@" + this->user.getServername() + " " + "INVITE " + this->getParameters().at(0) + " :" + this->getParameters().at(1);
 	ft_send(this->client->getFd(), msg);
