@@ -129,7 +129,7 @@ void Privmsg::execute()
 		return;
 	std::vector<std::string> parameters = getParameters();
 
-	if (parameters[0].empty()) // ERR_NORECIPIENT
+	if (parameters.empty() || parameters[0].empty()) // ERR_NORECIPIENT
 	{
 		std::string msg = ":" + user.getHostname() + " 411 " + user.getNickname() + " :No recipient given";
 		ft_send(user.getFd(), msg);
